@@ -7,7 +7,7 @@ import Stars from '@/components/Stars.astro';
 import QuoteForm from '@/components/islands/QuoteForm';
 import FormStatusNotice from '@/components/FormStatusNotice.astro';
 import { site } from '@/config/site';
-import { GARMENT_OPTIONS, QUANTITY_OPTIONS } from '@/lib/forms';
+import { GARMENT_OPTIONS } from '@/lib/forms';
 import { siteImage } from '@/lib/images';
 import { testimonialsFor } from '@/lib/testimonials';
 import { webPageJsonLd } from '@/lib/seo';
@@ -25,7 +25,7 @@ const testimonial = (await testimonialsFor('quote', 1))[0];
 const steps = [
   'We confirm your brief by email or phone.',
   'You get a written price and a free mockup.',
-  'Approve it and we go to production — 3–4 weeks.',
+  'Approve it and we go to production — 4–6 weeks.',
 ];
 ---
 
@@ -57,7 +57,6 @@ const steps = [
         client:idle
         sports={sports}
         garments={GARMENT_OPTIONS}
-        quantities={QUANTITY_OPTIONS}
         turnstileSiteKey={PUBLIC_TURNSTILE_SITE_KEY}
         contactEmail={site.email}
         phone={site.phone.display}

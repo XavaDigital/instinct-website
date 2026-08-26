@@ -79,7 +79,7 @@ const garments = defineCollection({
       priceNote: z.string().optional(),
       badges: z
         .array(z.string())
-        .default(['3–4 week turnaround', 'No minimums', 'Free mockup']),
+        .default(['4–6 week turnaround', 'No minimums', 'Free mockup']),
       specs: z.array(z.object({ label: z.string(), value: z.string() })).default([]),
       brandingTitle: z.string().optional(),
       brandingSpots: z.array(z.string()).default([]),

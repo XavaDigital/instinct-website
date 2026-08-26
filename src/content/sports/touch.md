@@ -37,7 +37,7 @@ extras:
 feature:
   eyebrow: Social teams
   title: Ten mates, one order
-  body: "No minimum order means a workplace team or a group of mates gets the same process as a premier club — free mockup, one price, kit in three to four weeks. Name each shirt so everyone knows whose is whose."
+  body: "No minimum order means a workplace team or a group of mates gets the same process as a premier club — free mockup, one price, kit in four to six weeks. Name each shirt so everyone knows whose is whose."
   tags: [Mixed, Men's, Women's, Nicknames welcome]
   imageLabel: Photo — social team tees with nicknames
 projectsTitle: Touch kit we've made
@@ -49,7 +49,7 @@ faqs:
   - q: Do you do women's cuts?
     a: "Yes. Women's fit tees, singlets and shorts are graded from the same design, so a mixed team matches without anyone wearing the wrong shape."
   - q: How quickly can we get kit before the season starts?
-    a: "Standard production is 3–4 weeks from the day you approve your mockup. If your first game is closer than that, ask us early — rush production is sometimes possible for a surcharge."
+    a: "Standard production is 4–6 weeks from the day you approve your mockup. If your first game is closer than that, ask us early — rush production is sometimes possible for a surcharge."
 testimonial:
   quote: "Twelve of us from work, nicknames on the back, and the tees turned up two weeks before the first game. Cheaper than I expected too."
   author: Social touch team organiser — placeholder

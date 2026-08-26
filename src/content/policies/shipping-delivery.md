@@ -1,14 +1,14 @@
 ---
 title: Shipping & delivery
 summary: Nationwide courier, tracked. Rural and split-shipping options, and what happens if a delivery goes astray.
-inShort: Orders ship tracked from Christchurch, usually 3–4 weeks from design approval. One club address is included in your quote; split-shipping to individual players is available for a per-parcel fee.
+inShort: Orders ship tracked from Christchurch, usually 4–6 weeks from design approval. One club address is included in your quote; split-shipping to individual players is available for a per-parcel fee.
 updated: 2026-08-20
 order: 1
 ---
 
 ## Dispatch times
 
-Production begins once you approve your final mockup and your deposit clears. Standard production is 3–4 weeks; larger multi-grade orders may take longer and we will tell you before you approve. Rush production is sometimes possible for a surcharge — ask us early rather than late.
+Production begins once you approve your final mockup and your deposit clears. Standard production is 4–6 weeks; larger multi-grade orders may take longer and we will tell you before you approve. Rush production is sometimes possible for a surcharge — ask us early rather than late.
 
 ## Rates and coverage
 

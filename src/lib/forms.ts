@@ -27,8 +27,6 @@ export const GARMENT_OTHER = 'Other';
 /** Last option in the sport select; reveals a free-text field. */
 export const SPORT_OTHER = 'Other / multiple';
 
-export const QUANTITY_OPTIONS = ['1–10', '10–20', '20–50', '50–100', '100–200', '200+'] as const;
-
 /** Maximum accepted length per field; enforced on the client and the server. */
 export const LIMITS = {
   name: 120,
@@ -39,7 +37,7 @@ export const LIMITS = {
   sport: 80,
   sportOther: 120,
   garmentsOther: 200,
-  quantity: 20,
+  quantity: 80,
   neededBy: 60,
   notes: 3000,
   message: 4000,
@@ -121,7 +119,7 @@ export function validateQuote(f: QuoteFields): Record<string, string> {
   if (f.sport === SPORT_OTHER && f.sportOther.trim().length < 2) {
     errors.sportOther = 'Tell us the sport or group type.';
   }
-  if (!f.quantity.trim()) errors.quantity = 'Please choose an approximate quantity.';
+  if (!f.quantity.trim()) errors.quantity = 'Please tell us roughly how many you need.';
   for (const key of [
     'name',
     'role',

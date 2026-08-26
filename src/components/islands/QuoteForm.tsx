@@ -32,7 +32,6 @@ import {
 interface Props {
   sports: { value: string; label: string }[];
   garments: readonly string[];
-  quantities: readonly string[];
   turnstileSiteKey?: string;
   contactEmail: string;
   phone: string;
@@ -40,7 +39,7 @@ interface Props {
 
 const THANKS = '/thanks/quote?sent=1';
 
-export default function QuoteForm({ sports, garments, quantities, turnstileSiteKey, phone }: Props) {
+export default function QuoteForm({ sports, garments, turnstileSiteKey, phone }: Props) {
   const [status, setStatus] = useState<Status>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState<string>();
@@ -402,24 +401,17 @@ export default function QuoteForm({ sports, garments, quantities, turnstileSiteK
           </Field>
           <Field label="Approx. quantity" name="quantity" required error={errors.quantity}>
             {(p) => (
-              <select
+              <input
                 id={p.id}
                 name="quantity"
+                type="text"
+                placeholder="e.g. 25 jerseys and 30 hoodies"
+                maxLength={LIMITS.quantity}
                 className={inputClass}
-                defaultValue=""
                 aria-invalid={p.invalid}
                 aria-describedby={p.describedBy}
                 required
-              >
-                <option value="" disabled>
-                  Choose…
-                </option>
-                {quantities.map((q) => (
-                  <option key={q} value={q}>
-                    {q}
-                  </option>
-                ))}
-              </select>
+              />
             )}
           </Field>
           <Field label="Needed by" name="neededBy" error={errors.neededBy}>

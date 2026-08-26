@@ -13,7 +13,7 @@ Every quote is in New Zealand dollars and shows GST separately. Quotes are valid
 
 ## Deposit
 
-A deposit is due when you approve your final mockup; the amount is shown on your quote. Production is scheduled once the deposit has cleared, and the 3–4 week production time runs from that day.
+A deposit is due when you approve your final mockup; the amount is shown on your quote. Production is scheduled once the deposit has cleared, and the 4–6 week production time runs from that day.
 
 ## Balance
 

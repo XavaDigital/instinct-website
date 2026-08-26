@@ -18,26 +18,23 @@ export function getStaticPaths() {
 
 const title = 'How it works';
 const description =
-  'From brief to kit bag in three steps: choose a design, choose your garments, send your colours and logos. Free mockup within one business day, production in 3–4 weeks, tracked delivery anywhere in New Zealand.';
+  'From brief to kit bag in three steps: choose a design, choose your garments, send your colours and logos. Free mockup within one business day, production in 4–6 weeks, tracked delivery anywhere in New Zealand.';
 
 const steps = [
   {
     n: '1',
     title: 'Choose a design',
     body: 'Pick a base design from our library or brief us on something completely new. Photos of kit you like, a sketch on a napkin or a competitor you want to beat — all useful.',
-    tone: 'lime',
   },
   {
     n: '2',
     title: 'Choose your garments',
     body: 'Jerseys, hoodies, jackets, training tees, shorts, socks — mix and match across your squad. There is no minimum per garment, so the committee can get polos while the juniors get hoodies.',
-    tone: 'lilac',
   },
   {
     n: '3',
     title: 'Send colours & logos',
     body: 'Send your club colours, logo and sponsor files with rough numbers. Our designers do the rest and send a mockup back for your feedback within one business day.',
-    tone: 'lime',
   },
 ];
 
@@ -45,7 +42,7 @@ const timeline = [
   { when: 'Same day', title: 'We confirm your brief', body: 'A quick email or call to check the sport, garments, numbers and dates so nothing is guessed.' },
   { when: 'Within 1 business day', title: 'Price and free mockup', body: 'A written price with quantity breaks, and a mockup of your kit in your colours with logos and sponsors placed.' },
   { when: 'As long as you need', title: 'Revisions and sign-off', body: 'Tweak colours, move a sponsor, try a second option for the committee. Most clubs sign off within two rounds.' },
-  { when: '3–4 weeks', title: 'Production', body: 'Once you approve the final mockup and your deposit clears, your kit is sublimated, sewn and quality-checked before it ships.' },
+  { when: '4–6 weeks', title: 'Production', body: 'Once you approve the final mockup and your deposit clears, your kit is sublimated, sewn and quality-checked before it ships.' },
   { when: '1–4 working days', title: 'Tracked delivery', body: 'Shipped by tracked courier to your club, or split-shipped to individual players for a per-parcel fee.' },
 ];
 
@@ -133,16 +130,8 @@ const testimonial = (await testimonialsFor('how-it-works', 1))[0];
       <ol class="grid gap-6 text-left md:grid-cols-3">
         {
           steps.map((s) => (
-            <li
-              class:list={[
-                'border border-white/[0.11] px-[26px] pb-[30px] pt-7 bg-gradient-to-b to-transparent',
-                s.tone === 'lime' ? 'from-lime/[0.07]' : 'from-lilac/[0.09]',
-              ]}
-            >
-              <div
-                class:list={['font-display text-[54px] font-black italic leading-none', s.tone === 'lime' ? 'text-lime' : 'text-lilac']}
-                aria-hidden="true"
-              >
+            <li class="border border-white/[0.11] bg-gradient-to-b from-lime/[0.07] to-transparent px-[26px] pb-[30px] pt-7">
+              <div class="font-display text-[54px] font-black italic leading-none text-lime" aria-hidden="true">
                 {s.n}
               </div>
               <h3 class="mb-2 mt-[14px] text-[19px] font-bold uppercase leading-[1.2] tracking-[0.02em] text-white">{s.title}</h3>

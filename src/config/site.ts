@@ -11,7 +11,7 @@ export const site = {
   url: 'https://instinct.nz',
   tagline: 'Custom sublimated teamwear. New Zealand owned and operated.',
   description:
-    'Fully custom sublimated sports uniforms and teamwear for clubs, schools and cultural groups across New Zealand. Free design mockups, no minimum order, 3–4 week turnaround.',
+    'Fully custom sublimated sports uniforms and teamwear for clubs, schools and cultural groups across New Zealand. Free design mockups, no minimum order, 4–6 week turnaround.',
   email: 'hello@instinct.nz',
   phone: {
     display: '022 192 9746',
@@ -48,7 +48,7 @@ export const site = {
   stats: {
     years: '12',
     clubs: '500+',
-    turnaround: '3–4',
+    turnaround: '4–6',
     rating: '5.0',
   },
   /** Add URLs as they exist; empty strings are skipped in the footer. */

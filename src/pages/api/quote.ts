@@ -91,6 +91,10 @@ export const POST: APIRoute = async ({ request }) => {
     .map((g) => (g === GARMENT_OTHER && fields.garmentsOther ? `Other: ${fields.garmentsOther}` : g))
     .join(', ');
   const sportLabel = fields.sport === SPORT_OTHER && fields.sportOther ? `Other: ${fields.sportOther}` : fields.sport;
+  // Quantity is free text; keep the subject line short (the full answer is in the
+  // body). Cut on code points so an emoji is never split into a stray half.
+  const quantityChars = Array.from(fields.quantity);
+  const quantityShort = quantityChars.length > 40 ? `${quantityChars.slice(0, 39).join('')}…` : fields.quantity;
 
   const rows: [string, string][] = [
     ['Name', fields.name],
@@ -112,7 +116,7 @@ export const POST: APIRoute = async ({ request }) => {
   const body = renderFields(rows);
 
   const result = await sendMail({
-    subject: `Quote request — ${fields.org} (${sportLabel}, ${fields.quantity})`,
+    subject: `Quote request — ${fields.org} (${sportLabel}, ${quantityShort})`,
     text: `New quote request from the website.\n\n${body.text}\n\nReply to this email to respond to ${fields.name}.`,
     html: `<p>New quote request from the website.</p>${body.html}<p>Reply to this email to respond.</p>`,
     replyTo: fields.email,
