@@ -1,15 +1,23 @@
-import { SITE_MODE } from 'astro:env/server';
-
 /**
- * Build mode. Set SITE_MODE=mvp (in .env or the build environment) to build
- * the ad-landing subset of the site; anything else builds the full site.
+ * Build mode. `npm run build:mvp` (= `astro build --mode mvp`) builds the
+ * ad-landing subset of the site; `npm run build` builds the full site, or
+ * the MVP when SITE_MODE=mvp is present in the build environment or .env.
+ *
+ * The primary switch is Astro's --mode flag, inlined by Vite as
+ * import.meta.env.MODE, because it is the one channel the .env file cannot
+ * override: the Cloudflare toolchain loads .env into process.env with
+ * override during the build, so a plain SITE_MODE=mvp from the shell was
+ * silently replaced by SITE_MODE=full from .env and the full site got built.
+ * SITE_MODE is still honoured as a way to opt IN to the MVP; it can never
+ * switch a --mode mvp build back to full. Evaluated at build time only.
  *
  * MVP hides: /sports and every /sports/<sport>, every /teamwear/<garment>
  * (the /teamwear hub stays), and /how-it-works. Hidden routes are not built,
  * not in the sitemap, and every link to them is removed or turned into plain
  * text by `routeEnabled()`.
  */
-export const MODE: 'full' | 'mvp' = SITE_MODE;
+const fromEnv = typeof process !== 'undefined' ? process.env?.SITE_MODE : undefined;
+export const MODE: 'full' | 'mvp' = import.meta.env.MODE === 'mvp' || fromEnv === 'mvp' ? 'mvp' : 'full';
 export const IS_MVP = MODE === 'mvp';
 
 const HIDDEN_IN_MVP: { exact?: string; prefix?: string }[] = [

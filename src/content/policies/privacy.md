@@ -13,7 +13,7 @@ Instinct Apparel Limited handles personal information in line with the Privacy A
 
 - **Quote and contact forms** — your name, role, email, phone, club or group, the garments and numbers you're after, and any notes or artwork you attach.
 - **Orders** — size runs, player names and numbers you send us for printing, delivery addresses, and invoicing details.
-- **Website analytics** — anonymised page views and performance data so we can see what's working. Where Google Analytics is enabled it sets cookies; Cloudflare Web Analytics does not.
+- **Website analytics and advertising measurement** — page views and performance data so we can see what's working, and whether an enquiry came from one of our ads. The site loads Google Tag Manager, which runs Google Analytics 4 and Google Ads conversion tracking; these set cookies. Cloudflare Web Analytics, where enabled, does not.
 - **Campaign attribution** — if you arrive from an ad or a link with tracking parameters, your browser remembers which campaign it was so that, if you send us an enquiry, we know where it came from. This is stored on your device, not on our servers, until you submit a form.
 
 We don't collect payment card details on this website. Card payments are handled by our payment provider on their secure pages.
@@ -35,7 +35,7 @@ Only the people and services needed to do the job: our production team (print-re
 
 ## Your rights
 
-You can ask us at any time to show you the personal information we hold about you, correct it, or delete it. Email [hello@instinctapparel.co.nz](mailto:hello@instinctapparel.co.nz) and we'll respond within 20 working days. If you're unhappy with how we've handled your information you can contact the Office of the Privacy Commissioner at privacy.org.nz.
+You can ask us at any time to show you the personal information we hold about you, correct it, or delete it. Email [hello@instinct.nz](mailto:hello@instinct.nz) and we'll respond within 20 working days. If you're unhappy with how we've handled your information you can contact the Office of the Privacy Commissioner at privacy.org.nz.
 
 ## Security
 

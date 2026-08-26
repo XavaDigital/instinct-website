@@ -24,7 +24,8 @@ teamwear, Christchurch NZ). Main conversion is the quote request form. Not e-com
 
 ## Site modes
 
-`SITE_MODE=mvp` (build-time env) builds the ad-landing subset; `full` builds everything.
+`npm run build:mvp` (`astro build --mode mvp`) builds the ad-landing subset; `npm run build`
+builds everything (`SITE_MODE=mvp` in the environment or .env also opts into the MVP).
 `src/config/mode.ts` is the single source of truth: use `routeEnabled(href)` before linking
 to /sports*, /teamwear/<garment> or /how-it-works, and `IS_MVP` for layout differences.
 Hidden pages opt out via `getStaticPaths()` returning `[]`. Never fork the codebase for

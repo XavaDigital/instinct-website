@@ -108,10 +108,19 @@ export function resetTurnstile() {
   }
 }
 
-export function Turnstile({ siteKey }: { siteKey?: string }) {
+/** `action` is echoed back by siteverify; the server requires it to match. */
+export function Turnstile({ siteKey, action }: { siteKey?: string; action: 'quote' | 'contact' }) {
   if (!siteKey) return null;
   // min-h reserves the widget's height so it doesn't shift the form when it loads.
-  return <div className="cf-turnstile min-h-[65px]" data-sitekey={siteKey} data-theme="dark" data-size="flexible" />;
+  return (
+    <div
+      className="cf-turnstile min-h-[65px]"
+      data-sitekey={siteKey}
+      data-action={action}
+      data-theme="dark"
+      data-size="flexible"
+    />
+  );
 }
 
 /** Hidden fields used by the server's bot checks. */

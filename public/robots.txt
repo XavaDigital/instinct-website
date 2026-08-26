@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://instinctapparel.co.nz/sitemap-index.xml
+Sitemap: https://instinct.nz/sitemap-index.xml

@@ -8,11 +8,11 @@ export const site = {
   name: 'Instinct Apparel',
   shortName: 'Instinct',
   legalName: 'Instinct Apparel Limited',
-  url: 'https://instinctapparel.co.nz',
+  url: 'https://instinct.nz',
   tagline: 'Custom sublimated teamwear. New Zealand owned and operated.',
   description:
     'Fully custom sublimated sports uniforms and teamwear for clubs, schools and cultural groups across New Zealand. Free design mockups, no minimum order, 3–4 week turnaround.',
-  email: 'hello@instinctapparel.co.nz',
+  email: 'hello@instinct.nz',
   phone: {
     display: '022 192 9746',
     international: '+64 22 192 9746',

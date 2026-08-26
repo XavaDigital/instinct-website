@@ -543,7 +543,7 @@ export default function QuoteForm({ sports, garments, quantities, turnstileSiteK
 
         {turnstileSiteKey && (
           <div className="mt-6">
-            <Turnstile siteKey={turnstileSiteKey} />
+            <Turnstile siteKey={turnstileSiteKey} action="quote" />
           </div>
         )}
 

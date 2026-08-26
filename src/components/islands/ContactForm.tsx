@@ -213,7 +213,7 @@ export default function ContactForm({ turnstileSiteKey }: Props) {
 
         {turnstileSiteKey && (
           <div className="mt-6">
-            <Turnstile siteKey={turnstileSiteKey} />
+            <Turnstile siteKey={turnstileSiteKey} action="contact" />
           </div>
         )}
 

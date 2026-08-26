@@ -4,6 +4,13 @@
   "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2026-07-01",
   "compatibility_flags": ["nodejs_compat"],
+  // Production hostnames. Routes run on top of the zone's existing proxied DNS
+  // records (nothing in DNS is changed). The workers.dev preview URL stays on.
+  "routes": [
+    { "pattern": "instinct.nz/*", "zone_name": "instinct.nz" },
+    { "pattern": "www.instinct.nz/*", "zone_name": "instinct.nz" }
+  ],
+  "workers_dev": true,
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS"

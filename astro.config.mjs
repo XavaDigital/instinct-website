@@ -17,7 +17,7 @@ import tailwindcss from '@tailwindcss/vite';
  * depends on Cloudflare.
  */
 export default defineConfig({
-  site: 'https://instinctapparel.co.nz',
+  site: 'https://instinct.nz',
   output: 'static',
   trailingSlash: 'never',
   build: {
@@ -50,10 +50,12 @@ export default defineConfig({
   },
   env: {
     schema: {
-      // "mvp" builds the ad-landing subset (no sport pages, no individual
-      // garment pages, no how-it-works); "full" builds everything.
-      SITE_MODE: envField.enum({ context: 'server', access: 'public', values: ['full', 'mvp'], default: 'full' }),
-      // Google Ads conversion (optional): "AW-123456789" and the conversion label
+      // SITE_MODE ("full" | "mvp") is deliberately not declared here: it is read
+      // from the build process environment in src/config/mode.ts (see the note there).
+      // Google Tag Manager container (public). Rendered on every page; the /thanks
+      // pages push a "generate_lead" event to the dataLayer for its triggers.
+      PUBLIC_GTM_ID: envField.string({ context: 'client', access: 'public', optional: true, default: 'GTM-MSQCHHBT' }),
+      // Google Ads conversion (optional, direct gtag path when GTM is not used): "AW-123456789" and the label
       PUBLIC_GADS_CONVERSION_ID: envField.string({ context: 'client', access: 'public', optional: true }),
       PUBLIC_GADS_CONVERSION_LABEL: envField.string({ context: 'client', access: 'public', optional: true }),
       // Mailgun (transactional email for the quote and contact forms)
@@ -70,7 +72,14 @@ export default defineConfig({
       // Cloudflare Turnstile (spam protection). Both optional: without keys the
       // forms fall back to honeypot + timing checks only.
       TURNSTILE_SECRET_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
-      PUBLIC_TURNSTILE_SITE_KEY: envField.string({ context: 'client', access: 'public', optional: true }),
+      // The site key is public (it is rendered into the page). Widget "Instinct forms"
+      // in the Cloudflare account: instinct.nz, the workers.dev preview, localhost.
+      PUBLIC_TURNSTILE_SITE_KEY: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: '0x4AAAAAAEc4nmZxm1sUDh4n',
+      }),
       // Analytics. Each snippet is only rendered when its ID is set.
       PUBLIC_GA_MEASUREMENT_ID: envField.string({ context: 'client', access: 'public', optional: true }),
       PUBLIC_CF_ANALYTICS_TOKEN: envField.string({ context: 'client', access: 'public', optional: true }),

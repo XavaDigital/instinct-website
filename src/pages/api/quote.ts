@@ -82,7 +82,7 @@ export const POST: APIRoute = async ({ request }) => {
     return fail(422, 'Please check the highlighted fields.', errors);
   }
 
-  if (!(await verifyTurnstile(form, ip))) {
+  if (!(await verifyTurnstile(form, { ip, hostname: new URL(request.url).hostname, action: 'quote' }))) {
     return fail(400, 'The spam check did not pass. Please try again.');
   }
 

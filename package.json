@@ -10,12 +10,13 @@
     "dev": "astro dev",
     "prebuild": "node -e \"try { require('node:fs').rmSync('dist', { recursive: true, force: true }) } catch (e) { console.warn('dist not cleared:', e.code) }\"",
     "build": "astro build",
-    "build:mvp": "node -e \"process.env.SITE_MODE='mvp'; require('node:child_process').execSync('npm run build', { stdio: 'inherit' })\"",
+    "build:mvp": "npm run prebuild && astro build --mode mvp && node -e \"if (require('node:fs').existsSync('dist/client/sports.html')) { console.error('build:mvp: the output is the FULL site, not the MVP'); process.exit(1) }\"",
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro",
     "assets": "node scripts/generate-assets.mjs",
-    "deploy": "astro build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "deploy:mvp": "npm run build:mvp && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.2.4",

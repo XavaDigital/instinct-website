@@ -9,8 +9,8 @@ form endpoints run on the server.
 
 ```bash
 npm install
-cp .env.example .dev.vars   # fill in Mailgun keys to test the forms locally
-npm run dev                 # http://localhost:4321
+cp .env.example .env        # fill in the Mailgun and Turnstile keys to test the forms locally
+npm run dev                 # http://localhost:4321 (first start takes ~40s while Vite optimises dependencies)
 ```
 
 | Command                 | What it does                                                        |
@@ -19,7 +19,8 @@ npm run dev                 # http://localhost:4321
 | `npm run build`         | Production build into `dist/`                                       |
 | `npm run preview`       | Serve the production build locally                                  |
 | `npm run check`         | Type-check `.astro` and `.tsx` files                                |
-| `npm run deploy`        | Build and deploy to Cloudflare with Wrangler                        |
+| `npm run deploy`        | Build the full site and deploy to Cloudflare with Wrangler          |
+| `npm run deploy:mvp`    | Build the MVP (ad-landing subset) and deploy it                     |
 | `node scripts/generate-assets.mjs` | Regenerate `og-default.png` and the favicon PNGs         |
 
 Requires Node 22.12 or newer.
@@ -62,10 +63,10 @@ Gallery projects take `"image": "../assets/projects/riverside.jpg"` (relative to
 
 The same codebase builds two sites, chosen at build time:
 
-| `SITE_MODE` | Builds |
-| ----------- | ------ |
-| `full` (default) | Everything — 36 pages (including 404) |
-| `mvp` | 19 pages (including 404): Home, Teamwear (as a showcase, no garment pages), Gallery, Why us, FAQ, Contact, Request a quote, the two thanks pages, policies (hub + 6), terms, size charts |
+| Command | Builds |
+| ------- | ------ |
+| `npm run build` | Everything — 36 pages (including 404) |
+| `npm run build:mvp` | 19 pages (including 404): Home, Teamwear (as a showcase, no garment pages), Gallery, Why us, FAQ, Contact, Request a quote, the two thanks pages, policies (hub + 6), terms, size charts |
 
 Because the MVP build receives real ad traffic, it hides unbacked social proof: testimonials
 flagged `placeholder: true`, the placeholder client-logo row, and the "5.0 Google" rating
@@ -74,10 +75,15 @@ placeholders in `src/content/testimonials.json` with real quotes to bring the se
 The other headline numbers in `site.stats` (years, clubs, turnaround) are shown in both modes —
 confirm them before launch.
 
-`npm run build:mvp` builds the MVP; `npm run build` builds the full site. In the Cloudflare
-build settings set `SITE_MODE=mvp` for the ad-testing period and change it to `full` when you
-want the whole site — no branches, no merges. Hidden pages are not built, are absent from the
-sitemap, and every link to them is removed or rendered as plain text (`src/config/mode.ts`).
+`npm run build:mvp` runs `astro build --mode mvp`; the mode reaches the code as
+`import.meta.env.MODE` (`src/config/mode.ts`), which is the one switch the `.env` file cannot
+override (the Cloudflare toolchain copies `.env` over the shell environment during a build).
+`SITE_MODE=mvp` in `.env` or the shell also opts a plain `npm run build` into the MVP, but
+nothing can turn a `--mode mvp` build back into the full site. For the ad-testing period
+deploy `npm run build:mvp`; switch to `npm run build` when you want the whole site — no
+branches, no merges. `build:mvp` fails if its output is not the MVP, so a wrong mode can't be
+deployed by accident. Hidden pages are not built, are absent from the sitemap, and every link
+to them is removed or rendered as plain text.
 
 ### Photos and images
 
@@ -108,11 +114,19 @@ Garment showcase images on `/teamwear` come from each garment file's `image` fie
 ### Conversions and attribution
 
 - Both forms land on `/thanks/quote` or `/thanks/contact` after a successful send — use those
-  URLs as the conversion goals. The page fires a GA4 `generate_lead` event and, when
-  `PUBLIC_GADS_CONVERSION_ID` + `PUBLIC_GADS_CONVERSION_LABEL` are set, a Google Ads
-  `conversion` event. Events fire once per submission only: the API appends a one-shot
-  `?sent=1` marker, the page strips it immediately, so reloads, bookmarks and bot submissions
-  never count.
+  URLs as the conversion goals. Tags are managed in **Google Tag Manager**: the container in
+  `PUBLIC_GTM_ID` (default `GTM-MSQCHHBT`, set in `astro.config.mjs`) is rendered on every page
+  of a production build (never by `astro dev`),
+  and the thanks page pushes `{ event: 'generate_lead', form_type: 'quote' | 'contact',
+  transaction_id }` to the `dataLayer`. In GTM, add a **Custom Event** trigger named
+  `generate_lead` and attach the GA4 event tag and the Google Ads conversion tag to it (map
+  `transaction_id` to the conversion's transaction ID to deduplicate). Without GTM, the direct
+  path still works: set `PUBLIC_GA_MEASUREMENT_ID` and/or `PUBLIC_GADS_CONVERSION_ID` +
+  `PUBLIC_GADS_CONVERSION_LABEL` and the page calls `gtag` itself. The direct path is switched
+  off automatically while GTM is on, so a lead is never counted twice; to drop GTM, remove the
+  `PUBLIC_GTM_ID` default in `astro.config.mjs` (a blank value in `.env` is replaced by the
+  default). Events fire once per submission only: the API appends a one-shot `?sent=1` marker,
+  the page strips it immediately, so reloads, bookmarks and bot submissions never count.
 - UTM parameters, `gclid`/`fbclid` and the first external referrer are remembered in the
   visitor's browser (`localStorage`) on any page and sent with the form as a "Source" line in
   the email, so you can see which ad produced each enquiry.
@@ -137,49 +151,63 @@ Layers, from cheapest to strongest:
 2. Body-size guard (quote: files + 512KB; contact: 64KB) before the body is parsed.
 3. In-memory per-IP rate limit (5 submissions per 10 minutes per endpoint). On Cloudflare
    Workers this is per isolate, so treat it as burst protection only.
-4. **Cloudflare Turnstile** — set `TURNSTILE_SECRET_KEY` and `PUBLIC_TURNSTILE_SITE_KEY`
-   (both, or neither). Strongly recommended before launch; without it the forms are
-   protected only by the layers above.
-
-   *What Turnstile is:* Cloudflare's free, invisible alternative to a CAPTCHA. It checks that
-   a form is being sent by a real browser, usually without showing anything. *Getting the
-   keys:* Cloudflare dashboard → **Turnstile** → **Add widget** → name it "Instinct forms",
-   hostname `instinctapparel.co.nz` (add `localhost` for local testing), widget mode
-   **Managed** → Create. It shows two strings: the **Site Key** goes in
-   `PUBLIC_TURNSTILE_SITE_KEY` (it's public and is baked into the pages at build time) and
-   the **Secret Key** goes in `TURNSTILE_SECRET_KEY` (`npx wrangler secret put
-   TURNSTILE_SECRET_KEY`). Takes about two minutes and costs nothing.
+4. **Cloudflare Turnstile** — Cloudflare's free, invisible alternative to a CAPTCHA. The
+   widget "Instinct forms" exists in the Cloudflare account (hostnames `instinct.nz`, the
+   workers.dev preview URL, `localhost` and `127.0.0.1`; mode Managed). Its public site key
+   is the default for `PUBLIC_TURNSTILE_SITE_KEY` in `astro.config.mjs`; the secret is set on
+   the Worker (`TURNSTILE_SECRET_KEY`) and lives in `.env` for local runs. The server accepts
+   a token only when siteverify reports success **and** the token was issued on the same
+   hostname that received the post **and** carries the expected action (`quote` /
+   `contact`), so a token minted on localhost or the preview URL can't be replayed against
+   production. With the site key present but no secret, every submission is rejected and the
+   reason is logged (the widget would show but nothing could verify it) — so the secret must be
+   set wherever the site runs. To switch Turnstile off entirely, remove the site-key default in
+   `astro.config.mjs` (a blank value in `.env` is replaced by the default); the forms then fall
+   back to the layers above.
 5. **Recommended in production:** add a Cloudflare WAF rate-limiting rule for
    `/api/*` (for example 10 requests per minute per IP) in the dashboard. This is the
    only layer that is global rather than per isolate.
 
 ### Environment variables / secrets
 
-See `.env.example`. Locally, put them in `.dev.vars`. In production:
+See `.env.example`. Locally, put them in `.env` (Astro reads it for builds and for the
+form endpoints in `npm run dev`; a `.dev.vars` file, if present, would shadow it for the Worker
+runtime, so keep just `.env`). In production:
 
 ```bash
 npx wrangler secret put MAILGUN_API_KEY
 npx wrangler secret put MAILGUN_DOMAIN
 npx wrangler secret put FORM_TO_EMAIL
 npx wrangler secret put FORM_FROM_EMAIL
-npx wrangler secret put TURNSTILE_SECRET_KEY        # optional
+npx wrangler secret put TURNSTILE_SECRET_KEY        # widget "Instinct forms"
 ```
 
-Public values (`PUBLIC_TURNSTILE_SITE_KEY`, `PUBLIC_GA_MEASUREMENT_ID`,
-`PUBLIC_CF_ANALYTICS_TOKEN`) are baked in at build time, so set them in the build
-environment (or `wrangler.jsonc` → `vars`) before running `npm run build`. Each analytics
-snippet only renders when its ID is set.
+Public values (`PUBLIC_GTM_ID`, `PUBLIC_TURNSTILE_SITE_KEY`, `PUBLIC_GA_MEASUREMENT_ID`,
+`PUBLIC_CF_ANALYTICS_TOKEN`, ...) are baked in at build time: Astro reads them from `.env` or
+the shell environment when `npm run build` runs. The GTM container ID and the Turnstile site
+key are public, so they also have defaults in `astro.config.mjs` and every build gets them
+without a `.env`. Each analytics snippet only renders when its ID is set.
 
 ## Deploying
 
 ### Cloudflare (default)
 
 ```bash
-npm run deploy
+npm run deploy:mvp   # ad-landing subset (current)
+npm run deploy       # full site
 ```
 
-`wrangler.jsonc` holds the Worker config. Attach the `instinctapparel.co.nz` custom domain
-to the Worker in the Cloudflare dashboard (or add a `routes` block).
+Secrets on the Worker (`wrangler secret put`) survive deploys; only the public build-time values
+change with the build.
+
+`wrangler.jsonc` holds the Worker config. Production is served on `instinct.nz` and
+`www.instinct.nz` through Worker **routes** (the `routes` block) on top of the zone's existing
+proxied DNS records, and the `instinct-apparel-website.xava.workers.dev` preview URL stays on
+(`workers_dev: true`; set it to `false` once the domain is live if you want to retire the
+preview hostname — it serves the same deployment, secrets included). Two one-off settings for the `instinct.nz` zone are made in the
+Cloudflare dashboard: **SSL/TLS → Edge Certificates → Always Use HTTPS** (on) and **Rules →
+Redirect Rules → template "Redirect from WWW to root"**, so `http://` and `www.` both land on
+`https://instinct.nz`.
 
 ### Google Cloud Run (alternative)
 

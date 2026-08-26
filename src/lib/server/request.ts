@@ -1,4 +1,5 @@
 import { TURNSTILE_SECRET_KEY } from 'astro:env/server';
+import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
 
 /** Hard ceiling on any single text field, before per-field validation. */
 const HARD_CAP = 20_000;
@@ -81,21 +82,43 @@ export function looksLikeBot(form: FormData): boolean {
   return false;
 }
 
+export interface TurnstileCheck {
+  /** Visitor IP, forwarded to siteverify when it looks like an address. */
+  ip?: string;
+  /** Hostname that received the form post; the token must have been issued for it. */
+  hostname: string;
+  /** The widget's data-action ("quote" | "contact"); the token must carry the same one. */
+  action: string;
+}
+
+const SITEVERIFY = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+
 /**
- * Verifies a Cloudflare Turnstile token. Returns true when Turnstile is not
- * configured so the forms keep working without it (honeypot, timing and rate
- * limiting still apply).
+ * Verifies a Cloudflare Turnstile token. Returns true only when Turnstile is
+ * switched off on both sides (no site key rendered, no secret), so the forms
+ * keep working without it (honeypot, timing and rate limiting still apply).
+ * A site key without a secret is a misconfiguration: the widget is shown but
+ * nothing could check its tokens, so every post is rejected and the reason is
+ * logged rather than silently letting everything through. When configured it
+ * fails closed: the token must verify, must have been minted on the same
+ * hostname that received the post (so a token from localhost or the preview
+ * URL can't be replayed against production) and must carry the expected action.
  */
-export async function verifyTurnstile(form: FormData, ip?: string): Promise<boolean> {
-  if (!TURNSTILE_SECRET_KEY) return true;
+export async function verifyTurnstile(form: FormData, check: TurnstileCheck): Promise<boolean> {
+  if (!TURNSTILE_SECRET_KEY) {
+    if (!PUBLIC_TURNSTILE_SITE_KEY) return true;
+    console.error('Turnstile: PUBLIC_TURNSTILE_SITE_KEY is set but TURNSTILE_SECRET_KEY is missing; rejecting the submission.');
+    return false;
+  }
   const token = form.get('cf-turnstile-response');
-  if (typeof token !== 'string' || !token) return false;
+  if (typeof token !== 'string' || !token || token.length > 2048) return false;
   const body = new URLSearchParams({ secret: TURNSTILE_SECRET_KEY, response: token });
-  if (ip) body.set('remoteip', ip);
+  if (check.ip && /^[0-9a-fA-F.:]+$/.test(check.ip)) body.set('remoteip', check.ip);
   try {
-    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body });
-    const data = (await res.json()) as { success?: boolean };
-    return Boolean(data.success);
+    const res = await fetch(SITEVERIFY, { method: 'POST', body, signal: AbortSignal.timeout(10_000) });
+    if (!res.ok) return false;
+    const data = (await res.json()) as { success?: boolean; hostname?: string; action?: string };
+    return data.success === true && data.hostname === check.hostname && data.action === check.action;
   } catch {
     return false;
   }

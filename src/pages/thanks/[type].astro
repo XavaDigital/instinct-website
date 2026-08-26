@@ -2,12 +2,19 @@
 /**
  * Conversion pages: /thanks/quote and /thanks/contact. Both forms land here
  * after a successful send. The URL is the goal to configure in GA4 / Google
- * Ads. Analytics events fire only when the one-shot `?sent=1` marker is
- * present (added by the API / the form islands), and the marker is removed
- * from the address bar immediately, so reloads, bookmarks and back
- * navigation never double-count a lead.
+ * Ads. On a genuine send the page pushes a "generate_lead" event to the
+ * dataLayer (Google Tag Manager triggers on it) and, when the direct gtag
+ * path is configured instead, calls gtag itself. Events fire only when the
+ * one-shot `?sent=1` marker is present (added by the API / the form islands),
+ * and the marker is removed from the address bar immediately, so reloads,
+ * bookmarks and back navigation never double-count a lead.
  */
-import { PUBLIC_GADS_CONVERSION_ID, PUBLIC_GADS_CONVERSION_LABEL } from 'astro:env/client';
+import {
+  PUBLIC_GTM_ID,
+  PUBLIC_GA_MEASUREMENT_ID,
+  PUBLIC_GADS_CONVERSION_ID,
+  PUBLIC_GADS_CONVERSION_LABEL,
+} from 'astro:env/client';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { site } from '@/config/site';
 
@@ -40,6 +47,8 @@ const adsSendTo =
   PUBLIC_GADS_CONVERSION_ID && PUBLIC_GADS_CONVERSION_LABEL
     ? `${PUBLIC_GADS_CONVERSION_ID}/${PUBLIC_GADS_CONVERSION_LABEL}`
     : '';
+// The direct gtag path only exists when GTM is off (BaseLayout loads gtag.js on the same condition).
+const directGtag = !PUBLIC_GTM_ID && Boolean(PUBLIC_GA_MEASUREMENT_ID || PUBLIC_GADS_CONVERSION_ID);
 ---
 
 <BaseLayout
@@ -81,7 +90,7 @@ const adsSendTo =
     </div>
   </section>
 
-  <script is:inline define:vars={{ adsSendTo, form: type }}>
+  <script is:inline define:vars={{ adsSendTo, form: type, directGtag }}>
     (function () {
       var params = new URLSearchParams(location.search);
       var fresh = params.get('sent') === '1';
@@ -94,10 +103,16 @@ const adsSendTo =
       }
       var heading = document.querySelector('[data-thanks-heading]');
       if (heading) heading.focus();
-      if (fresh && typeof gtag === 'function') {
+      if (fresh) {
         var txn = window.crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random();
-        gtag('event', 'generate_lead', { form: form, transaction_id: txn });
-        if (adsSendTo) gtag('event', 'conversion', { send_to: adsSendTo, transaction_id: txn });
+        // Google Tag Manager: fire the GA4 / Google Ads tags on a "generate_lead" custom-event trigger.
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: 'generate_lead', form_type: form, transaction_id: txn });
+        // Direct gtag.js path (GA4 / Google Ads IDs set and no GTM); window.gtag is assigned by BaseLayout.
+        if (directGtag && typeof window.gtag === 'function') {
+          gtag('event', 'generate_lead', { form: form, transaction_id: txn });
+          if (adsSendTo) gtag('event', 'conversion', { send_to: adsSendTo, transaction_id: txn });
+        }
       }
     })();
   </script>

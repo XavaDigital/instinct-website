@@ -5,7 +5,12 @@ import '@/styles/global.css';
 import archivoItalicUrl from '@fontsource/archivo/files/archivo-latin-900-italic.woff2?url';
 import barlowRegularUrl from '@fontsource/barlow/files/barlow-latin-400-normal.woff2?url';
 
-import { PUBLIC_GA_MEASUREMENT_ID, PUBLIC_CF_ANALYTICS_TOKEN, PUBLIC_GADS_CONVERSION_ID } from 'astro:env/client';
+import {
+  PUBLIC_GTM_ID,
+  PUBLIC_GA_MEASUREMENT_ID,
+  PUBLIC_CF_ANALYTICS_TOKEN,
+  PUBLIC_GADS_CONVERSION_ID,
+} from 'astro:env/client';
 
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
@@ -48,8 +53,12 @@ const {
 } = Astro.props;
 
 const fullTitle = titleTemplate ? `${title} | ${site.name}` : title;
-// gtag.js serves both GA4 and Google Ads; load it once with whichever ID exists.
-const gtagLoaderId = PUBLIC_GA_MEASUREMENT_ID || PUBLIC_GADS_CONVERSION_ID;
+// Google Tag Manager is rendered in production builds only, so `astro dev` never
+// sends localhost traffic to the live container.
+const gtmId = import.meta.env.PROD ? PUBLIC_GTM_ID : undefined;
+// Direct gtag.js path (GA4 / Google Ads without GTM): load it once with whichever
+// ID exists. Off whenever GTM is configured, so a lead is never counted twice.
+const gtagLoaderId = PUBLIC_GTM_ID ? undefined : PUBLIC_GA_MEASUREMENT_ID || PUBLIC_GADS_CONVERSION_ID;
 // With build.format 'file' the index route reports "/index"; normalise so the
 // canonical URL is always the clean path with no extension or trailing slash.
 const pathname =
@@ -67,6 +76,23 @@ const extraJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {
+      gtmId && (
+        <script is:inline define:vars={{ gtmId }}>
+          /* Google Tag Manager */
+          (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            var f = d.getElementsByTagName(s)[0],
+              j = d.createElement(s),
+              dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+          })(window, document, 'script', 'dataLayer', gtmId);
+        </script>
+      )
+    }
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     {noindex ? <meta name="robots" content="noindex, nofollow" /> : <link rel="canonical" href={canonicalUrl} />}
@@ -106,9 +132,13 @@ const extraJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
           <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gtagLoaderId}`} />
           <script is:inline define:vars={{ ga: PUBLIC_GA_MEASUREMENT_ID ?? '', ads: PUBLIC_GADS_CONVERSION_ID ?? '' }}>
             window.dataLayer = window.dataLayer || [];
-            function gtag() {
-              dataLayer.push(arguments);
-            }
+            // Astro wraps define:vars scripts in a closure, so assign to window
+            // explicitly: the thanks page calls window.gtag for conversions.
+            window.gtag =
+              window.gtag ||
+              function () {
+                dataLayer.push(arguments);
+              };
             gtag('js', new Date());
             if (ga) gtag('config', ga, { anonymize_ip: true });
             if (ads) gtag('config', ads);
@@ -144,6 +174,19 @@ const extraJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     <slot name="head" />
   </head>
   <body class:list={['flex min-h-dvh flex-col', bodyClass]}>
+    {
+      gtmId && (
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+            height="0"
+            width="0"
+            style="display:none;visibility:hidden"
+            title="Google Tag Manager"
+          ></iframe>
+        </noscript>
+      )
+    }
     <a href="#main" class="skip-link">Skip to content</a>
     <Header announcement={announcement} cta={headerCta} />
     {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
