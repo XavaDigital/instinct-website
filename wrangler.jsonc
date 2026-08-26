@@ -11,6 +11,15 @@
     { "pattern": "www.instinct.nz/*", "zone_name": "instinct.nz" }
   ],
   "workers_dev": true,
+  // Submissions log (every quote request / contact message). See README → Submissions log.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "instinct-apparel-leads",
+      "database_id": "42c85d40-f6f1-4deb-99a7-1a8c6744133d",
+      "migrations_dir": "migrations"
+    }
+  ],
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS"

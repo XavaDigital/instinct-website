@@ -2,7 +2,10 @@ import type { APIRoute } from 'astro';
 import { validateContact } from '@/lib/forms';
 import { renderFields, sendMail } from '@/lib/server/mailgun';
 import { rateLimited } from '@/lib/server/ratelimit';
+import { getDb } from '@/lib/server/bindings';
+import { markEmail, recordSubmission } from '@/lib/server/store';
 import {
+  attributionData,
   attributionRows,
   bodyTooLarge,
   clientIp,
@@ -67,6 +70,19 @@ export const POST: APIRoute = async ({ request }) => {
     return fail(400, 'The spam check did not pass. Please try again.');
   }
 
+  // Log the message first, so it survives an email outage (best-effort; see store.ts).
+  const db = getDb();
+  const rowId = await recordSubmission(db, {
+    type: 'contact',
+    name: fields.name,
+    email: fields.email,
+    phone: fields.phone,
+    org: fields.org,
+    message: fields.message,
+    source: attributionData(form),
+    page: new URL(request.url).hostname,
+  });
+
   const body = renderFields([
     ['Name', fields.name],
     ['Club / school / group', fields.org],
@@ -85,8 +101,10 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (!result.ok) {
     console.error('[contact] send failed:', result.error);
+    await markEmail(db, rowId, 'failed', result.error);
     return fail(502, FALLBACK);
   }
+  await markEmail(db, rowId, 'sent');
 
   return html ? redirect(THANKS) : json({ ok: true, redirect: THANKS });
 };

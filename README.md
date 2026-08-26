@@ -3,7 +3,7 @@
 Customer-facing site for Instinct Apparel (custom sublimated teamwear, Christchurch, NZ).
 Built with [Astro](https://astro.build) and React islands, styled with Tailwind CSS v4,
 deployed to Cloudflare Workers. Every page is prerendered to static HTML; only the two
-form endpoints run on the server.
+form endpoints and the private submissions export run on the server.
 
 ## Quick start
 
@@ -180,6 +180,7 @@ npx wrangler secret put MAILGUN_DOMAIN
 npx wrangler secret put FORM_TO_EMAIL
 npx wrangler secret put FORM_FROM_EMAIL
 npx wrangler secret put TURNSTILE_SECRET_KEY        # widget "Instinct forms"
+npx wrangler secret put EXPORT_KEY                  # submissions export (URL-safe: openssl rand -hex 24)
 ```
 
 Public values (`PUBLIC_GTM_ID`, `PUBLIC_TURNSTILE_SITE_KEY`, `PUBLIC_GA_MEASUREMENT_ID`,
@@ -188,11 +189,49 @@ the shell environment when `npm run build` runs. The GTM container ID and the Tu
 key are public, so they also have defaults in `astro.config.mjs` and every build gets them
 without a `.env`. Each analytics snippet only renders when its ID is set.
 
+## Submissions log
+
+Every genuine quote request and contact message is written to a Cloudflare D1 database
+(`instinct-apparel-leads`, binding `DB` in `wrangler.jsonc`) *before* the notification email is
+sent, so a lead survives a mail outage; the email's outcome (`sent` / `failed` + reason) is stored
+next to it. Bots caught by the honeypot, timing or Turnstile checks are not stored. Attached
+artwork is not stored — the files travel only in the email.
+
+Viewing it — replace `KEY` with the `EXPORT_KEY` secret:
+
+| URL | Gives |
+| --- | --- |
+| `https://instinct.nz/api/export?key=KEY` | Table in the browser, newest first, NZ time |
+| `https://instinct.nz/api/export?key=KEY&format=csv` | CSV download for Excel / Google Sheets (File → Import) |
+| `https://instinct.nz/api/export?key=KEY&format=json` | JSON |
+| add `&type=quote` or `&type=contact`, `&since=2026-09-01` (a New Zealand date), `&limit=500` | Filters |
+
+Opening the table view with `?key=` sets a 30-day cookie and redirects to the same page without
+the key, so the key isn't repeated in the page's links, your browser history or the Worker's
+request logs after that first visit; the CSV/JSON links on the page use the cookie. Scripts should
+send the key as a header instead: `Authorization: Bearer KEY`. Rotating the key
+(`npx wrangler secret put EXPORT_KEY`) signs every browser out — do that if anyone who could
+read the Worker logs or the link leaves. Treat the link like a password: it exposes customer
+contact details.
+
+A Google Sheet can pull it live with `=IMPORTDATA("https://instinct.nz/api/export?key=KEY&format=csv")`
+(refreshes about hourly; anyone who can open that sheet can read the key, so keep the sheet private).
+In the CSV, a value that starts with `=`, `@`, or a `+`/`-` that isn't a plain number is shown with
+a leading apostrophe — that is deliberate, so a visitor can never plant a spreadsheet formula.
+
+Schema: `migrations/0001_submissions.sql`. Rows older than 12 months are deleted automatically on
+each new submission, matching the privacy policy. Apply schema changes with
+`npx wrangler d1 migrations apply instinct-apparel-leads --remote` **before** deploying code that
+needs them (and `--local` once for `npm run dev`, which uses a separate local database; without
+it the log is skipped with a warning and the forms still work). A `[store] insert failed` line in
+the Worker logs, or a 500 from `/api/export`, means a migration hasn't been applied.
+
 ## Deploying
 
 ### Cloudflare (default)
 
 ```bash
+npx wrangler d1 migrations apply instinct-apparel-leads --remote   # only when migrations/ changed
 npm run deploy:mvp   # ad-landing subset (current)
 npm run deploy       # full site
 ```
@@ -217,8 +256,10 @@ npm install @astrojs/node
 
 In `astro.config.mjs` replace the `adapter: cloudflare(...)` line with
 `adapter: node({ mode: 'standalone' })` (and the import). Build a container that runs
-`node dist/server/entry.mjs`; set the same environment variables on the service. Nothing
-else in the project depends on Cloudflare — Turnstile and Mailgun are plain HTTPS calls.
+`node dist/server/entry.mjs`; set the same environment variables on the service. Turnstile and
+Mailgun are plain HTTPS calls. The only Cloudflare-specific code is `src/lib/server/bindings.ts`
+(the D1 submissions log): point it at another database, or let `getDb()` return `undefined` —
+the forms then skip the log and still send email, and `/api/export` answers 503.
 
 ## SEO checklist built in
 
@@ -246,9 +287,10 @@ src/
   content/           Editable content (see above)
   layouts/           BaseLayout.astro — <head>, SEO, analytics, header/footer
   lib/               seo.ts (JSON-LD helpers), forms.ts (shared validation)
-  lib/server/        mailgun.ts, request.ts (server-only helpers)
-  pages/             One file per route; api/ holds the two endpoints
+  lib/server/        mailgun.ts, request.ts, store.ts (server-only helpers)
+  pages/             One file per route; api/ holds the endpoints (quote, contact, export)
   styles/global.css  Tailwind theme tokens and component classes
+migrations/          D1 schema for the submissions log
 scripts/             generate-assets.mjs (OG image + favicons)
 public/              Static files copied as-is
 Instinct Apparel UI mockups/   Original Claude Design mockups (reference only)

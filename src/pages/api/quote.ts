@@ -8,9 +8,13 @@ import {
 } from '@/lib/forms';
 import { renderFields, sendMail } from '@/lib/server/mailgun';
 import { rateLimited } from '@/lib/server/ratelimit';
+import { getDb } from '@/lib/server/bindings';
+import { markEmail, recordSubmission } from '@/lib/server/store';
 import {
+  attributionData,
   attributionRows,
   bodyTooLarge,
+  cleanFileName,
   clientIp,
   field,
   fieldList,
@@ -96,6 +100,27 @@ export const POST: APIRoute = async ({ request }) => {
   const quantityChars = Array.from(fields.quantity);
   const quantityShort = quantityChars.length > 40 ? `${quantityChars.slice(0, 39).join('')}…` : fields.quantity;
 
+  const artworkNames = artwork.map((f) => cleanFileName(f.name));
+
+  // Log the lead first, so it survives an email outage (best-effort; see store.ts).
+  const db = getDb();
+  const rowId = await recordSubmission(db, {
+    type: 'quote',
+    name: fields.name,
+    role: fields.role,
+    email: fields.email,
+    phone: fields.phone,
+    org: fields.org,
+    sport: sportLabel,
+    garments: garmentsLabel,
+    quantity: fields.quantity,
+    neededBy: fields.neededBy,
+    message: fields.notes,
+    artwork: artworkNames,
+    source: attributionData(form),
+    page: new URL(request.url).hostname,
+  });
+
   const rows: [string, string][] = [
     ['Name', fields.name],
     ['Role', fields.role],
@@ -109,7 +134,7 @@ export const POST: APIRoute = async ({ request }) => {
     ['Notes', fields.notes],
     [
       'Artwork attached',
-      artwork.length ? artwork.map((f) => `${f.name} (${Math.round(f.size / 1024)} KB)`).join(', ') : 'None',
+      artwork.length ? artwork.map((f, i) => `${artworkNames[i]} (${Math.round(f.size / 1024)} KB)`).join(', ') : 'None',
     ],
     ...attributionRows(form),
   ];
@@ -125,8 +150,10 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (!result.ok) {
     console.error('[quote] send failed:', result.error);
+    await markEmail(db, rowId, 'failed', result.error);
     return fail(502, FALLBACK);
   }
+  await markEmail(db, rowId, 'sent');
 
   return html ? redirect(THANKS) : json({ ok: true, redirect: THANKS });
 };

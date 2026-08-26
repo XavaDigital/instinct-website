@@ -48,6 +48,8 @@ the MVP — both sites must build from `main`.
   country-of-origin claim is off limits.
 - "Your gear, your way" is the tagline of the owner's other brand (BeastMode); don't use
   it here. Instinct's lines are "Follow your instinct" and "Trust your instinct".
+- Both form endpoints log the submission to D1 (`src/lib/server/store.ts`) before sending the
+  email; keep that order, and keep the database writes best-effort (never fail the form).
 
 ## Commands
 

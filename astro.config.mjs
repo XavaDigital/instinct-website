@@ -8,13 +8,15 @@ import tailwindcss from '@tailwindcss/vite';
 /**
  * Instinct Apparel — Astro configuration.
  *
- * Every page is prerendered to static HTML at build time. Only the two form
- * endpoints under src/pages/api/ opt out with `export const prerender = false`.
+ * Every page is prerendered to static HTML at build time. Only the endpoints
+ * under src/pages/api/ (quote, contact, export) opt out with
+ * `export const prerender = false`.
  *
  * Hosting: the Cloudflare adapter is the default. To deploy on Google Cloud Run
- * instead, install @astrojs/node and swap the adapter line for
- * `adapter: node({ mode: 'standalone' })` — nothing else in the project
- * depends on Cloudflare.
+ * instead, install @astrojs/node, swap the adapter line for
+ * `adapter: node({ mode: 'standalone' })`, and give src/lib/server/bindings.ts
+ * another way to reach a database (or none: the forms still work, they just
+ * skip the submissions log). Nothing else depends on Cloudflare.
  */
 export default defineConfig({
   site: 'https://instinct.nz',
@@ -72,6 +74,8 @@ export default defineConfig({
       // Cloudflare Turnstile (spam protection). Both optional: without keys the
       // forms fall back to honeypot + timing checks only.
       TURNSTILE_SECRET_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      // Private key for /api/export (the submissions log). Without it the route is a 404.
+      EXPORT_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       // The site key is public (it is rendered into the page). Widget "Instinct forms"
       // in the Cloudflare account: instinct.nz, the workers.dev preview, localhost.
       PUBLIC_TURNSTILE_SITE_KEY: envField.string({

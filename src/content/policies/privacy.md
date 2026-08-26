@@ -2,7 +2,7 @@
 title: Privacy
 summary: What we collect from a quote request, how long we hold it, and who it is never shared with.
 inShort: We collect only what we need to quote, make and deliver your order. We never sell or rent your details. You can ask to see, correct or delete what we hold at any time.
-updated: 2026-08-20
+updated: 2026-08-27
 order: 5
 draft: true
 ---
@@ -24,11 +24,11 @@ To prepare your quote and mockup, make and deliver your order, invoice you, keep
 
 ## Who it's shared with
 
-Only the people and services needed to do the job: our production team (print-ready artwork, size runs, and any names and numbers being printed), our email provider (to deliver form submissions and replies), our courier (name and delivery address), our payment and accounting providers (invoicing details), and our analytics provider. We never sell, rent or trade your details.
+Only the people and services needed to do the job: our production team (print-ready artwork, size runs, and any names and numbers being printed), our website host, Cloudflare (form submissions are stored in our site's database there), our email provider (to deliver form submissions and replies), our courier (name and delivery address), our payment and accounting providers (invoicing details), and our analytics provider. We never sell, rent or trade your details.
 
 ## How long we keep it
 
-- Quote requests that don't become orders: 12 months, then deleted.
+- Quote requests and contact messages that don't become orders: 12 months, then deleted automatically from our website's database (and from our email).
 - Invoices and order records: seven years after your last order, to meet our tax obligations.
 - Artwork, size runs and design files: kept so you can reorder without re-briefing, and deleted whenever you ask.
 - Player names and numbers: for the life of the order and any reorders, then deleted on request.
@@ -39,4 +39,4 @@ You can ask us at any time to show you the personal information we hold about yo
 
 ## Security
 
-Form submissions are sent over an encrypted connection and stored with providers that use industry-standard security. Access inside Instinct is limited to the staff who need it for your order.
+Form submissions are sent over an encrypted connection and stored in our website's database and our email, with providers that use industry-standard security. Access inside Instinct is limited to the staff who need it for your order.

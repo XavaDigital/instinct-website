@@ -69,6 +69,12 @@ export function files(form: FormData, key: string): File[] {
   return form.getAll(key).filter((v): v is File => v instanceof File && v.size > 0 && Boolean(v.name));
 }
 
+/** A filename safe to store and print: control characters removed, trimmed, at most 200 characters. */
+export function cleanFileName(name: string): string {
+  const clean = name.replace(CONTROL_CHARS, ' ').trim();
+  return clean.length > 200 ? `${clean.slice(0, 190)}…${clean.slice(-9)}` : clean;
+}
+
 /**
  * Cheap bot checks: a honeypot field that humans never fill, and a timing
  * token that must be present and at least a few seconds old.
@@ -139,27 +145,34 @@ const ATTRIBUTION_KEYS = [
 
 /**
  * Campaign attribution captured in the browser (see BaseLayout) and posted as
- * a JSON string in the `attribution` field. Returns email rows, or [] when
- * absent or malformed.
+ * a JSON string in the `attribution` field. Whitelisted keys only, control
+ * characters removed, each value capped at 200 characters; {} when absent or
+ * malformed.
  */
-export function attributionRows(form: FormData): [string, string][] {
+export function attributionData(form: FormData): Record<string, string> {
   const raw = form.get('attribution');
-  if (typeof raw !== 'string' || !raw || raw.length > 4000) return [];
+  if (typeof raw !== 'string' || !raw || raw.length > 4000) return {};
   let parsed: unknown;
   try {
     parsed = JSON.parse(raw);
   } catch {
-    return [];
+    return {};
   }
-  if (!parsed || typeof parsed !== 'object') return [];
+  if (!parsed || typeof parsed !== 'object') return {};
   const rec = parsed as Record<string, unknown>;
-  const parts: string[] = [];
+  const out: Record<string, string> = {};
   for (const key of ATTRIBUTION_KEYS) {
     const value = rec[key];
     if (typeof value === 'string' && value.trim()) {
-      parts.push(`${key}=${value.replace(CONTROL_CHARS, ' ').trim().slice(0, 200)}`);
+      out[key] = value.replace(CONTROL_CHARS, ' ').trim().slice(0, 200);
     }
   }
+  return out;
+}
+
+/** The same attribution as email rows, or [] when there is none. */
+export function attributionRows(form: FormData): [string, string][] {
+  const parts = Object.entries(attributionData(form)).map(([key, value]) => `${key}=${value}`);
   return parts.length ? [['Source', parts.join('\n')]] : [];
 }
 

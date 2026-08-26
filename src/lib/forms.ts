@@ -66,6 +66,7 @@ export function formatBytes(bytes: number): string {
 /** Returns an error message for a set of artwork files, or null if acceptable. */
 export function validateArtwork(files: { name: string; size: number }[]): string | null {
   if (files.length > ARTWORK_MAX_FILES) return `Please attach no more than ${ARTWORK_MAX_FILES} files.`;
+  if (files.some((f) => f.name.length > 255)) return 'One of the file names is too long. Please rename it and try again.';
   const bad = files.find((f) => !ARTWORK_EXTENSIONS.includes(fileExtension(f.name)));
   if (bad) return `"${bad.name}" isn't a file type we can open. Send PNG, JPG, PDF, AI, EPS, SVG or ZIP.`;
   const total = files.reduce((n, f) => n + f.size, 0);
