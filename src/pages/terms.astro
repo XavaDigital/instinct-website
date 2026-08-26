@@ -1,0 +1,91 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { webPageJsonLd } from '@/lib/seo';
+
+const entry = await getEntry('legal', 'terms');
+if (!entry) throw new Error('Missing src/content/legal/terms.md');
+const { data } = entry;
+const { Content, headings } = await render(entry);
+const contents = headings.filter((h) => h.depth === 2);
+const longDate = data.updated.toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  breadcrumbs={[{ label: 'Terms & conditions' }]}
+  ogType="article"
+  jsonLd={webPageJsonLd({ name: data.title, description: data.description, url: '/terms' })}
+>
+  <section class="border-b border-white/[0.09] bg-plum-850">
+    <div class="container-x flex flex-col gap-6 pb-[34px] pt-12 lg:flex-row lg:items-end lg:justify-between lg:gap-10">
+      <div>
+        <h1 class="display text-[38px] leading-[0.98] tracking-[-0.035em] sm:text-[50px]">{data.title}</h1>
+        <p class="mt-[10px] max-w-[640px] text-[16.5px] leading-[1.6] text-white/70">{data.intro}</p>
+      </div>
+      <p class="font-mono text-[12.5px] font-medium uppercase leading-[1.7] tracking-[0.06em] text-white/50 lg:text-right">
+        Version 1.0<br />Effective <time datetime={data.updated.toISOString().slice(0, 10)}>{longDate}</time>
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-plum-900">
+    <div class="container-x grid items-start gap-10 py-10 lg:grid-cols-[260px_1fr] lg:py-[38px]">
+      <aside class="panel p-[10px] lg:sticky lg:top-24">
+        <div class="px-[14px] pb-[10px] pt-3 font-mono text-[11px] font-semibold uppercase leading-none tracking-[0.16em] text-white/60">
+          Contents
+        </div>
+        <nav aria-label="Contents" class="grid gap-[2px]">
+          {
+            contents.map((h) => (
+              <a href={`#${h.slug}`} class="px-[14px] py-[11px] text-[13px] font-semibold leading-[1.3] text-white/75 transition-colors hover:bg-white/[0.06] hover:text-white">
+                {h.text}
+              </a>
+            ))
+          }
+        </nav>
+      </aside>
+
+      <article class="max-w-[800px]">
+        <div class="mb-[30px] border-l-[3px] border-lilac bg-plum-800 px-6 py-5 text-[15.5px] leading-[1.7] text-white/[0.78]">
+          Placeholder legal copy for layout only. Have your own solicitor review and replace the wording in
+          <code class="font-mono text-[13px] text-lime-soft"> src/content/legal/terms.md</code> before this page goes live.
+        </div>
+
+        <div class="prose-policy prose-terms">
+          <Content />
+        </div>
+
+        <div class="panel mt-[34px] flex flex-col gap-5 p-6 sm:flex-row sm:items-center sm:justify-between">
+          <p class="max-w-[480px] text-[15.5px] leading-[1.6] text-white/[0.72]">
+            Need something clarified before you order? We're happy to walk through any clause with you.
+          </p>
+          <a href="/contact" class="btn btn-sm shrink-0 border border-lime text-lime hover:bg-lime/10">Contact us</a>
+        </div>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style is:global>
+  .prose-terms h2 {
+    font-family: var(--font-display);
+    font-style: normal;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: -0.02em;
+    font-size: 22px;
+    line-height: 1.25;
+    margin: 30px 0 12px;
+  }
+  .prose-terms p {
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+  .prose-terms p > strong:first-child {
+    color: var(--color-lime-soft);
+    font-weight: 600;
+    margin-right: 4px;
+  }
+</style>

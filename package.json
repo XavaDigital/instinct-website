@@ -1,0 +1,42 @@
+{
+  "name": "instinct-apparel-website",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "prebuild": "node -e \"try { require('node:fs').rmSync('dist', { recursive: true, force: true }) } catch (e) { console.warn('dist not cleared:', e.code) }\"",
+    "build": "astro build",
+    "build:mvp": "node -e \"process.env.SITE_MODE='mvp'; require('node:child_process').execSync('npm run build', { stdio: 'inherit' })\"",
+    "preview": "astro preview",
+    "check": "astro check",
+    "astro": "astro",
+    "assets": "node scripts/generate-assets.mjs",
+    "deploy": "astro build && wrangler deploy"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^14.2.4",
+    "@astrojs/react": "^6.0.4",
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource/archivo": "^5.3.0",
+    "@fontsource/barlow": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.2.6",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@fontsource/archivo-black": "^5.3.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.5",
+    "opentype.js": "^2.0.0",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.125.0"
+  }
+}

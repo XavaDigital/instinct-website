@@ -1,0 +1,232 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Figure from '@/components/Figure.astro';
+import SectionHead from '@/components/SectionHead.astro';
+import SportsGrid from '@/components/SportsGrid.astro';
+import ProjectsGrid from '@/components/ProjectsGrid.astro';
+import Testimonials from '@/components/Testimonials.astro';
+import Stars from '@/components/Stars.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { nav, site } from '@/config/site';
+import { IS_MVP, routeEnabled } from '@/config/mode';
+import { featuredItems, getGalleryItems } from '@/lib/gallery';
+import { siteImage } from '@/lib/images';
+import { testimonialsFor } from '@/lib/testimonials';
+import { webPageJsonLd } from '@/lib/seo';
+
+const sports = (await getCollection('sports')).sort((a, b) => a.data.order - b.data.order);
+const projects = featuredItems(await getGalleryItems(), 4);
+const testimonials = await testimonialsFor('general');
+// The Google rating is a placeholder until a review profile exists; never show it to ad traffic unbacked.
+const showRating = !IS_MVP || Boolean(site.googleReviewsUrl);
+
+const title = 'Custom Sublimated Teamwear NZ | Instinct Apparel';
+const description = site.description;
+
+const steps = [
+  {
+    n: '1',
+    title: 'Choose a design',
+    body: 'Pick a base design from our library or brief us on something completely new.',
+    tone: 'lime',
+  },
+  {
+    n: '2',
+    title: 'Choose your garments',
+    body: 'Jerseys, hoodies, jackets, training tees — mix and match across your squad.',
+    tone: 'lilac',
+  },
+  {
+    n: '3',
+    title: 'Send colours & logos',
+    body: 'Our designers do the rest and send a mockup back for your feedback.',
+    tone: 'lime',
+  },
+];
+
+const reasons = [
+  'NZ owned and operated',
+  'No minimum order',
+  'Free design mockups',
+  '3–4 week turnaround',
+  'Names and numbers included',
+  'Reorders any time',
+];
+---
+
+<BaseLayout
+  title={title}
+  titleTemplate={false}
+  description={description}
+  jsonLd={webPageJsonLd({ name: title, description, url: '/' })}
+>
+  <!-- Hero -->
+  <section class="hero-glow relative overflow-hidden">
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute -bottom-[70px] -left-10 select-none font-display text-[140px] font-black italic leading-none tracking-[-0.05em] text-white/[0.032] sm:text-[200px]"
+    >
+      INSTINCT
+    </div>
+    <div class="container-x relative grid gap-10 py-12 lg:grid-cols-[1.1fr_0.9fr] lg:py-16">
+      <div class="flex flex-col items-start gap-6 lg:pt-4">
+        <span class="eyebrow">Custom sublimated teamwear</span>
+        <h1 class="display text-[44px] leading-[0.92] tracking-[-0.035em] sm:text-[56px] lg:text-[58px] xl:text-[64px]">
+          Kit your team<br />in your colours
+        </h1>
+        <p class="max-w-[460px] text-[17.5px] leading-[1.6] text-white/[0.72]">
+          Fully custom sublimated uniforms for clubs, schools and cultural groups across New Zealand. Send us your logo
+          and colours — we design it, you approve it, your team wears it.
+        </p>
+        <div class="flex flex-wrap gap-[14px]">
+          <a href={nav.cta.href} class="btn btn-primary">Request a quote <span aria-hidden="true">→</span></a>
+          <a href="/gallery" class="btn btn-outline">See the gallery</a>
+        </div>
+        <ul class="mt-1 flex flex-wrap gap-x-6 gap-y-2 text-[12.5px] font-medium text-white/55">
+          {
+            showRating && (
+              <li class="flex items-center gap-[6px]">
+                <Stars label="Five stars" class="text-[12px] tracking-normal" /> {site.stats.rating} Google
+              </li>
+            )
+          }
+          <li>{site.stats.years} years in business</li>
+          <li>{site.stats.turnaround} week turnaround</li>
+        </ul>
+      </div>
+      <Figure
+        src={siteImage('home-hero')}
+        alt="A team wearing custom sublimated Instinct Apparel kit"
+        tone="hero"
+        label="Hero image — team in full custom kit, cut out on dark"
+        class="min-h-[260px] sm:min-h-[360px] lg:min-h-[430px]"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <!-- Why Instinct -->
+  <section class="bg-plum-850">
+    <div class="container-x grid gap-10 py-14 lg:grid-cols-2 lg:items-center lg:gap-14 lg:py-[72px]">
+      <Figure
+        src={siteImage('home-team')}
+        alt="A club team lined up in matching custom jerseys"
+        label="Photo — club team lined up in matching jerseys"
+        class="min-h-[240px] lg:min-h-[360px]"
+      />
+      <div>
+        <span class="eyebrow eyebrow-lilac">Why Instinct</span>
+        <h2 class="display mt-3 text-[34px] sm:text-[44px]">Play on instinct</h2>
+        <p class="mb-6 mt-4 max-w-[480px] text-[16.5px] leading-[1.65] text-white/70">
+          Custom-designed kit is easier and cheaper than most organisers expect. Start from one of our designs or from a
+          blank page — either way you get a free mockup before you commit a cent.
+        </p>
+        <ul class="grid gap-x-6 gap-y-[14px] sm:grid-cols-2">
+          {
+            reasons.map((r) => (
+              <li class="flex items-center gap-[10px] text-[15px] font-semibold leading-[1.2] text-mint">
+                <span class="tick" aria-hidden="true" />
+                {r}
+              </li>
+            ))
+          }
+        </ul>
+        <a href="/why-us" class="link-lime mt-7 inline-block">Why buy from us <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="bg-plum-900">
+    <div class="container-x py-14 text-center lg:py-[70px]">
+      <span class="eyebrow">How it works</span>
+      <h2 class="display mb-10 mt-3 text-[34px] sm:text-[42px]">As easy as 1 2 3</h2>
+      <ol class="grid gap-6 text-left md:grid-cols-3">
+        {
+          steps.map((s) => (
+            <li
+              class:list={[
+                'border border-white/[0.11] px-[26px] pb-[30px] pt-7 bg-gradient-to-b to-transparent',
+                s.tone === 'lime' ? 'from-lime/[0.07]' : 'from-lilac/[0.09]',
+              ]}
+            >
+              <div
+                class:list={[
+                  'font-display text-[54px] font-black italic leading-none',
+                  s.tone === 'lime' ? 'text-lime' : 'text-lilac',
+                ]}
+                aria-hidden="true"
+              >
+                {s.n}
+              </div>
+              <h3 class="mb-2 mt-[14px] text-[19px] font-bold uppercase leading-[1.2] tracking-[0.02em] text-white">
+                {s.title}
+              </h3>
+              <p class="text-[15px] leading-[1.6] text-white/[0.66]">{s.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+      {
+        routeEnabled('/how-it-works') ? (
+          <a href="/how-it-works" class="link-lime mt-8 inline-block">
+            See how it works <span aria-hidden="true">→</span>
+          </a>
+        ) : (
+          <a href={nav.cta.href} class="link-lime mt-8 inline-block">
+            Start with a free mockup <span aria-hidden="true">→</span>
+          </a>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Sports -->
+  <section class="bg-plum-800">
+    <div class="container-x py-14 lg:py-[70px]">
+      <SectionHead
+        eyebrow="What we can help with"
+        title="All sports, all groups"
+        tone="lilac"
+        link={
+          routeEnabled('/sports')
+            ? { label: 'And many more →', href: '/sports', style: 'outline' }
+            : { label: 'Ask about your sport →', href: nav.cta.href, style: 'outline' }
+        }
+        class="mb-8"
+      />
+      <SportsGrid sports={sports} />
+    </div>
+  </section>
+
+  <!-- Recent projects -->
+  <section class="bg-plum-900">
+    <div class="container-x py-14 lg:py-[70px]">
+      <SectionHead
+        eyebrow="Recent projects"
+        title="Kit we shipped lately"
+        link={{ label: 'View full gallery →', href: '/gallery' }}
+        class="mb-8"
+      />
+      <ProjectsGrid items={projects} />
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  {
+    testimonials.length > 0 && (
+      <section class="bg-plum-850">
+        <div class="container-x py-14 lg:py-[70px]">
+          <Testimonials title="What organisers say" items={testimonials} />
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand
+    title="Ready to kit the squad?"
+    body="Tell us the sport, the numbers and roughly when you need it. We'll come back with a price and a free design mockup."
+    watermark={String(new Date().getFullYear())}
+  />
+</BaseLayout>

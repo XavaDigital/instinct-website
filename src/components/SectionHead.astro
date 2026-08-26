@@ -1,0 +1,50 @@
+---
+/**
+ * Eyebrow + display heading, optionally with a right-aligned link or button.
+ * A trailing " →" in the link label is rendered as a decorative glyph.
+ */
+interface Props {
+  eyebrow?: string;
+  title: string;
+  tone?: 'green' | 'lilac';
+  align?: 'left' | 'center';
+  size?: 'md' | 'lg';
+  link?: { label: string; href: string; style?: 'text' | 'outline' };
+  as?: 'h1' | 'h2' | 'h3';
+  class?: string;
+}
+const {
+  eyebrow,
+  title,
+  tone = 'green',
+  align = 'left',
+  size = 'md',
+  link,
+  as: Tag = 'h2',
+  class: className,
+} = Astro.props;
+const titleSize = size === 'lg' ? 'text-[36px] sm:text-[44px]' : 'text-[32px] sm:text-[42px]';
+const hasArrow = link?.label.endsWith(' →') ?? false;
+const linkText = hasArrow && link ? link.label.slice(0, -2) : link?.label;
+---
+
+<div
+  class:list={[
+    'flex flex-col gap-5',
+    align === 'center' ? 'items-center text-center' : 'sm:flex-row sm:items-end sm:justify-between',
+    className,
+  ]}
+>
+  <div>
+    {eyebrow && <span class:list={['eyebrow', tone === 'lilac' && 'eyebrow-lilac']}>{eyebrow}</span>}
+    <Tag class:list={['display', titleSize, eyebrow && 'mt-3']}>{title}</Tag>
+  </div>
+  {
+    link && (
+      <a href={link.href} class:list={['shrink-0', link.style === 'outline' ? 'btn btn-outline btn-sm' : 'link-lime']}>
+        {linkText}
+        {hasArrow && <span aria-hidden="true"> →</span>}
+      </a>
+    )
+  }
+</div>

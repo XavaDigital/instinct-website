@@ -1,0 +1,237 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Figure from '@/components/Figure.astro';
+import ProjectsGrid from '@/components/ProjectsGrid.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { nav } from '@/config/site';
+import { IS_MVP } from '@/config/mode';
+import { getGalleryItems, itemsForGarment } from '@/lib/gallery';
+import { garmentBranding, garmentImage, garmentViews } from '@/lib/images';
+import { productJsonLd, webPageJsonLd } from '@/lib/seo';
+
+export async function getStaticPaths() {
+  if (IS_MVP) return []; // individual garment pages are not part of the MVP build
+  const garments = await getCollection('garments');
+  return garments.map((entry) => ({ params: { garment: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<'garments'>;
+}
+const { entry } = Astro.props;
+const { data } = entry;
+const url = `/teamwear/${entry.id}`;
+
+const pairs = (await Promise.all(data.pairsWith.map((id) => getEntry('garments', id)))).filter(
+  (g): g is CollectionEntry<'garments'> => Boolean(g),
+);
+
+const projects = itemsForGarment(await getGalleryItems(), data.name, 4);
+
+const sizeChart = data.sizeChart ? await getEntry('sizeCharts', data.sizeChart) : undefined;
+
+// Images by filename convention (see IMAGE-GUIDE.md); frontmatter wins when set.
+const mainImage = data.image ?? garmentImage(entry.id);
+const views = garmentViews(entry.id);
+const branding = garmentBranding(entry.id);
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  breadcrumbs={[{ label: 'Club teamwear', href: '/teamwear' }, { label: data.name }]}
+  jsonLd={
+    data.price
+      ? productJsonLd({ name: data.title, description: data.description, url, price: data.price })
+      : webPageJsonLd({ name: data.title, description: data.description, url, type: 'ItemPage' })
+  }
+>
+  <!-- Product -->
+  <section class="bg-plum-900">
+    <div class="container-x grid gap-10 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-11">
+      <div>
+        <Figure
+          src={mainImage}
+          alt={data.imageAlt ?? data.title}
+          tone="hero"
+          label={data.imageLabel}
+          class="aspect-[4/3] w-full lg:min-h-[440px]"
+          loading="eager"
+        />
+        {
+          data.thumbLabels.length > 0 && (
+            <ul class="mt-3 grid grid-cols-4 gap-3">
+              {data.thumbLabels.map((label, i) => (
+                <li>
+                  <Figure
+                    src={views[i]}
+                    alt={`${data.title} — ${label.toLowerCase()}`}
+                    label={label}
+                    tone={i === 0 ? 'tile' : 'photo'}
+                    class:list={['aspect-[4/3] min-h-[72px] sm:min-h-[96px]', i === 0 ? 'border-lime' : 'border border-white/10']}
+                    sizes="(min-width: 1024px) 150px, 25vw"
+                    widths={[300, 600]}
+                  />
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+
+      <div class="flex flex-col gap-[18px]">
+        <span class="eyebrow">Garment · {data.name}</span>
+        <h1 class="display text-[38px] leading-[0.98] tracking-[-0.035em] sm:text-[50px]">{data.title}</h1>
+        <p class="text-[17px] leading-[1.6] text-white/[0.72]">{data.intro}</p>
+
+        {
+          data.options.map((group) => (
+            <div>
+              <span class="field-label mb-[10px] block">{group.label}</span>
+              <ul class="flex flex-wrap gap-[10px]">
+                {group.values.map((v) => (
+                  <li class="border border-white/[0.16] px-[18px] py-3 text-[14.5px] font-medium leading-none text-white/[0.68]">{v}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+
+        {
+          data.sizes.length > 0 && (
+            <div>
+              <span class="field-label mb-[10px] block">Sizes</span>
+              <ul class="flex flex-wrap gap-2">
+                {data.sizes.map((s) => (
+                  <li class="border border-white/[0.14] bg-plum-800 px-[13px] py-[10px] font-mono text-[13px] font-semibold leading-none text-white">{s}</li>
+                ))}
+              </ul>
+              {sizeChart && (
+                <a href={`/size-charts#${sizeChart.id}`} class="link-inline mt-[10px] inline-block text-[13px] font-semibold">
+                  View size chart
+                </a>
+              )}
+            </div>
+          )
+        }
+
+        <div class="panel px-[22px] py-5">
+          {
+            data.price ? (
+              <div class="flex flex-wrap items-baseline gap-[10px]">
+                <span class="font-display text-[30px] font-black italic leading-none text-white">From ${data.price.from}</span>
+                <span class="text-[14px] leading-none text-white/55">
+                  +GST, per {data.price.unit} at {data.price.quantity} units
+                </span>
+              </div>
+            ) : (
+              <div class="font-display text-[24px] font-black italic leading-none text-white">Priced per order</div>
+            )
+          }
+          {data.priceNote && <p class="mt-[10px] text-[14px] leading-[1.6] text-white/[0.62]">{data.priceNote}</p>}
+        </div>
+
+        <a href={nav.cta.href} class="btn btn-primary w-full text-[15px] !py-[22px]">Request a quote <span aria-hidden="true">→</span></a>
+        <ul class="flex flex-wrap gap-x-5 gap-y-1 text-[13px] font-medium leading-[1.4] text-white/55">
+          {data.badges.map((b) => <li>{b}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Specs + branding -->
+  {
+    (data.specs.length > 0 || data.brandingSpots.length > 0) && (
+  <section class="bg-plum-850">
+    <div class="container-x grid gap-11 py-14 lg:grid-cols-2">
+      {
+        data.specs.length > 0 && (
+          <div>
+            <h2 class="display mb-5 text-[28px] sm:text-[34px]">Specifications</h2>
+            <dl class="border border-white/[0.12] text-[14.5px] leading-[1.4]">
+              {data.specs.map((s) => (
+                <div class="grid grid-cols-[0.9fr_1.1fr] border-t border-white/10 first:border-t-0">
+                  <dt class="bg-plum-800 px-4 py-[14px] font-semibold text-white/[0.62]">{s.label}</dt>
+                  <dd class="px-4 py-[14px] text-white">{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )
+      }
+      {
+        data.brandingSpots.length > 0 && (
+          <div>
+            <h2 class="display mb-5 text-[28px] sm:text-[34px]">{data.brandingTitle ?? 'Where clubs put their branding'}</h2>
+            <ul class="grid grid-cols-2 gap-[14px]">
+              {data.brandingSpots.map((spot, i) => (
+                <li>
+                  <Figure
+                    src={branding[i]}
+                    alt={`${data.title} — ${spot.toLowerCase()}`}
+                    tone="hero"
+                    label={spot}
+                    class="aspect-[4/3] min-h-[120px] sm:min-h-[150px]"
+                    sizes="(min-width: 1024px) 300px, 50vw"
+                    widths={[400, 800]}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+    </div>
+  </section>
+    )
+  }
+
+  <!-- Projects (only kit that includes this garment; hidden until there is something to show) -->
+  {
+    projects.length > 0 && (
+      <section class="bg-plum-900">
+        <div class="container-x py-14">
+          <div class="mb-6 flex items-end justify-between gap-4">
+            <h2 class="display text-[30px] sm:text-[36px]">{data.projectsTitle ?? `${data.name} we've made`}</h2>
+            <a href="/gallery" class="link-lime">
+              Full gallery <span aria-hidden="true">→</span>
+            </a>
+          </div>
+          <ProjectsGrid items={projects} />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Pairs with -->
+  {
+    pairs.length > 0 && (
+      <section class="bg-plum-800">
+        <div class="container-x py-[52px]">
+          <h2 class="display mb-[22px] text-[28px] sm:text-[32px]">Pairs well with</h2>
+          <ul class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+            {pairs.map((g) => (
+              <li>
+                <a href={`/teamwear/${g.id}`} class="group block border border-white/10 bg-plum-850 transition-colors hover:border-lime/60">
+                  <Figure
+                    src={g.data.image ?? garmentImage(g.id)}
+                    alt={g.data.imageAlt ?? g.data.title}
+                    tone="hero"
+                    label={g.data.name}
+                    class="aspect-[4/3] min-h-[120px] sm:min-h-[160px]"
+                    sizes="(min-width: 1024px) 25vw, 50vw"
+                  />
+                  <div class="px-[18px] py-4 text-[16px] font-semibold leading-[1.2] text-white group-hover:text-lime-soft">{g.data.cardTitle}</div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand title={data.ctaTitle} body={data.ctaBody} watermark={data.name.toUpperCase()} />
+</BaseLayout>

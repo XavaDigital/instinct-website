@@ -1,0 +1,104 @@
+---
+/**
+ * Conversion pages: /thanks/quote and /thanks/contact. Both forms land here
+ * after a successful send. The URL is the goal to configure in GA4 / Google
+ * Ads. Analytics events fire only when the one-shot `?sent=1` marker is
+ * present (added by the API / the form islands), and the marker is removed
+ * from the address bar immediately, so reloads, bookmarks and back
+ * navigation never double-count a lead.
+ */
+import { PUBLIC_GADS_CONVERSION_ID, PUBLIC_GADS_CONVERSION_LABEL } from 'astro:env/client';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/config/site';
+
+export function getStaticPaths() {
+  return [{ params: { type: 'quote' } }, { params: { type: 'contact' } }];
+}
+
+const { type } = Astro.params;
+const isQuote = type === 'quote';
+
+const copy = isQuote
+  ? {
+      eyebrow: 'Request sent',
+      title: "Thanks — we're on it",
+      body: "Your quote request is with us. Here's what happens next.",
+      steps: [
+        'We confirm your brief by email or phone.',
+        'You get a written price and a free mockup within one business day.',
+        'Approve it and we go to production — 3–4 weeks.',
+      ],
+    }
+  : {
+      eyebrow: 'Message sent',
+      title: "Thanks — we'll be in touch",
+      body: "A real person who knows kit will reply within one business day. If it's urgent, give us a call.",
+      steps: [] as string[],
+    };
+
+const adsSendTo =
+  PUBLIC_GADS_CONVERSION_ID && PUBLIC_GADS_CONVERSION_LABEL
+    ? `${PUBLIC_GADS_CONVERSION_ID}/${PUBLIC_GADS_CONVERSION_LABEL}`
+    : '';
+---
+
+<BaseLayout
+  title={copy.title}
+  description={`Your ${isQuote ? 'quote request' : 'message'} is with Instinct Apparel. We'll reply within one business day.`}
+  noindex
+>
+  <section class="hero-glow">
+    <div class="container-x py-16 lg:py-24">
+      <div class="panel max-w-[720px] p-7 sm:p-9">
+        <span class="eyebrow">{copy.eyebrow}</span>
+        <h1 class="display mt-3 text-[34px] outline-none sm:text-[44px]" tabindex="-1" data-thanks-heading>
+          {copy.title}
+        </h1>
+        <p class="mt-4 text-[16.5px] leading-[1.65] text-white/75">{copy.body}</p>
+        {
+          copy.steps.length > 0 && (
+            <ol class="mt-6 grid gap-3">
+              {copy.steps.map((s, i) => (
+                <li class="flex gap-3 text-[15px] leading-[1.55] text-white/[0.78]">
+                  <span class="flex h-[22px] w-[22px] flex-none items-center justify-center bg-lime text-[12px] font-bold text-ink">
+                    {i + 1}
+                  </span>
+                  {s}
+                </li>
+              ))}
+            </ol>
+          )
+        }
+        <p class="mt-6 text-[14.5px] text-white/60">
+          Forgot something? Write to <a href={`mailto:${site.email}`} class="link-inline">{site.email}</a> or call
+          <a href={site.phone.href} class="link-inline">{site.phone.display}</a>.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="/gallery" class="btn btn-outline">Browse the gallery</a>
+          <a href="/" class="btn btn-outline">Back to the homepage</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline define:vars={{ adsSendTo, form: type }}>
+    (function () {
+      var params = new URLSearchParams(location.search);
+      var fresh = params.get('sent') === '1';
+      if (fresh) {
+        params.delete('sent');
+        var qs = params.toString();
+        try {
+          history.replaceState(history.state, '', location.pathname + (qs ? '?' + qs : ''));
+        } catch (e) {}
+      }
+      var heading = document.querySelector('[data-thanks-heading]');
+      if (heading) heading.focus();
+      if (fresh && typeof gtag === 'function') {
+        var txn = window.crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random();
+        gtag('event', 'generate_lead', { form: form, transaction_id: txn });
+        if (adsSendTo) gtag('event', 'conversion', { send_to: adsSendTo, transaction_id: txn });
+      }
+    })();
+  </script>
+</BaseLayout>

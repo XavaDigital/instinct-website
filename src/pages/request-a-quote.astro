@@ -1,0 +1,114 @@
+---
+import { getCollection } from 'astro:content';
+import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Figure from '@/components/Figure.astro';
+import Stars from '@/components/Stars.astro';
+import QuoteForm from '@/components/islands/QuoteForm';
+import FormStatusNotice from '@/components/FormStatusNotice.astro';
+import { site } from '@/config/site';
+import { GARMENT_OPTIONS, QUANTITY_OPTIONS } from '@/lib/forms';
+import { siteImage } from '@/lib/images';
+import { testimonialsFor } from '@/lib/testimonials';
+import { webPageJsonLd } from '@/lib/seo';
+
+const title = 'Request a quote';
+const description =
+  'Get a written price and a free design mockup for custom sublimated teamwear within one business day. Tell us the sport, garments, numbers and when you need it — no obligation.';
+
+const sports = (await getCollection('sports'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((s) => ({ value: s.data.navLabel ?? s.data.title, label: s.data.navLabel ?? s.data.title }));
+
+const testimonial = (await testimonialsFor('quote', 1))[0];
+
+const steps = [
+  'We confirm your brief by email or phone.',
+  'You get a written price and a free mockup.',
+  'Approve it and we go to production — 3–4 weeks.',
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  breadcrumbs={[{ label: 'Request a quote' }]}
+  headerCta="phone"
+  jsonLd={webPageJsonLd({ name: title, description, url: '/request-a-quote', type: 'ContactPage' })}
+>
+  <Fragment slot="head">
+    {PUBLIC_TURNSTILE_SITE_KEY && <link rel="preconnect" href="https://challenges.cloudflare.com" />}
+  </Fragment>
+  <FormStatusNotice />
+  <section class="hero-glow">
+    <div class="container-x pb-10 pt-12 lg:pt-[52px]">
+      <span class="eyebrow">Step 1 of 1 · takes about two minutes</span>
+      <h1 class="display mt-3 text-[40px] leading-[0.96] tracking-[-0.035em] sm:text-[58px]">Request a quote</h1>
+      <p class="mt-3 max-w-[620px] text-[17.5px] leading-[1.6] text-white/[0.72]">
+        Tell us the sport, roughly how many and when you need it. You'll get a price and a free design mockup back
+        within one business day — no obligation.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-plum-900">
+    <div class="container-x grid items-start gap-[34px] pb-16 lg:grid-cols-[1.35fr_0.65fr]">
+      <QuoteForm
+        client:idle
+        sports={sports}
+        garments={GARMENT_OPTIONS}
+        quantities={QUANTITY_OPTIONS}
+        turnstileSiteKey={PUBLIC_TURNSTILE_SITE_KEY}
+        contactEmail={site.email}
+        phone={site.phone.display}
+      />
+
+      <aside class="grid gap-4">
+        <div class="panel-deep px-6 py-[26px]">
+          <h2 class="mb-4 text-[17px] font-bold uppercase leading-[1.2] tracking-[0.04em] text-white">What happens next</h2>
+          <ol class="grid gap-[14px]">
+            {
+              steps.map((s, i) => (
+                <li class="flex gap-3 text-[14.5px] leading-[1.55] text-white/[0.74]">
+                  <span class="flex h-[22px] w-[22px] flex-none items-center justify-center bg-lime text-[12px] font-bold text-ink">
+                    {i + 1}
+                  </span>
+                  {s}
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        {
+          testimonial && (
+            <div class="panel px-6 py-[26px]">
+              <Stars />
+              <blockquote class="mt-3 text-[15px] leading-[1.6] text-white/[0.78]">
+                <p>“{testimonial.quote}”</p>
+              </blockquote>
+              <p class="mt-[14px] text-[12px] font-semibold uppercase tracking-[0.06em] text-white/50">{testimonial.author}</p>
+            </div>
+          )
+        }
+
+        <div class="panel px-6 py-[26px]">
+          <h2 class="mb-3 text-[17px] font-bold uppercase leading-[1.2] tracking-[0.04em] text-white">Rather talk it through?</h2>
+          <p class="mb-[14px] text-[14.5px] leading-[1.6] text-white/70">
+            We're happy to work out sizing and numbers with you over the phone.
+          </p>
+          <a href={site.phone.href} class="card-title block text-[22px] text-lime hover:text-lime-soft">{site.phone.display}</a>
+          <p class="text-[13.5px] leading-[1.6] text-white/55">{site.hours.displayLong}</p>
+        </div>
+
+        <Figure
+          src={siteImage('quote-page')}
+          alt="A design mockup sheet next to finished kit"
+          tone="hero"
+          label="Photo — mockup sheet / kit detail"
+          class="min-h-[150px]"
+        />
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

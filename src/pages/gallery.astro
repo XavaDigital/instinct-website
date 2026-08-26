@@ -1,0 +1,79 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProjectsGrid from '@/components/ProjectsGrid.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { nav } from '@/config/site';
+import { routeEnabled } from '@/config/mode';
+import { getGalleryItems, groupBySport } from '@/lib/gallery';
+import { webPageJsonLd } from '@/lib/seo';
+
+const title = 'Gallery';
+const description =
+  'Custom sublimated teamwear we have made for New Zealand clubs, schools and cultural groups — rugby, netball, football, basketball, touch and performance uniforms.';
+
+const sports = await getCollection('sports');
+const navLabel = (id: string) => {
+  const s = sports.find((x) => x.id === id);
+  return s ? (s.data.navLabel ?? s.data.title) : 'More kit';
+};
+const groups = await groupBySport(await getGalleryItems());
+const sportsLinked = routeEnabled('/sports');
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  breadcrumbs={[{ label: 'Gallery' }]}
+  jsonLd={webPageJsonLd({ name: title, description, url: '/gallery', type: 'CollectionPage' })}
+>
+  <section class="hero-glow">
+    <div class="container-x py-14 lg:pb-12 lg:pt-16">
+      <span class="eyebrow">Recent projects</span>
+      <h1 class="display mt-3 text-[40px] leading-[0.96] tracking-[-0.035em] sm:text-[58px]">Kit we've made</h1>
+      <p class="mt-4 max-w-[620px] text-[17.5px] leading-[1.6] text-white/[0.72]">
+        A selection of recent orders, grouped by sport. Every one started as a free mockup. If you see a design you
+        like, mention it in your quote request and we'll use it as a starting point.
+      </p>
+      {
+        groups.length > 1 && (
+          <nav aria-label="Jump to sport" class="mt-8 flex flex-wrap gap-2">
+            {groups.map((g) => (
+              <a
+                href={`#${g.id}`}
+                class="border border-white/20 px-4 py-[10px] text-[12.5px] font-semibold uppercase tracking-[0.08em] text-white/80 transition-colors hover:border-lime hover:text-lime"
+              >
+                {navLabel(g.id)}
+              </a>
+            ))}
+          </nav>
+        )
+      }
+    </div>
+  </section>
+
+  {
+    groups.map((g, i) => (
+      <section id={g.id} class:list={['scroll-mt-24', i % 2 === 0 ? 'bg-plum-900' : 'bg-plum-850']}>
+        <div class="container-x py-12 lg:py-14">
+          <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <h2 class="display text-[28px] sm:text-[36px]">{navLabel(g.id)}</h2>
+            {sportsLinked && g.id !== 'more' && (
+              <a href={`/sports/${g.id}`} class="link-lime">
+                {g.label} kit <span aria-hidden="true">→</span>
+              </a>
+            )}
+          </div>
+          <ProjectsGrid items={g.items} columns={4} captions />
+        </div>
+      </section>
+    ))
+  }
+
+  <CtaBand
+    title="Want yours in here next?"
+    body="Send us your sport, numbers and colours. We'll come back with a price and a free mockup within one business day."
+    ctaHref={nav.cta.href}
+    watermark="GALLERY"
+  />
+</BaseLayout>

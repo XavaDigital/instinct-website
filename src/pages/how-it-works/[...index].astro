@@ -1,0 +1,244 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Figure from '@/components/Figure.astro';
+import Faq from '@/components/Faq.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { nav, site } from '@/config/site';
+import { IS_MVP } from '@/config/mode';
+import Stars from '@/components/Stars.astro';
+import { siteImage } from '@/lib/images';
+import { testimonialsFor } from '@/lib/testimonials';
+import { webPageJsonLd } from '@/lib/seo';
+
+/** Rest route that resolves to /how-it-works itself; returns nothing in MVP so the page is not built. */
+export function getStaticPaths() {
+  return IS_MVP ? [] : [{ params: { index: undefined } }];
+}
+
+const title = 'How it works';
+const description =
+  'From brief to kit bag in three steps: choose a design, choose your garments, send your colours and logos. Free mockup within one business day, production in 3–4 weeks, tracked delivery anywhere in New Zealand.';
+
+const steps = [
+  {
+    n: '1',
+    title: 'Choose a design',
+    body: 'Pick a base design from our library or brief us on something completely new. Photos of kit you like, a sketch on a napkin or a competitor you want to beat — all useful.',
+    tone: 'lime',
+  },
+  {
+    n: '2',
+    title: 'Choose your garments',
+    body: 'Jerseys, hoodies, jackets, training tees, shorts, socks — mix and match across your squad. There is no minimum per garment, so the committee can get polos while the juniors get hoodies.',
+    tone: 'lilac',
+  },
+  {
+    n: '3',
+    title: 'Send colours & logos',
+    body: 'Send your club colours, logo and sponsor files with rough numbers. Our designers do the rest and send a mockup back for your feedback within one business day.',
+    tone: 'lime',
+  },
+];
+
+const timeline = [
+  { when: 'Same day', title: 'We confirm your brief', body: 'A quick email or call to check the sport, garments, numbers and dates so nothing is guessed.' },
+  { when: 'Within 1 business day', title: 'Price and free mockup', body: 'A written price with quantity breaks, and a mockup of your kit in your colours with logos and sponsors placed.' },
+  { when: 'As long as you need', title: 'Revisions and sign-off', body: 'Tweak colours, move a sponsor, try a second option for the committee. Most clubs sign off within two rounds.' },
+  { when: '3–4 weeks', title: 'Production', body: 'Once you approve the final mockup and your deposit clears, your kit is sublimated, sewn and quality-checked before it ships.' },
+  { when: '1–4 working days', title: 'Tracked delivery', body: 'Shipped by tracked courier to your club, or split-shipped to individual players for a per-parcel fee.' },
+];
+
+const checklist = [
+  { title: 'Logo files', body: 'Vector (AI, EPS, PDF, SVG) is best. A high-res PNG works. A photo of a badge will do to start.' },
+  { title: 'Club colours', body: 'Pantone references if you have them, or an existing garment we can match.' },
+  { title: 'Sponsor logos', body: 'Files and any placement rules your sponsors have.' },
+  {
+    title: 'Competition rules',
+    body: "Any uniform requirements from your competition or governing body. We build them into the mockup and work with you on them, but we don't check compliance for you — please confirm the final mockup meets them.",
+  },
+  { title: 'Size run', body: 'How many of each size, or ask for a sizing kit so players can try first.' },
+  { title: 'Names and numbers', body: 'A list per garment. Nicknames welcome.' },
+  { title: 'Delivery date', body: 'When the first game is, so we can plan production around it.' },
+];
+
+const faqCategories = await getCollection('faqs');
+const pick = (q: string) => faqCategories.flatMap((c) => c.data.items).find((i) => i.q === q);
+const faqs = [
+  'How long does an order take?',
+  'Are mockups really free?',
+  'Does a quote lock me in?',
+  'How many design revisions do we get?',
+  'Can you rush an order for the season start?',
+]
+  .map(pick)
+  .filter((i): i is { q: string; a: string } => Boolean(i));
+
+const testimonial = (await testimonialsFor('how-it-works', 1))[0];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  breadcrumbs={[{ label: 'How it works' }]}
+  jsonLd={[
+    webPageJsonLd({ name: title, description, url: '/how-it-works' }),
+    {
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: 'How to order custom teamwear from Instinct Apparel',
+      description,
+      totalTime: 'P5W',
+      step: steps.map((s, i) => ({
+        '@type': 'HowToStep',
+        position: i + 1,
+        name: s.title,
+        text: s.body,
+      })),
+    },
+  ]}
+>
+  <section class="hero-glow relative overflow-hidden">
+    <div class="container-x relative grid gap-10 py-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-16">
+      <div>
+        <span class="eyebrow">How it works</span>
+        <h1 class="display mt-3 text-[40px] leading-[0.96] tracking-[-0.035em] sm:text-[58px]">
+          From brief to kit bag, without the back and forth
+        </h1>
+        <p class="mt-4 max-w-[600px] text-[17.5px] leading-[1.6] text-white/[0.72]">
+          You tell us what the team needs. We design it, show you a mockup, and only make it once you've signed off.
+          Here's every step, with the timings we work to.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-[14px]">
+          <a href={nav.cta.href} class="btn btn-primary">Request a quote <span aria-hidden="true">→</span></a>
+          <a href="/faq" class="btn btn-outline">Read the FAQ</a>
+        </div>
+      </div>
+      <Figure
+        src={siteImage('how-it-works')}
+        alt="An organiser reviewing a kit design mockup"
+        tone="hero"
+        label="Photo — organiser reviewing a design mockup"
+        class="min-h-[240px] lg:min-h-[380px]"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <!-- Three steps -->
+  <section class="bg-plum-900">
+    <div class="container-x py-14 text-center lg:py-[70px]">
+      <span class="eyebrow">The short version</span>
+      <h2 class="display mb-10 mt-3 text-[34px] sm:text-[42px]">As easy as 1 2 3</h2>
+      <ol class="grid gap-6 text-left md:grid-cols-3">
+        {
+          steps.map((s) => (
+            <li
+              class:list={[
+                'border border-white/[0.11] px-[26px] pb-[30px] pt-7 bg-gradient-to-b to-transparent',
+                s.tone === 'lime' ? 'from-lime/[0.07]' : 'from-lilac/[0.09]',
+              ]}
+            >
+              <div
+                class:list={['font-display text-[54px] font-black italic leading-none', s.tone === 'lime' ? 'text-lime' : 'text-lilac']}
+                aria-hidden="true"
+              >
+                {s.n}
+              </div>
+              <h3 class="mb-2 mt-[14px] text-[19px] font-bold uppercase leading-[1.2] tracking-[0.02em] text-white">{s.title}</h3>
+              <p class="text-[15px] leading-[1.6] text-white/[0.66]">{s.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="mx-auto mt-10 max-w-[640px] text-[17px] font-medium text-white/80">
+        Our designers do the rest. You'll see your kit in your colours before you spend a cent.
+      </p>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section class="bg-plum-850">
+    <div class="container-x grid gap-10 py-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14 lg:py-[70px]">
+      <div>
+        <span class="eyebrow eyebrow-lilac">After you send the form</span>
+        <h2 class="display mt-3 text-[32px] sm:text-[40px]">What happens next</h2>
+        <p class="mt-4 max-w-[440px] text-[16.5px] leading-[1.65] text-white/70">
+          Five stages, one contact. The only step that waits on you is sign-off — production can't start until the
+          mockup is approved.
+        </p>
+        {
+          testimonial && (
+            <blockquote class="panel-deep mt-8 p-6">
+              <Stars />
+              <p class="mt-3 text-[15.5px] leading-[1.65] text-white/[0.78]">“{testimonial.quote}”</p>
+              <footer class="mt-4 text-[12.5px] font-semibold uppercase tracking-[0.06em] text-white/50">{testimonial.author}</footer>
+            </blockquote>
+          )
+        }
+      </div>
+      <ol class="grid gap-0">
+        {
+          timeline.map((t, i) => (
+            <li class="relative grid gap-2 border-l-2 border-white/15 pb-8 pl-8 last:pb-0 sm:grid-cols-[160px_1fr] sm:gap-6">
+              <span
+                class="absolute -left-[13px] top-0 flex h-6 w-6 items-center justify-center bg-lime text-[12px] font-bold text-ink"
+                aria-hidden="true"
+              >
+                {i + 1}
+              </span>
+              <span class="font-mono text-[11.5px] font-semibold uppercase leading-[1.6] tracking-[0.14em] text-lime-soft">{t.when}</span>
+              <div>
+                <h3 class="text-[18px] font-bold leading-tight text-white">{t.title}</h3>
+                <p class="mt-2 text-[15px] leading-[1.6] text-white/70">{t.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Checklist -->
+  <section class="bg-plum-900">
+    <div class="container-x py-14 lg:py-[70px]">
+      <span class="eyebrow">Before you start</span>
+      <h2 class="display mb-8 mt-3 text-[32px] sm:text-[40px]">What we need from you</h2>
+      <ul class="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
+        {
+          checklist.map((c) => (
+            <li class="panel flex gap-4 p-6">
+              <span class="tick mt-1" aria-hidden="true" />
+              <div>
+                <h3 class="text-[16.5px] font-bold text-white">{c.title}</h3>
+                <p class="mt-1 text-[14.5px] leading-[1.6] text-white/65">{c.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-8 text-[15px] text-white/60">
+        Missing something? Send what you have. We'd rather start the conversation than wait for a perfect brief. Call
+        <a href={site.phone.href} class="link-inline">{site.phone.display}</a> if it's easier to talk it through.
+      </p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="bg-plum-850">
+    <div class="container-x grid gap-10 py-14 lg:grid-cols-[0.8fr_1.2fr] lg:py-[70px]">
+      <div>
+        <span class="eyebrow eyebrow-lilac">Common questions</span>
+        <h2 class="display mt-3 text-[32px] sm:text-[40px]">Before you ask</h2>
+        <a href="/faq" class="link-lime mt-6 inline-block">All questions <span aria-hidden="true">→</span></a>
+      </div>
+      <Faq items={faqs} openFirst idPrefix="hiw" />
+    </div>
+  </section>
+
+  <CtaBand
+    title="Ready to start?"
+    body="Tell us the sport, the numbers and roughly when you need it. We'll come back with a price and a free design mockup within one business day."
+    watermark="1 2 3"
+  />
+</BaseLayout>

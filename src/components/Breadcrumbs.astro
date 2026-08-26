@@ -1,0 +1,31 @@
+---
+import { breadcrumbJsonLd, serializeJsonLd, type Crumb } from '@/lib/seo';
+
+interface Props {
+  items: Crumb[];
+}
+const { items } = Astro.props;
+const crumbs: Crumb[] = [{ label: 'Home', href: '/' }, ...items];
+---
+
+<nav aria-label="Breadcrumb" class="bg-plum-850">
+  <ol class="container-x flex flex-wrap items-center gap-x-2 py-[14px] font-mono text-[12px] font-medium uppercase leading-none tracking-[0.1em] text-white/50">
+    {
+      crumbs.map((c, i) => (
+        <li class="flex items-center gap-2">
+          {i > 0 && <span aria-hidden="true">/</span>}
+          {c.href && i < crumbs.length - 1 ? (
+            <a href={c.href} class="hover:text-white">
+              {c.label}
+            </a>
+          ) : (
+            <span class="text-white/70" aria-current="page">
+              {c.label}
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+<script is:inline type="application/ld+json" set:html={serializeJsonLd(breadcrumbJsonLd(crumbs))} />

@@ -1,0 +1,91 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { webPageJsonLd } from '@/lib/seo';
+
+export async function getStaticPaths() {
+  const policies = await getCollection('policies');
+  return policies.map((entry) => ({ params: { policy: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<'policies'>;
+}
+const { entry } = Astro.props;
+const { data } = entry;
+const { Content } = await render(entry);
+
+const policies = (await getCollection('policies')).sort((a, b) => a.data.order - b.data.order);
+const url = `/policies/${entry.id}`;
+const longDate = data.updated.toLocaleDateString('en-NZ', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.summary}
+  breadcrumbs={[{ label: 'Policies', href: '/policies' }, { label: data.title }]}
+  ogType="article"
+  jsonLd={webPageJsonLd({ name: data.title, description: data.summary, url })}
+>
+  <section class="bg-plum-900">
+    <div class="container-x grid items-start gap-9 py-10 lg:grid-cols-[250px_1fr] lg:py-14">
+      <aside class="panel grid gap-[2px] p-[10px] lg:sticky lg:top-24">
+        <div class="px-[14px] pb-[10px] pt-3 font-mono text-[11px] font-semibold uppercase leading-none tracking-[0.16em] text-white/60">
+          Policies
+        </div>
+        <nav aria-label="Policies" class="grid gap-[2px]">
+          {
+            policies.map((p) => (
+              <a
+                href={`/policies/${p.id}`}
+                aria-current={p.id === entry.id ? 'page' : undefined}
+                class:list={[
+                  'px-[14px] py-3 text-[13.5px] font-semibold leading-none transition-colors',
+                  p.id === entry.id ? 'bg-lime font-bold text-ink' : 'text-white/75 hover:bg-white/[0.06] hover:text-white',
+                ]}
+              >
+                {p.data.title}
+              </a>
+            ))
+          }
+          <a href="/terms" class="px-[14px] py-3 text-[13.5px] font-semibold leading-none text-white/75 hover:bg-white/[0.06] hover:text-white">
+            Terms &amp; conditions
+          </a>
+        </nav>
+      </aside>
+
+      <article class="max-w-[820px]">
+        <h1 class="display text-[32px] leading-none sm:text-[40px]">{data.title}</h1>
+        <p class="mb-[22px] mt-2 font-mono text-[12.5px] font-medium uppercase leading-none tracking-[0.1em] text-white/60">
+          Last updated <time datetime={data.updated.toISOString().slice(0, 10)}>{longDate}</time>
+        </p>
+
+        {
+          data.draft && (
+            <div class="mb-6 border-l-[3px] border-lilac bg-plum-800 px-6 py-5 text-[15.5px] leading-[1.7] text-white/[0.78]">
+              Draft wording for review. Have it checked and edit
+              <code class="font-mono text-[13px] text-lime-soft"> src/content/policies/{entry.id}.md</code> before this page goes live.
+            </div>
+          )
+        }
+
+        <div class="mb-[26px] border-l-[3px] border-lime bg-plum-800 px-6 py-5">
+          <div class="mb-2 text-[12px] font-bold uppercase leading-none tracking-[0.12em] text-lime-soft">In short</div>
+          <p class="text-[16px] leading-[1.65] text-white/[0.82]">{data.inShort}</p>
+        </div>
+
+        <div class="prose-policy prose-compact">
+          <Content />
+        </div>
+
+        <div class="panel mt-8 flex flex-col gap-5 px-6 py-[22px] sm:flex-row sm:items-center sm:justify-between">
+          <p class="text-[15.5px] leading-[1.6] text-white/[0.72]">
+            Questions about this policy, or an order in progress? Have your order number handy and give us a call.
+          </p>
+          <a href="/contact" class="btn btn-sm shrink-0 border border-lime text-lime hover:bg-lime/10">Contact us</a>
+        </div>
+      </article>
+    </div>
+  </section>
+</BaseLayout>

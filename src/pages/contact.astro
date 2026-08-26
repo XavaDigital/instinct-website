@@ -1,0 +1,115 @@
+---
+import { getCollection } from 'astro:content';
+import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Figure from '@/components/Figure.astro';
+import Faq from '@/components/Faq.astro';
+import ContactForm from '@/components/islands/ContactForm';
+import FormStatusNotice from '@/components/FormStatusNotice.astro';
+import { nav, site } from '@/config/site';
+import { siteImage } from '@/lib/images';
+import { webPageJsonLd } from '@/lib/seo';
+
+const title = 'Contact';
+const description = `Call, email or message Instinct Apparel in ${site.address.city}. Questions about sizing, artwork, timelines or pricing answered within one business day.`;
+
+const faqCategories = await getCollection('faqs');
+const pick = (q: string) => faqCategories.flatMap((c) => c.data.items).find((i) => i.q === q);
+const faqs = [
+  'How long does an order take?',
+  'Is there a minimum order?',
+  'What artwork files do you need?',
+  'Can we add players after we\'ve ordered?',
+]
+  .map(pick)
+  .filter((i): i is { q: string; a: string } => Boolean(i));
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  breadcrumbs={[{ label: 'Contact' }]}
+  jsonLd={webPageJsonLd({ name: title, description, url: '/contact', type: 'ContactPage' })}
+>
+  <Fragment slot="head">
+    {PUBLIC_TURNSTILE_SITE_KEY && <link rel="preconnect" href="https://challenges.cloudflare.com" />}
+  </Fragment>
+  <FormStatusNotice />
+  <section class="hero-glow-right">
+    <div class="container-x grid gap-10 py-14 lg:grid-cols-2 lg:gap-11 lg:pb-[50px] lg:pt-14">
+      <div>
+        <span class="eyebrow">Talk to a real person</span>
+        <h1 class="display mt-3 text-[40px] leading-[0.96] tracking-[-0.035em] sm:text-[56px]">Get in touch</h1>
+        <p class="mb-[30px] mt-[14px] max-w-[470px] text-[17.5px] leading-[1.6] text-white/[0.72]">
+          Questions about sizing, artwork, timelines or pricing? Call us, email us, or send a message and we'll come
+          back within one business day.
+        </p>
+        <div class="grid max-w-[460px] gap-[14px]">
+          <a
+            href={site.phone.href}
+            class="panel-deep flex items-center justify-between gap-[18px] px-[22px] py-5 transition-colors hover:border-lime/60"
+          >
+            <div>
+              <div class="mb-2 text-[11.5px] font-semibold uppercase leading-none tracking-[0.12em] text-white/55">Phone</div>
+              <div class="card-title text-[24px] text-lime">{site.phone.display}</div>
+            </div>
+            <span class="text-right text-[13px] leading-[1.5] text-white/50">
+              {site.hours.short[0]}<br />{site.hours.short[1]}
+            </span>
+          </a>
+          <a href={`mailto:${site.email}`} class="panel block px-[22px] py-5 transition-colors hover:border-lime/60">
+            <div class="mb-2 text-[11.5px] font-semibold uppercase leading-none tracking-[0.12em] text-white/55">Email</div>
+            <div class="break-all text-[17px] font-semibold leading-[1.4] text-white">{site.email}</div>
+            <div class="mt-1 text-[13.5px] leading-[1.5] text-white/50">Artwork files welcome — up to 25MB</div>
+          </a>
+          <div class="panel px-[22px] py-5">
+            <div class="mb-2 text-[11.5px] font-semibold uppercase leading-none tracking-[0.12em] text-white/55">Showroom</div>
+            <address class="text-[17px] font-semibold not-italic leading-[1.5] text-white">
+              {site.address.street}, {site.address.suburb}<br />
+              {site.address.city} {site.address.postcode}, {site.address.country}
+            </address>
+            <div class="mt-1 text-[13.5px] leading-[1.5] text-white/50">
+              Visits by appointment — come see and feel the fabric.
+              <a href={site.mapsUrl} class="link-inline ml-1" rel="noopener" target="_blank">Open in Google Maps</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid content-start gap-4">
+        <Figure
+          src={siteImage('contact-map')}
+          alt={`Map showing the Instinct Apparel showroom in ${site.address.suburb}, ${site.address.city}`}
+          tone="hero"
+          label={`Map — ${site.address.city} showroom location`}
+          class="min-h-[240px] lg:min-h-[300px]"
+          loading="eager"
+        />
+        <Figure
+          src={siteImage('contact-showroom')}
+          alt="The Instinct Apparel team and showroom"
+          label="Photo — the team / showroom interior"
+          class="min-h-[160px] lg:min-h-[200px]"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-plum-900">
+    <div class="container-x grid items-start gap-[34px] pb-[58px] lg:grid-cols-[1.2fr_0.8fr]">
+      <ContactForm client:idle turnstileSiteKey={PUBLIC_TURNSTILE_SITE_KEY} contactEmail={site.email} />
+
+      <aside class="grid gap-4">
+        <div class="panel-deep px-6 py-[26px]">
+          <h2 class="mb-4 text-[17px] font-bold uppercase leading-[1.2] tracking-[0.04em] text-white">Common questions</h2>
+          <Faq items={faqs} idPrefix="contact-faq" />
+          <a href="/faq" class="link-lime mt-4 inline-block">All questions <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="bg-lime px-6 py-[26px] text-ink">
+          <h2 class="display text-[26px] leading-[1.05] text-ink">Need a price?</h2>
+          <p class="mb-4 mt-2 text-[15px] font-medium leading-[1.5]">Send the sport, numbers and dates — we'll do the rest.</p>
+          <a href={nav.cta.href} class="btn btn-sm bg-plum-900 text-white hover:bg-plum-800">Request a quote <span aria-hidden="true">→</span></a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

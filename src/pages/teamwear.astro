@@ -1,0 +1,169 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Figure from '@/components/Figure.astro';
+import GarmentCard from '@/components/GarmentCard.astro';
+import SportsGrid from '@/components/SportsGrid.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { nav } from '@/config/site';
+import { IS_MVP, routeEnabled } from '@/config/mode';
+import { siteImage } from '@/lib/images';
+import { webPageJsonLd } from '@/lib/seo';
+
+const title = 'Club teamwear';
+const description =
+  'Custom sublimated club teamwear from a New Zealand owned and operated supplier: playing jerseys, hoodies, jackets, training tees, polos, shorts, socks, headwear and bags — one design across the whole club, one point of contact, one invoice.';
+
+const garments = (await getCollection('garments')).sort((a, b) => a.data.order - b.data.order);
+// Full site: four featured cards plus a compact list linking to garment pages.
+// MVP: the garment pages don't exist, so every garment gets a showcase card.
+const featured = IS_MVP ? garments : garments.filter((g) => g.data.featured);
+const others = IS_MVP ? [] : garments.filter((g) => !g.data.featured);
+const sports = (await getCollection('sports')).sort((a, b) => a.data.order - b.data.order);
+const sportsLinked = routeEnabled('/sports');
+
+const tiers = [
+  {
+    label: 'Tier 1',
+    title: 'Playing kit only',
+    body: 'Jersey and shorts, numbered, ready for round one.',
+    items: ['Playing jersey', 'Match shorts', 'Numbers included'],
+    popular: false,
+  },
+  {
+    label: 'Tier 2',
+    title: 'Match & training',
+    body: 'Everything the squad needs from Tuesday to Saturday.',
+    items: ['Playing jersey + shorts', 'Training tee', 'Hoodie', 'Socks'],
+    popular: true,
+  },
+  {
+    label: 'Tier 3',
+    title: 'Whole club',
+    body: 'Squad, coaches, committee and supporters in one look.',
+    items: ['All of Tier 2', 'Jackets', 'Committee polos', 'Supporter merch', 'Bags & headwear'],
+    popular: false,
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  breadcrumbs={[{ label: 'Club teamwear' }]}
+  jsonLd={webPageJsonLd({ name: title, description, url: '/teamwear', type: 'CollectionPage' })}
+>
+  <!-- Hero -->
+  <section class="hero-glow">
+    <div class="container-x grid gap-10 py-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:pb-[50px] lg:pt-14">
+      <div class="flex flex-col gap-5">
+        <span class="eyebrow">Club teamwear</span>
+        <h1 class="display text-[40px] leading-[0.96] tracking-[-0.035em] sm:text-[58px]">Everything your club wears</h1>
+        <p class="max-w-[490px] text-[17.5px] leading-[1.6] text-white/[0.72]">
+          Playing kit, training gear, sideline warmth, committee polos and supporter merch — one design language across
+          the whole club, one point of contact, one invoice.
+        </p>
+        <div class="flex flex-wrap gap-[14px]">
+          <a href={nav.cta.href} class="btn btn-primary">Request a quote <span aria-hidden="true">→</span></a>
+          <a href="/gallery" class="btn btn-outline">See the gallery</a>
+        </div>
+      </div>
+      <Figure
+        src={siteImage('teamwear-hero')}
+        alt="A full club kit laid out: jersey, hoodie, shorts and polo"
+        tone="hero"
+        label="Hero — full club kit laid out flat: jersey, hoodie, shorts, polo"
+        class="min-h-[260px] lg:min-h-[390px]"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <!-- Garments -->
+  <section class="bg-plum-850">
+    <div class="container-x py-14 lg:py-[60px]">
+      <div class="mb-[26px] flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <span class="eyebrow eyebrow-lilac">Build your range</span>
+          <h2 class="display mt-3 text-[32px] sm:text-[40px]">Garments we sublimate</h2>
+        </div>
+        <p class="max-w-[320px] text-[14.5px] leading-[1.5] text-white/55 sm:text-right">
+          Mix and match freely — there's no minimum per garment.
+        </p>
+      </div>
+      <ul class:list={['grid gap-4 sm:grid-cols-2', IS_MVP ? 'lg:grid-cols-3' : 'lg:grid-cols-4']}>
+        {
+          featured.map((g) => (
+            <li>
+              <GarmentCard garment={g} />
+            </li>
+          ))
+        }
+      </ul>
+      {
+        others.length > 0 && (
+          <ul class="mt-4 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
+            {others.map((g) => (
+              <li>
+                <GarmentCard garment={g} compact />
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Tiers -->
+  <section class="bg-plum-900">
+    <div class="container-x py-14 lg:py-[60px]">
+      <h2 class="display text-[32px] sm:text-[40px]">Kit the whole club</h2>
+      <p class="mb-8 mt-2 max-w-[620px] text-[16.5px] leading-[1.6] text-white/[0.68]">
+        Most clubs order in three tiers. Pick the one that matches your season and we'll price it out.
+      </p>
+      <ul class="grid gap-[18px] md:grid-cols-3">
+        {
+          tiers.map((t) => (
+            <li
+              class:list={[
+                'relative px-7 py-[30px]',
+                t.popular ? 'border border-lime bg-plum-800' : 'border border-white/[0.12] bg-plum-850',
+              ]}
+            >
+              {t.popular && (
+                <span class="absolute -top-3 left-7 bg-lime px-3 py-[7px] text-[11px] font-bold uppercase leading-none tracking-[0.12em] text-ink">
+                  Most popular
+                </span>
+              )}
+              <span class:list={['eyebrow text-[11.5px] tracking-[0.16em]', !t.popular && 'eyebrow-lilac']}>{t.label}</span>
+              <h3 class="card-title my-3 text-[24px] leading-[1.1]">{t.title}</h3>
+              <p class="mb-[18px] text-[15px] leading-[1.6] text-white/70">{t.body}</p>
+              <ul class="text-[14px] font-medium leading-[1.9] text-white/[0.62]">
+                {t.items.map((i) => (
+                  <li>{i}</li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Sports -->
+  <section class="bg-plum-850">
+    <div class="container-x py-14 lg:py-[60px]">
+      <div class="mb-[26px] flex items-end justify-between gap-4">
+        <h2 class="display text-[30px] sm:text-[38px]">{sportsLinked ? 'Browse by sport' : 'Sports we kit'}</h2>
+        {sportsLinked && <a href="/sports" class="link-lime">All sports <span aria-hidden="true">→</span></a>}
+      </div>
+      <SportsGrid sports={sports} variant="mini" />
+    </div>
+  </section>
+
+  <CtaBand
+    title="Let's price your club's range"
+    body="Send the sport, numbers and garments you're after. Price and a free mockup back within one business day."
+    watermark="CLUB"
+  />
+</BaseLayout>

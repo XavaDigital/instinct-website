@@ -1,0 +1,162 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Faq from '@/components/Faq.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { site } from '@/config/site';
+import { faqJsonLd } from '@/lib/seo';
+
+const title = 'Frequently asked questions';
+const description =
+  'Answers to what organisers usually ask about custom teamwear: minimum orders, quotes, artwork, sizing kits, production times, delivery and payment.';
+
+const categories = (await getCollection('faqs')).sort((a, b) => a.data.order - b.data.order);
+const allItems = categories.flatMap((c) => c.data.items);
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  breadcrumbs={[{ label: 'FAQ' }]}
+  jsonLd={faqJsonLd(allItems, { name: title, description, url: '/faq' })}
+>
+  <section class="hero-glow">
+    <div class="container-x pb-10 pt-12 lg:pt-[52px]">
+      <span class="eyebrow">Help centre</span>
+      <h1 class="display mt-3 text-[40px] leading-[0.96] tracking-[-0.035em] sm:text-[56px]">{title}</h1>
+      <p class="mb-[26px] mt-3 max-w-[620px] text-[17.5px] leading-[1.6] text-white/[0.72]">
+        Everything organisers usually ask us — ordering, artwork, sizing, delivery and payment. Can't find it? Call
+        <a href={site.phone.href} class="link-inline">{site.phone.display}</a> or
+        <a href="/contact" class="link-inline">send us a message</a>.
+      </p>
+      <form role="search" class="max-w-[560px]" onsubmit="return false">
+        <label for="faq-search" class="sr-only">Search the FAQ</label>
+        <input
+          id="faq-search"
+          type="search"
+          class="field-input !bg-white/[0.06] !border-white/[0.16] !px-[18px] !py-4"
+          placeholder='Search the FAQ — e.g. "sizing kit"'
+          autocomplete="off"
+          data-faq-search
+        />
+      </form>
+    </div>
+  </section>
+
+  <section class="bg-plum-900">
+    <div class="container-x grid items-start gap-9 pb-[60px] pt-2 lg:grid-cols-[250px_1fr]">
+      <aside class="panel grid gap-[2px] p-[10px] lg:sticky lg:top-24">
+        <nav aria-label="FAQ categories" class="grid gap-[2px]">
+          {
+            categories.map((c, i) => (
+              <a
+                href={`#${c.id}`}
+                class:list={[
+                  'px-[14px] py-[13px] text-[13.5px] font-semibold leading-none tracking-[0.04em] transition-colors',
+                  i === 0 ? 'bg-lime font-bold text-ink' : 'text-white/75 hover:bg-white/[0.06] hover:text-white',
+                ]}
+                data-faq-nav
+              >
+                {c.data.title}
+              </a>
+            ))
+          }
+          <a href="/policies" class="px-[14px] py-[13px] text-[13.5px] font-semibold leading-none tracking-[0.04em] text-white/75 hover:bg-white/[0.06] hover:text-white">
+            Returns &amp; policies
+          </a>
+        </nav>
+        <div class="mt-2 border-t border-white/10 px-[14px] pb-2 pt-4">
+          <div class="mb-2 text-[11.5px] font-semibold uppercase leading-none tracking-[0.1em] text-white/50">Still stuck?</div>
+          <a href={site.phone.href} class="card-title block text-[19px] text-lime hover:text-lime-soft">{site.phone.display}</a>
+          <div class="text-[13px] leading-[1.5] text-white/55">{site.hours.display}</div>
+        </div>
+      </aside>
+
+      <div class="grid gap-[34px]" data-faq-list>
+        {
+          categories.map((c, i) => (
+            <section id={c.id} class="scroll-mt-24" data-faq-section>
+              <h2 class="display mb-[14px] text-[26px] sm:text-[30px]">{c.data.title}</h2>
+              <Faq items={c.data.items} openFirst={i === 0} idPrefix={c.id} />
+            </section>
+          ))
+        }
+        <p hidden data-faq-empty class="text-[16px] text-white/60">
+          No questions match that search. Try a different word, or <a href="/contact" class="link-inline">ask us directly</a>.
+        </p>
+        <p role="status" aria-live="polite" class="sr-only" data-faq-count></p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Question we haven't answered?"
+    body="Call us or send a message — a real person who knows kit will get back to you."
+    secondary={{ label: 'Contact us', href: '/contact' }}
+    watermark="FAQ"
+  />
+</BaseLayout>
+
+<script>
+  // Client-side filter over the accordion. Progressive enhancement only —
+  // every answer is in the HTML regardless.
+  const input = document.querySelector<HTMLInputElement>('[data-faq-search]');
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-faq-section]'));
+  const empty = document.querySelector<HTMLElement>('[data-faq-empty]');
+  const count = document.querySelector<HTMLElement>('[data-faq-count]');
+  const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-faq-nav]'));
+
+  if (input && sections.length) {
+    const items = sections.flatMap((section) =>
+      Array.from(section.querySelectorAll<HTMLDetailsElement>('details')).map((details) => ({
+        section,
+        details,
+        text: (details.textContent ?? '').toLowerCase(),
+      })),
+    );
+
+    const apply = () => {
+      const q = input.value.trim().toLowerCase();
+      let visible = 0;
+      for (const item of items) {
+        const match = !q || item.text.includes(q);
+        item.details.hidden = !match;
+        if (match) visible += 1;
+        if (q && match) item.details.open = true;
+      }
+      for (const section of sections) {
+        const any = Array.from(section.querySelectorAll<HTMLDetailsElement>('details')).some((d) => !d.hidden);
+        section.hidden = !any;
+      }
+      if (empty) empty.hidden = visible > 0;
+      if (count) count.textContent = q ? `${visible} question${visible === 1 ? '' : 's'} match` : '';
+    };
+    input.addEventListener('input', apply);
+  }
+
+  // Highlight the category nearest the top of the viewport.
+  if (navLinks.length && 'IntersectionObserver' in window) {
+    const active = new Set<string>();
+    const setActive = () => {
+      const first = sections.find((s) => active.has(s.id)) ?? sections[0];
+      for (const link of navLinks) {
+        const on = link.getAttribute('href') === `#${first?.id}`;
+        link.classList.toggle('bg-lime', on);
+        link.classList.toggle('text-ink', on);
+        link.classList.toggle('font-bold', on);
+        link.classList.toggle('text-white/75', !on);
+      }
+    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) active.add(e.target.id);
+          else active.delete(e.target.id);
+        }
+        setActive();
+      },
+      { rootMargin: '-96px 0px -60% 0px' },
+    );
+    sections.forEach((s) => observer.observe(s));
+  }
+</script>

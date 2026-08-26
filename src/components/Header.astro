@@ -1,0 +1,145 @@
+---
+import { nav, site } from '@/config/site';
+import Wordmark from './Wordmark.astro';
+
+interface Props {
+  announcement?: boolean;
+  /** Right-hand action: the quote button, or the phone number on the quote page itself. */
+  cta?: 'quote' | 'phone';
+}
+const { announcement = true, cta = 'quote' } = Astro.props;
+
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
+---
+
+{
+  announcement && (
+    <div class="bg-lime text-ink">
+      <p class="container-x flex items-center justify-center gap-4 py-[9px] text-center text-[11px] font-semibold uppercase leading-none tracking-[0.1em] sm:gap-7 sm:text-[11.5px]">
+        {site.announcement.map((item, i) => (
+          <>
+            {i > 0 && (
+              <span class="hidden opacity-50 sm:inline" aria-hidden="true">
+                /
+              </span>
+            )}
+            <span class:list={[i > 0 && 'hidden sm:inline']}>{item}</span>
+          </>
+        ))}
+      </p>
+    </div>
+  )
+}
+
+<header class="sticky top-0 z-50 border-b border-white/[0.09] bg-plum-900/95 backdrop-blur-md">
+  <div class="container-x flex items-center justify-between gap-6 py-4 lg:py-5">
+    <a href="/" class="shrink-0" aria-label={`${site.name} — home`}>
+      <Wordmark />
+    </a>
+
+    <nav
+      aria-label="Primary"
+      class="hidden items-center gap-6 text-[13px] font-semibold uppercase leading-none tracking-[0.09em] text-white/[0.78] lg:flex xl:gap-[30px]"
+    >
+      {
+        nav.primary.map((link) => (
+          <a
+            href={link.href}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+            class:list={['transition-colors hover:text-white', isActive(link.href) && 'text-lime hover:text-lime']}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-3">
+      {
+        cta === 'phone' ? (
+          <a href={site.phone.href} class="hidden text-[14px] font-bold text-lime hover:text-lime-soft sm:inline-flex">
+            {site.phone.display}
+          </a>
+        ) : (
+          <a href={nav.cta.href} class="btn btn-primary btn-sm hidden sm:inline-flex">
+            {nav.cta.label}
+          </a>
+        )
+      }
+      <button
+        type="button"
+        class="menu-toggle -mr-2 inline-flex h-11 w-11 items-center justify-center text-white lg:hidden"
+        data-menu-toggle
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+        aria-label="Open menu"
+      >
+        <svg class="icon-open" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+        <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="mobile-menu" hidden class="max-h-[calc(100dvh-72px)] overflow-y-auto border-t border-white/10 bg-plum-900 lg:hidden">
+    <nav aria-label="Mobile" class="container-x grid py-4">
+      {
+        nav.primary.map((link) => (
+          <a
+            href={link.href}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+            class:list={[
+              'border-b border-white/[0.08] py-4 text-[15px] font-semibold uppercase tracking-[0.09em] text-white/[0.85]',
+              isActive(link.href) && 'text-lime',
+            ]}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+      <div class="flex flex-wrap items-center gap-4 py-6">
+        <a href={nav.cta.href} class="btn btn-primary">{nav.cta.label}</a>
+        <a href={site.phone.href} class="text-[15px] font-bold text-lime">Call {site.phone.display}</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .menu-toggle .icon-close {
+    display: none;
+  }
+  .menu-toggle[aria-expanded='true'] .icon-open {
+    display: none;
+  }
+  .menu-toggle[aria-expanded='true'] .icon-close {
+    display: block;
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.getElementById('mobile-menu');
+
+  if (toggle && menu) {
+    const setOpen = (open: boolean) => {
+      menu.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    };
+    toggle.addEventListener('click', () => setOpen(menu.hidden));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !menu.hidden) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    window.matchMedia('(min-width: 64rem)').addEventListener('change', (event) => {
+      if (event.matches) setOpen(false);
+    });
+  }
+</script>

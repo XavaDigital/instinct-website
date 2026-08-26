@@ -1,0 +1,102 @@
+[
+  {
+    "id": "rugby-club-kit",
+    "title": "Full club kit — rugby",
+    "sport": "rugby",
+    "garments": ["Playing jerseys", "Match shorts", "Hoodies"],
+    "label": "Project shot 1 — rugby club kit",
+    "featured": true,
+    "order": 1
+  },
+  {
+    "id": "netball-eight-grades",
+    "title": "Eight grades in one order — netball",
+    "sport": "netball",
+    "garments": ["Netball dresses", "Warm-up hoodies"],
+    "label": "Project shot 2 — netball dresses",
+    "featured": true,
+    "order": 2
+  },
+  {
+    "id": "football-home-away",
+    "title": "Home and away strips — football",
+    "sport": "football",
+    "garments": ["Playing shirts", "Shorts", "Keeper kit"],
+    "label": "Project shot 3 — football strips",
+    "featured": true,
+    "order": 3
+  },
+  {
+    "id": "cultural-performance",
+    "title": "Performance uniforms — kapa haka",
+    "sport": "cultural-groups",
+    "garments": ["Performance tops", "Group hoodies"],
+    "label": "Project shot 4 — cultural group uniforms",
+    "featured": true,
+    "order": 4
+  },
+  {
+    "id": "rugby-juniors",
+    "title": "Junior grades — rugby",
+    "sport": "rugby",
+    "garments": ["Playing jerseys", "Socks"],
+    "label": "Rugby project 2 — junior jerseys",
+    "order": 5
+  },
+  {
+    "id": "netball-bodysuits",
+    "title": "Bodysuits and bibs — netball",
+    "sport": "netball",
+    "garments": ["Bodysuits", "Velcro bibs"],
+    "label": "Netball project 2 — bodysuits",
+    "order": 6
+  },
+  {
+    "id": "football-juniors",
+    "title": "Junior academy kit — football",
+    "sport": "football",
+    "garments": ["Playing shirts", "Training tees"],
+    "label": "Football project 2 — junior academy",
+    "order": 7
+  },
+  {
+    "id": "basketball-reversible",
+    "title": "Reversible training singlets — basketball",
+    "sport": "basketball",
+    "garments": ["Reversible singlets", "Shorts"],
+    "label": "Basketball project 1 — reversible singlets",
+    "order": 8
+  },
+  {
+    "id": "basketball-game",
+    "title": "Game uniforms — basketball",
+    "sport": "basketball",
+    "garments": ["Game singlets", "Game shorts", "Shooting shirts"],
+    "label": "Basketball project 2 — game uniforms",
+    "order": 9
+  },
+  {
+    "id": "touch-social",
+    "title": "Social team tees — touch",
+    "sport": "touch",
+    "garments": ["Playing tees", "Shorts"],
+    "label": "Touch project 1 — social team tees",
+    "order": 10
+  },
+  {
+    "id": "touch-rep",
+    "title": "Representative kit — touch",
+    "sport": "touch",
+    "garments": ["Playing singlets", "Shorts", "Hoodies"],
+    "label": "Touch project 2 — representative kit",
+    "order": 11
+  },
+  {
+    "id": "cultural-polos",
+    "title": "Travel polos — cultural group",
+    "sport": "cultural-groups",
+    "garments": ["Group polos", "Kit bags"],
+    "label": "Cultural group project 2 — travel polos",
+    "order": 12
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "instinct-apparel-website",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2026-07-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  // Non-secret variables. Secrets (MAILGUN_API_KEY etc.) are set with
+  // `npx wrangler secret put NAME`, never committed here.
+  "vars": {
+    "MAILGUN_API_BASE": "https://api.mailgun.net"
+  }
+}

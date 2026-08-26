@@ -1,0 +1,30 @@
+{
+  "title": "Design & artwork",
+  "order": 2,
+  "items": [
+    {
+      "q": "What artwork files do you need?",
+      "a": "Vector files are best — AI, EPS, PDF or SVG — because they scale cleanly to any garment size. A high-resolution PNG works for most logos. If all you have is a photo of a badge or a hand-drawn pattern, send that and we'll redraw it for you."
+    },
+    {
+      "q": "Are mockups really free?",
+      "a": "Yes. Every quote comes with a design mockup showing your kit in your colours with your logos and sponsors placed. There's no charge and no obligation, whether you go ahead or not."
+    },
+    {
+      "q": "How many design revisions do we get?",
+      "a": "We keep revising until you're happy. Most clubs sign off within two rounds — the first mockup gets the big decisions made, the second tidies the detail. If a committee needs a few options to vote on, tell us up front and we'll prepare them together."
+    },
+    {
+      "q": "Can you match our exact club colours?",
+      "a": "Yes. Send a Pantone reference, a swatch or an existing garment and we'll match it. Sublimation prints unlimited colours at no extra cost, so gradients, patterns and multi-colour crests are all included."
+    },
+    {
+      "q": "Who owns the design once it's made?",
+      "a": "Your logos, patterns and artwork stay yours, and the finished design is yours to reorder from us for as long as you like. Our base templates and design library remain ours, and we never reuse your design for another customer. See our [artwork and IP policy](/policies/artwork-ip) for the detail."
+    },
+    {
+      "q": "Will our kit meet our competition's uniform rules?",
+      "a": "We don't check designs against competition, league or governing-body rules — confirming compliance before you approve is the club's responsibility — but we'll work with you to make sure your design is competition compliant. Send us the requirements with your quote request and we'll build them into the mockup so you can check it against the rules before you sign off."
+    }
+  ]
+}

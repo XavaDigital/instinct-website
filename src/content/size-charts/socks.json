@@ -1,0 +1,13 @@
+{
+  "title": "Socks",
+  "garment": "socks",
+  "order": 4,
+  "note": "Sized by shoe size (NZ/AU). Knitted socks stretch to fit across the range shown.",
+  "columns": ["Size", "Shoe size (NZ/AU)", "Shoe size (EU)"],
+  "rows": [
+    ["Junior", "13–3", "31–35"],
+    ["Small", "3–7", "35–40"],
+    ["Medium", "7–11", "40–45"],
+    ["Large", "11–14", "45–49"]
+  ]
+}

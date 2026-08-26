@@ -1,0 +1,35 @@
+---
+import type { GalleryItem } from '@/lib/gallery';
+import Figure from './Figure.astro';
+
+interface Props {
+  items: GalleryItem[];
+  columns?: 2 | 3 | 4;
+  captions?: boolean;
+  class?: string;
+}
+const { items, columns = 4, captions = false, class: className } = Astro.props;
+const cols = { 2: 'sm:grid-cols-2', 3: 'sm:grid-cols-2 lg:grid-cols-3', 4: 'grid-cols-2 lg:grid-cols-4' }[columns];
+---
+
+<ul class:list={['grid gap-[14px]', cols, className]}>
+  {
+    items.map((p) => (
+      <li>
+        <Figure
+          src={p.image}
+          alt={p.imageAlt ?? p.title}
+          label={p.label}
+          class="aspect-[4/5] w-full"
+          sizes="(min-width: 1024px) 25vw, 50vw"
+        />
+        {captions && (
+          <div class="mt-3">
+            <h3 class="text-[15px] font-bold text-white">{p.title}</h3>
+            {p.garments.length > 0 && <p class="mt-1 text-[13px] text-white/50">{p.garments.join(' · ')}</p>}
+          </div>
+        )}
+      </li>
+    ))
+  }
+</ul>

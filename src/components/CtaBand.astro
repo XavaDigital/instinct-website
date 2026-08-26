@@ -1,0 +1,93 @@
+---
+/**
+ * Full-width lime call-to-action band with an oversized watermark word.
+ * A trailing " →" in a button label is rendered as a decorative glyph.
+ */
+import { nav } from '@/config/site';
+
+interface Props {
+  title: string;
+  body: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  watermark?: string;
+  variant?: 'lime' | 'plum';
+  /** Optional second, outlined button shown before the primary one. */
+  secondary?: { label: string; href: string };
+}
+const {
+  title,
+  body,
+  ctaLabel = 'Request a quote →',
+  ctaHref = nav.cta.href,
+  watermark,
+  variant = 'lime',
+  secondary,
+} = Astro.props;
+
+const split = (label: string) =>
+  label.endsWith(' →') ? { text: label.slice(0, -2), arrow: true } : { text: label, arrow: false };
+const primary = split(ctaLabel);
+const second = secondary ? split(secondary.label) : null;
+---
+
+<section
+  class:list={[
+    'relative overflow-hidden',
+    variant === 'lime' ? 'bg-lime text-ink' : 'bg-plum-800 text-white',
+  ]}
+>
+  {
+    watermark && (
+      <div
+        aria-hidden="true"
+        class:list={[
+          'pointer-events-none absolute -right-[30px] -top-[40px] select-none font-display text-[120px] font-black italic leading-none tracking-[-0.05em] sm:text-[170px]',
+          variant === 'lime' ? 'text-ink/[0.07]' : 'text-white/[0.035]',
+        ]}
+      >
+        {watermark}
+      </div>
+    )
+  }
+  <div class="container-x relative flex flex-col gap-7 py-12 sm:py-16 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+    <div>
+      <h2
+        class:list={[
+          'font-display text-[34px] font-black uppercase italic leading-none tracking-[-0.03em] sm:text-[46px]',
+          variant === 'lime' ? 'text-ink' : 'text-white',
+        ]}
+      >
+        {title}
+      </h2>
+      <p
+        class:list={[
+          'mt-3 max-w-[560px] text-[17px] font-medium leading-[1.5]',
+          variant === 'lime' ? 'text-ink' : 'text-white/75',
+        ]}
+      >
+        {body}
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      {
+        secondary && second && (
+          <a
+            href={secondary.href}
+            class:list={[
+              'btn border-2 px-7 py-5',
+              variant === 'lime' ? 'border-ink text-ink hover:bg-ink/10' : 'border-white/40 text-white hover:border-white',
+            ]}
+          >
+            {second.text}
+            {second.arrow && <span aria-hidden="true"> →</span>}
+          </a>
+        )
+      }
+      <a href={ctaHref} class:list={['btn shrink-0', variant === 'lime' ? 'btn-plum' : 'btn-primary']}>
+        {primary.text}
+        {primary.arrow && <span aria-hidden="true"> →</span>}
+      </a>
+    </div>
+  </div>
+</section>

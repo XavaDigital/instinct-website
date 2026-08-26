@@ -1,0 +1,23 @@
+{
+  "title": "Shorts & skorts",
+  "garment": "shorts-leggings",
+  "order": 3,
+  "note": "Waist measured flat and relaxed across the top of the waistband (elasticated, so it stretches). Outseam from waistband to hem. Indicative — confirm with a sizing kit.",
+  "columns": ["Size", "Waist, relaxed (cm)", "Outseam (cm)", "Fits waist (cm)"],
+  "rows": [
+    ["4Y", 24, 30, "52–56"],
+    ["6Y", 25, 32, "56–60"],
+    ["8Y", 26, 34, "60–64"],
+    ["10Y", 27, 36, "64–68"],
+    ["12Y", 28, 38, "68–72"],
+    ["XS", 32, 42, "70–76"],
+    ["S", 34, 44, "76–82"],
+    ["M", 36, 45, "82–88"],
+    ["L", 38, 46, "88–94"],
+    ["XL", 40, 47, "94–100"],
+    ["2XL", 42, 48, "100–106"],
+    ["3XL", 44, 49, "106–112"],
+    ["4XL", 46, 50, "112–118"],
+    ["5XL", 48, 51, "118–124"]
+  ]
+}

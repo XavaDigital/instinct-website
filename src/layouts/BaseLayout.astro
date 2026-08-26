@@ -1,0 +1,165 @@
+---
+import '@/styles/fonts.css';
+import '@/styles/global.css';
+
+import archivoItalicUrl from '@fontsource/archivo/files/archivo-latin-900-italic.woff2?url';
+import barlowRegularUrl from '@fontsource/barlow/files/barlow-latin-400-normal.woff2?url';
+
+import { PUBLIC_GA_MEASUREMENT_ID, PUBLIC_CF_ANALYTICS_TOKEN, PUBLIC_GADS_CONVERSION_ID } from 'astro:env/client';
+
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import { site } from '@/config/site';
+import { absoluteUrl, organizationJsonLd, serializeJsonLd, type Crumb } from '@/lib/seo';
+
+interface Props {
+  /** Page title. The " | Instinct Apparel" suffix is added unless `titleTemplate` is false. */
+  title: string;
+  titleTemplate?: boolean;
+  description: string;
+  /** Override the canonical URL (defaults to the current path on the production origin). */
+  canonical?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  /** Extra JSON-LD objects for this page (FAQPage, Product, ...). */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Breadcrumb trail rendered under the header. "Home" is prepended automatically. */
+  breadcrumbs?: Crumb[];
+  announcement?: boolean;
+  headerCta?: 'quote' | 'phone';
+  bodyClass?: string;
+}
+
+const {
+  title,
+  titleTemplate = true,
+  description,
+  canonical,
+  ogImage = '/og-default.png',
+  ogType = 'website',
+  noindex = false,
+  jsonLd,
+  breadcrumbs,
+  announcement = true,
+  headerCta = 'quote',
+  bodyClass,
+} = Astro.props;
+
+const fullTitle = titleTemplate ? `${title} | ${site.name}` : title;
+// gtag.js serves both GA4 and Google Ads; load it once with whichever ID exists.
+const gtagLoaderId = PUBLIC_GA_MEASUREMENT_ID || PUBLIC_GADS_CONVERSION_ID;
+// With build.format 'file' the index route reports "/index"; normalise so the
+// canonical URL is always the clean path with no extension or trailing slash.
+const pathname =
+  Astro.url.pathname
+    .replace(/\.html$/, '')
+    .replace(/\/index$/, '/')
+    .replace(/(.)\/$/, '$1') || '/';
+const canonicalUrl = canonical ?? absoluteUrl(pathname);
+const ogImageUrl = absoluteUrl(ogImage);
+const extraJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+---
+
+<!doctype html>
+<html lang="en-NZ">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {noindex ? <meta name="robots" content="noindex, nofollow" /> : <link rel="canonical" href={canonicalUrl} />}
+    <meta name="theme-color" content="#1c0d3c" />
+    <meta name="color-scheme" content="dark" />
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <link rel="preload" as="font" type="font/woff2" href={archivoItalicUrl} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={barlowRegularUrl} crossorigin />
+
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_NZ" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name} — ${site.tagline}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <script is:inline type="application/ld+json" set:html={serializeJsonLd(organizationJsonLd())} />
+    {extraJsonLd.map((data) => <script is:inline type="application/ld+json" set:html={serializeJsonLd(data)} />)}
+
+    {
+      gtagLoaderId && (
+        <>
+          <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gtagLoaderId}`} />
+          <script is:inline define:vars={{ ga: PUBLIC_GA_MEASUREMENT_ID ?? '', ads: PUBLIC_GADS_CONVERSION_ID ?? '' }}>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            if (ga) gtag('config', ga, { anonymize_ip: true });
+            if (ads) gtag('config', ads);
+          </script>
+        </>
+      )
+    }
+    <!-- Remember which ad or link brought the visitor, so enquiries can be attributed. -->
+    <script is:inline>
+      (function () {
+        try {
+          var p = new URLSearchParams(location.search);
+          var keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'fbclid'];
+          var out = {};
+          var any = false;
+          for (var i = 0; i < keys.length; i++) {
+            var v = p.get(keys[i]);
+            if (v) {
+              out[keys[i]] = v.slice(0, 200);
+              any = true;
+            }
+          }
+          var external = document.referrer && document.referrer.indexOf(location.host) === -1;
+          if (any || (external && !localStorage.getItem('instinct_attribution'))) {
+            if (external) out.referrer = document.referrer.slice(0, 200);
+            out.landing = location.pathname;
+            out.at = new Date().toISOString();
+            localStorage.setItem('instinct_attribution', JSON.stringify(out));
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <slot name="head" />
+  </head>
+  <body class:list={['flex min-h-dvh flex-col', bodyClass]}>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Header announcement={announcement} cta={headerCta} />
+    {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+    {
+      PUBLIC_CF_ANALYTICS_TOKEN && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={`{"token": "${PUBLIC_CF_ANALYTICS_TOKEN}"}`}
+        />
+      )
+    }
+  </body>
+</html>

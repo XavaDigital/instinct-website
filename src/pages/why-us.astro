@@ -1,0 +1,202 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { IS_MVP } from '@/config/mode';
+import { clientLogos, siteImage } from '@/lib/images';
+import { testimonialsFor } from '@/lib/testimonials';
+import Figure from '@/components/Figure.astro';
+import Testimonials from '@/components/Testimonials.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { site } from '@/config/site';
+import { webPageJsonLd } from '@/lib/seo';
+
+const title = 'Why buy from us';
+const description = `${site.stats.years} years kitting out New Zealand clubs, schools and cultural groups. Free mockups, no minimum order, sublimation that does not crack or peel, and one NZ contact from start to finish.`;
+
+const testimonials = await testimonialsFor('why-us');
+
+// The Google rating is a placeholder until a review profile exists; never show it to ad traffic unbacked.
+const showRating = !IS_MVP || Boolean(site.googleReviewsUrl);
+const stats = [
+  { value: site.stats.years, label: 'Years in business' },
+  { value: site.stats.clubs, label: 'Clubs & schools kitted' },
+  { value: site.stats.turnaround, label: 'Week turnaround' },
+  ...(showRating ? [{ value: site.stats.rating, label: 'Google rating' }] : []),
+];
+
+const reasons = [
+  {
+    title: 'Free mockups before you commit',
+    body: 'See your kit in your colours with your sponsors placed — then take it to the committee. No cost, no obligation.',
+  },
+  {
+    title: 'No minimum order',
+    body: 'Ten shirts or two hundred, same process and same quality. Add a late signing without reordering the whole set.',
+  },
+  {
+    title: "Sublimation that doesn't crack or peel",
+    body: 'The design is dyed into the fabric, not printed on top. It survives the season, the wash and the mud.',
+  },
+  {
+    title: 'Sizing sorted for you',
+    body: 'Sizing kits on request, junior through to 5XL, and a size run we help you plan so nobody is left out.',
+  },
+  {
+    title: 'Your design kept on file',
+    body: 'Reorder next season in a single email. No re-briefing, no drift in colours or logo placement.',
+  },
+  {
+    title: 'One New Zealand contact',
+    body: 'Same person start to finish, in your timezone. Call and speak to someone who knows your order.',
+  },
+];
+
+const comparison = [
+  ['Design longevity', 'Dyed into fibre', 'Can crack, peel'],
+  ['Colour count', 'Unlimited', 'Priced per colour'],
+  ['Names & numbers', 'Included', 'Usually extra'],
+  ['Feel on skin', 'Nothing to feel', 'Ink sits on top'],
+];
+
+const logos = ['Club logo', 'Club logo', 'School logo', 'Club logo', 'Group logo'];
+const realLogos = clientLogos();
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  breadcrumbs={[{ label: 'Why buy from us' }]}
+  jsonLd={webPageJsonLd({ name: title, description, url: '/why-us', type: 'AboutPage' })}
+>
+  <!-- Hero -->
+  <section class="hero-glow relative overflow-hidden">
+    <div
+      aria-hidden="true"
+      class="pointer-events-none absolute -bottom-[60px] -right-[30px] select-none font-display text-[120px] font-black italic leading-none tracking-[-0.05em] text-white/[0.035] sm:text-[170px]"
+    >
+      WHY US
+    </div>
+    <div class="container-x relative py-14 lg:pb-[54px] lg:pt-[60px]">
+      <span class="eyebrow">Why buy from us</span>
+      <h1 class="display mt-3 max-w-[840px] text-[40px] leading-[0.96] tracking-[-0.035em] sm:text-[58px]">
+        Built for the person doing the organising
+      </h1>
+      <p class="mt-4 max-w-[640px] text-[17.5px] leading-[1.6] text-white/[0.72]">
+        {site.stats.years} years kitting out New Zealand clubs, schools and cultural groups. We know the committee
+        sign-offs, the late size changes and the season that starts sooner than anyone planned.
+      </p>
+      <ul class:list={['mt-10 grid grid-cols-2 gap-[18px]', stats.length === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3']}>
+        {
+          stats.map((s) => (
+            <li class="border-t-[3px] border-lime pt-4">
+              <span class="block font-display text-[40px] font-black italic leading-none tracking-[-0.03em] text-white sm:text-[44px]">
+                {s.value}
+              </span>
+              <span class="mt-[6px] block text-[13px] font-semibold uppercase leading-[1.4] tracking-[0.06em] text-white/60">
+                {s.label}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Six reasons -->
+  <section class="bg-plum-850">
+    <div class="container-x py-14 lg:py-16">
+      <h2 class="display mb-8 text-[32px] sm:text-[40px]">Six reasons organisers stay with us</h2>
+      <ul class="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
+        {
+          reasons.map((r, i) => (
+            <li class="panel-deep px-[26px] py-7">
+              <div
+                class:list={['mb-[18px] h-[6px] w-[34px] skew-x-[-20deg]', i % 2 === 0 ? 'bg-lime' : 'bg-lilac']}
+                aria-hidden="true"
+              />
+              <h3 class="card-title text-[20px]">{r.title}</h3>
+              <p class="mt-[10px] text-[15px] leading-[1.65] text-white/70">{r.body}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Sublimated vs printed -->
+  <section class="bg-plum-900">
+    <div class="container-x grid gap-10 py-14 lg:grid-cols-2 lg:items-center lg:gap-[52px] lg:py-[68px]">
+      <Figure
+        src={siteImage('why-us-fabric')}
+        alt="Close-up of sublimated fabric showing the design dyed into the fibres"
+        tone="hero"
+        label="Photo — fabric close-up / sublimation detail"
+        class="min-h-[260px] lg:min-h-[380px]"
+      />
+      <div>
+        <span class="eyebrow eyebrow-lilac">The difference</span>
+        <h2 class="display mt-3 text-[32px] sm:text-[40px]">Sublimated vs printed</h2>
+        <div class="mt-[18px] overflow-x-auto">
+          <table class="w-full min-w-[420px] border border-white/[0.12] text-[14.5px] leading-[1.4]">
+            <thead>
+              <tr class="bg-plum-800 text-[12px] font-bold uppercase leading-none tracking-[0.1em] text-white/60">
+                <th scope="col" class="px-4 py-[14px] text-left font-bold"><span class="sr-only">Feature</span></th>
+                <th scope="col" class="px-4 py-[14px] text-left font-bold text-lime">Instinct sublimated</th>
+                <th scope="col" class="px-4 py-[14px] text-left font-bold">Screen printed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                comparison.map(([feature, ours, theirs]) => (
+                  <tr class="border-t border-white/10">
+                    <th scope="row" class="px-4 py-[14px] text-left font-normal text-white/70">
+                      {feature}
+                    </th>
+                    <td class="px-4 py-[14px] text-white">{ours}</td>
+                    <td class="px-4 py-[14px] text-white/55">{theirs}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proof (placeholder testimonials and logos are hidden in the MVP build) -->
+  {
+    testimonials.length > 0 && (
+      <section class="bg-plum-850">
+        <div class="container-x py-14 lg:py-16">
+          <Testimonials title="Don't take our word for it" items={testimonials} tone="deep" />
+          {realLogos.length > 0 ? (
+            <ul class="mt-[34px] grid grid-cols-2 items-center gap-[14px] sm:grid-cols-3 lg:grid-cols-5" aria-label="Clubs and schools we've kitted">
+              {realLogos.map((l) => (
+                <li class="flex min-h-[64px] items-center justify-center bg-white/[0.04] p-4">
+                  <Image src={l.image} alt={l.name} class="max-h-12 w-auto max-w-full object-contain" widths={[240]} />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            !IS_MVP && (
+              <ul class="mt-[34px] grid grid-cols-2 gap-[14px] sm:grid-cols-3 lg:grid-cols-5">
+                {logos.map((l) => (
+                  <li>
+                    <Figure tone="deep" label={l} labelPosition="center" class="min-h-[64px]" />
+                  </li>
+                ))}
+              </ul>
+            )
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand
+    title="See it before you buy it"
+    body="Send us your sport, numbers and colours. We'll come back with a price and a free mockup within one business day."
+    watermark="INSTINCT"
+  />
+</BaseLayout>

@@ -1,0 +1,26 @@
+---
+/**
+ * Lockup 02 "speed slash" from the logo shortlist: Archivo Black italic
+ * wordmark with a skewed lime bar.
+ */
+interface Props {
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+const { size = 'md', class: className } = Astro.props;
+const sizes = {
+  sm: { text: 'text-[26px]', bar: 'h-[19px] w-[4px]' },
+  md: { text: 'text-[28px] sm:text-[30px]', bar: 'h-[22px] w-[5px]' },
+  lg: { text: 'text-[40px]', bar: 'h-[30px] w-[6px]' },
+} as const;
+---
+
+<span class:list={['inline-flex items-center gap-[10px]', className]}>
+  <span
+    class:list={[
+      'font-display font-black italic leading-none tracking-[-0.03em] text-white',
+      sizes[size].text,
+    ]}>INSTINCT</span
+  >
+  <span class:list={['block skew-mark bg-lime', sizes[size].bar]} aria-hidden="true"></span>
+</span>

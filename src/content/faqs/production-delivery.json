@@ -1,0 +1,22 @@
+{
+  "title": "Production & delivery",
+  "order": 4,
+  "items": [
+    {
+      "q": "How long does an order take?",
+      "a": "Standard production is 3–4 weeks from the day you approve your final mockup and your deposit clears. Larger multi-grade orders can take a little longer, and we'll tell you before you approve. Courier delivery within New Zealand adds 1–4 working days."
+    },
+    {
+      "q": "Can you rush an order for the season start?",
+      "a": "Sometimes. Rush production is available for a surcharge when our schedule allows, so ask early rather than late. The quickest way to hit a deadline is to approve your mockup promptly — production can't start until it's signed off."
+    },
+    {
+      "q": "Where do you deliver, and what does it cost?",
+      "a": "We deliver anywhere in New Zealand by tracked courier from Christchurch. Delivery to one club address is quoted with your order, so there are no surprises at invoice time. Rural addresses carry the courier's rural surcharge. See our [shipping and delivery policy](/policies/shipping-delivery)."
+    },
+    {
+      "q": "Can you split-ship to individual players?",
+      "a": "Yes. We can pack and send each player's gear to their own address for a per-parcel fee. Send us the address list with your size run and we'll add it to the quote."
+    }
+  ]
+}

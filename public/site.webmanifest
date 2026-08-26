@@ -1,0 +1,13 @@
+{
+  "name": "Instinct Apparel",
+  "short_name": "Instinct",
+  "description": "Custom sublimated teamwear. New Zealand owned and operated.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#1c0d3c",
+  "theme_color": "#1c0d3c",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

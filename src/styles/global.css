@@ -1,0 +1,608 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------------
+   Design tokens — lifted from the Claude Design mockup (direction 1a).
+   ------------------------------------------------------------------------ */
+@theme {
+  /* Purples (dark field). Higher number = darker, matching Tailwind's scale. */
+  --color-plum-950: #170b31; /* footer */
+  --color-plum-900: #1c0d3c; /* page background */
+  --color-plum-850: #24124b; /* alternating band / breadcrumb bar */
+  --color-plum-800: #2c1659; /* alternating band 2 / button on lime */
+  --color-plum-750: #2a1856; /* photo placeholder */
+  --color-plum-700: #33206b; /* hero placeholder */
+  --color-plum-650: #3a2273; /* sport tiles */
+  --color-plum-600: #3d2274; /* light-theme accents */
+  --color-plum-500: #4a2a8f; /* hero gradient highlight */
+  --color-lilac: #b79bff; /* purple eyebrow text */
+
+  /* Lime accent. Replace Tailwind's default lime scale with the brand one. */
+  --color-lime-*: initial;
+  --color-lime: #32cd32;
+  --color-lime-deep: #28b528;
+  --color-lime-soft: #8ce88c; /* green eyebrow text */
+  --color-ink: #04220a; /* text on lime */
+
+  /* Light tones */
+  --color-cream: #f2f0f8; /* body text on purple */
+  --color-mint: #eaf3ec;
+  --color-sand: #efece6;
+
+  /* Type */
+  --font-display: Archivo, "Archivo Fallback", "Arial Black", Impact, sans-serif;
+  --font-sans: Barlow, "Barlow Fallback", Arial, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --breakpoint-xs: 30rem;
+}
+
+/* ------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Keep focused elements and anchor targets clear of the sticky header */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  body {
+    background-color: var(--color-plum-900);
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--color-lime);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 3px;
+  }
+  /* On lime surfaces a lime ring is invisible; use the ink colour instead */
+  .bg-lime :focus-visible,
+  .btn-plum:focus-visible {
+    outline-color: var(--color-ink);
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  summary {
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------------
+   Utilities (usable with variants, e.g. hover:clip-cta)
+   ------------------------------------------------------------------------ */
+@utility clip-cta {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+}
+@utility clip-cta-sm {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+}
+@utility skew-mark {
+  transform: skewX(-12deg);
+}
+@utility hatch {
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgb(255 255 255 / 0.055) 0 6px,
+    transparent 6px 12px
+  );
+}
+@utility hatch-light {
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgb(0 0 0 / 0.055) 0 6px,
+    transparent 6px 12px
+  );
+}
+@utility hero-glow {
+  background: radial-gradient(120% 100% at 8% 0%, var(--color-plum-500) 0%, var(--color-plum-900) 62%);
+}
+@utility hero-glow-right {
+  background: radial-gradient(110% 100% at 92% 0%, var(--color-plum-500) 0%, var(--color-plum-900) 64%);
+}
+
+/* ------------------------------------------------------------------------
+   Components
+   ------------------------------------------------------------------------ */
+@layer components {
+  .container-x {
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (width >= 40rem) {
+    .container-x {
+      padding-inline: 2rem;
+    }
+  }
+  @media (width >= 64rem) {
+    .container-x {
+      padding-inline: 3rem;
+    }
+  }
+
+  /* Small mono label above headings */
+  .eyebrow {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 11.5px;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-lime-soft);
+  }
+  .eyebrow-lilac {
+    color: var(--color-lilac);
+  }
+
+  /* Big italic headline */
+  .display {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: #fff;
+  }
+
+  /* Card heading in upright Archivo */
+  .card-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: #fff;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    border: 0;
+    cursor: pointer;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease,
+      color 150ms ease,
+      transform 150ms ease;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+  /* The angled edge is drawn on a pseudo-element so clip-path never clips
+     the focus outline of the button itself. */
+  .btn-primary {
+    position: relative;
+    isolation: isolate;
+    color: var(--color-ink);
+    padding: 19px 30px;
+  }
+  .btn-primary::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-lime);
+    clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+    transition: background-color 150ms ease;
+  }
+  .btn-primary:hover::before {
+    background: var(--color-lime-deep);
+  }
+  .btn-outline {
+    border: 1px solid rgb(255 255 255 / 0.28);
+    color: #fff;
+    padding: 18px 26px;
+  }
+  .btn-outline:hover {
+    border-color: rgb(255 255 255 / 0.6);
+    background: rgb(255 255 255 / 0.04);
+  }
+  .btn-plum {
+    position: relative;
+    isolation: isolate;
+    color: #fff;
+    padding: 22px 34px;
+  }
+  .btn-plum::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-plum-800);
+    clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+    transition: background-color 150ms ease;
+  }
+  .btn-plum:hover::before {
+    background: var(--color-plum-900);
+  }
+  .btn-sm {
+    font-size: 12.5px;
+    padding: 14px 20px;
+  }
+  .btn-sm.btn-primary::before {
+    clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  }
+  .btn-sm.btn-outline {
+    padding: 15px 22px;
+  }
+
+  /* Inline lime text link, uppercase */
+  .link-lime {
+    color: var(--color-lime);
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .link-lime:hover {
+    color: var(--color-lime-soft);
+  }
+
+  /* Inline text link inside paragraphs */
+  .link-inline {
+    color: var(--color-lime);
+    text-decoration: none;
+    border-bottom: 1px solid rgb(50 205 50 / 0.5);
+  }
+  .link-inline:hover {
+    border-bottom-color: var(--color-lime);
+  }
+
+  /* Skewed lime tick used in feature lists */
+  .tick {
+    display: inline-block;
+    flex: none;
+    width: 8px;
+    height: 16px;
+    background: var(--color-lime);
+    transform: skewX(-12deg);
+  }
+
+  /* Bordered panel */
+  .panel {
+    background: var(--color-plum-850);
+    border: 1px solid rgb(255 255 255 / 0.1);
+  }
+  .panel-deep {
+    background: var(--color-plum-800);
+    border: 1px solid rgb(255 255 255 / 0.1);
+  }
+
+  /* Form controls (dark) */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .field-label {
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.62);
+  }
+  .field-input {
+    width: 100%;
+    background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.18);
+    color: #fff;
+    font-family: var(--font-sans);
+    font-size: 15.5px;
+    line-height: 1.3;
+    padding: 14px 16px;
+    border-radius: 0;
+    appearance: none;
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease;
+  }
+  .field-input::placeholder {
+    color: rgb(255 255 255 / 0.55);
+  }
+  .field-input:hover {
+    border-color: rgb(255 255 255 / 0.3);
+  }
+  .field-input:focus {
+    outline: none;
+    border-color: var(--color-lime);
+    background: rgb(255 255 255 / 0.07);
+  }
+  .field-input[aria-invalid="true"] {
+    border-color: #ff7a7a;
+  }
+  .field-error {
+    font-size: 13px;
+    color: #ffb3b3;
+  }
+  select.field-input {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='none' stroke='%2332cd32' stroke-width='2' d='M1 1l5 5 5-5'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+  }
+  select.field-input option {
+    color: #111;
+    background: #fff;
+  }
+
+  /* Selectable chip (checkbox styled as a pill) */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border: 1px solid rgb(255 255 255 / 0.16);
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1;
+    color: rgb(255 255 255 / 0.66);
+    cursor: pointer;
+    user-select: none;
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+  .chip:hover {
+    border-color: rgb(255 255 255 / 0.4);
+  }
+  .chip:has(input:checked) {
+    border-color: var(--color-lime);
+    background: rgb(50 205 50 / 0.14);
+    color: var(--color-lime-soft);
+    font-weight: 600;
+  }
+  .chip:has(input:focus-visible) {
+    outline: 2px solid var(--color-lime);
+    outline-offset: 2px;
+  }
+  .chip input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+  .chip-check {
+    display: none;
+  }
+  .chip:has(input:checked) .chip-check {
+    display: inline;
+  }
+
+  /* Quote form: reveal the "Other" free-text fields without JavaScript.
+     React toggles the hidden attribute after hydration; this keeps the
+     fields reachable before hydration and with scripts disabled.
+     !important is needed to beat the preflight [hidden] rule. */
+  form:has(input[name="garments"][value="Other"]:checked) #f-garmentsOther-wrap[hidden],
+  form:has(select[name="sport"] option[value="Other / multiple"]:checked) #f-sportOther-wrap[hidden] {
+    display: block !important;
+  }
+
+  /* Accordion rows built on <details> */
+  .faq {
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background: var(--color-plum-850);
+  }
+  .faq + .faq {
+    border-top: 0;
+  }
+  .faq summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px 22px;
+    font-weight: 700;
+    font-size: 16.5px;
+    line-height: 1.3;
+    color: #fff;
+  }
+  .faq summary::after {
+    /* Alternative text "" keeps the glyph out of the accessibility tree */
+    content: "+" / "";
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 20px;
+    line-height: 1;
+    color: var(--color-lime);
+    transition: transform 150ms ease;
+  }
+  .faq[open] summary::after {
+    content: "−" / "";
+  }
+  .faq[open] summary {
+    border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  }
+  .faq-body {
+    padding: 16px 22px 22px;
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: rgb(255 255 255 / 0.74);
+  }
+  .faq-body p + p {
+    margin-top: 10px;
+  }
+  .faq-body a {
+    color: var(--color-lime);
+    text-decoration: none;
+    border-bottom: 1px solid rgb(50 205 50 / 0.5);
+  }
+
+  /* Prose for markdown policies / terms */
+  .prose-policy {
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgb(255 255 255 / 0.74);
+  }
+  .prose-policy h2 {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    font-size: 26px;
+    color: #fff;
+    margin: 44px 0 14px;
+    scroll-margin-top: 96px;
+  }
+  .prose-policy > h2:first-child {
+    margin-top: 0;
+  }
+  /* Policy pages: h2 sections styled as compact uppercase subheadings */
+  .prose-compact h2 {
+    font-family: var(--font-sans);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin: 30px 0 10px;
+  }
+  .prose-policy h3 {
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 30px 0 10px;
+    scroll-margin-top: 96px;
+  }
+  .prose-policy p {
+    margin: 0 0 16px;
+  }
+  .prose-policy ul,
+  .prose-policy ol {
+    margin: 0 0 18px;
+    padding-left: 22px;
+  }
+  .prose-policy li {
+    margin: 6px 0;
+  }
+  .prose-policy ul {
+    list-style: square;
+  }
+  .prose-policy ol {
+    list-style: decimal;
+  }
+  .prose-policy li::marker {
+    color: var(--color-lime);
+    font-weight: 700;
+  }
+  .prose-policy a {
+    color: var(--color-lime);
+    text-decoration: none;
+    border-bottom: 1px solid rgb(50 205 50 / 0.5);
+  }
+  .prose-policy a:hover {
+    border-bottom-color: var(--color-lime);
+  }
+  .prose-policy strong {
+    color: #fff;
+    font-weight: 600;
+  }
+  .prose-policy table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0 24px;
+    font-size: 15px;
+  }
+  .prose-policy th,
+  .prose-policy td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid rgb(255 255 255 / 0.1);
+    vertical-align: top;
+  }
+  .prose-policy th {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 0.5);
+    background: rgb(255 255 255 / 0.04);
+    font-weight: 600;
+  }
+  .prose-policy td:first-child {
+    color: #fff;
+    font-weight: 600;
+  }
+  .prose-policy blockquote {
+    margin: 0 0 18px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--color-lime);
+    background: rgb(255 255 255 / 0.04);
+    color: rgb(255 255 255 / 0.8);
+  }
+  .prose-policy blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -100px;
+    z-index: 100;
+    background: var(--color-lime);
+    color: var(--color-ink);
+    padding: 12px 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 13px;
+  }
+  .skip-link:focus {
+    top: 1rem;
+  }
+}

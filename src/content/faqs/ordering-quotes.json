@@ -1,0 +1,22 @@
+{
+  "title": "Ordering & quotes",
+  "order": 1,
+  "items": [
+    {
+      "q": "Is there a minimum order?",
+      "a": "No. We'll make one hoodie or two hundred jerseys. Per-unit pricing does drop as quantity rises, so we'll show you the breaks in your quote and you can decide where to land."
+    },
+    {
+      "q": "How do I get a price?",
+      "a": "Fill in the [quote request form](/request-a-quote) with your sport, the garments you're after, rough numbers and when you need it. You'll get a written price and a free design mockup back within one business day. If you'd rather talk it through, call us and we'll work it out with you on the phone."
+    },
+    {
+      "q": "Does a quote lock me in?",
+      "a": "No. A quote is free and carries no obligation. Nothing goes into production until you've approved your final mockup and paid a deposit."
+    },
+    {
+      "q": "Can we add players after we've ordered?",
+      "a": "Yes. Because there's no minimum order and your design stays on file, a late signing is a single extra garment on a quick reorder. We match the colours to your original run."
+    }
+  ]
+}

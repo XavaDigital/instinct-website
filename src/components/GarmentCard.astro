@@ -1,0 +1,59 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { routeEnabled } from '@/config/mode';
+import { garmentImage } from '@/lib/images';
+import Figure from './Figure.astro';
+
+interface Props {
+  garment: CollectionEntry<'garments'>;
+  compact?: boolean;
+}
+const { garment, compact = false } = Astro.props;
+const { data } = garment;
+const href = `/teamwear/${garment.id}`;
+// In MVP mode the garment pages are not built, so cards are plain showcase tiles.
+const linked = routeEnabled(href);
+const Tag = linked ? 'a' : 'div';
+---
+
+{
+  compact ? (
+    <Tag
+      href={linked ? href : undefined}
+      class:list={[
+        'flex items-center justify-between gap-4 border border-white/10 bg-plum-850 px-5 py-4 text-[15px] font-semibold text-white',
+        linked && 'transition-colors hover:border-lime/60 hover:bg-plum-800',
+      ]}
+    >
+      {data.cardTitle}
+      {linked && (
+        <span class="text-lime" aria-hidden="true">
+          →
+        </span>
+      )}
+    </Tag>
+  ) : (
+    <Tag
+      href={linked ? href : undefined}
+      class:list={[
+        'group flex h-full flex-col border border-white/10 bg-plum-850',
+        linked && 'transition-colors hover:border-lime/60',
+      ]}
+    >
+      <Figure
+        src={data.image ?? garmentImage(garment.id)}
+        alt={data.imageAlt ?? data.title}
+        label={data.name}
+        class="aspect-[4/3] w-full border-b border-white/10"
+        tone="deep"
+        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+      />
+      <div class="p-5">
+        <h3 class:list={['text-[18px] font-bold leading-tight text-white', linked && 'group-hover:text-lime-soft']}>
+          {data.cardTitle}
+        </h3>
+        <p class="mt-2 text-[14.5px] leading-[1.55] text-white/65">{data.cardBlurb}</p>
+      </div>
+    </Tag>
+  )
+}

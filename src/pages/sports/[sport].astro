@@ -1,0 +1,220 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Figure from '@/components/Figure.astro';
+import Faq from '@/components/Faq.astro';
+import ProjectsGrid from '@/components/ProjectsGrid.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Stars from '@/components/Stars.astro';
+import { nav } from '@/config/site';
+import { IS_MVP } from '@/config/mode';
+import { galleryHref, getGalleryItems, itemsForSport } from '@/lib/gallery';
+import { sportFeature, sportHero } from '@/lib/images';
+import { ORGANIZATION_ID, absoluteUrl, faqJsonLd } from '@/lib/seo';
+
+export async function getStaticPaths() {
+  if (IS_MVP) return []; // sport pages are not part of the MVP build
+  const sports = await getCollection('sports');
+  return sports.map((entry) => ({ params: { sport: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<'sports'>;
+}
+const { entry } = Astro.props;
+const { data } = entry;
+const url = `/sports/${entry.id}`;
+const label = data.navLabel ?? data.title;
+
+const gallery = await getGalleryItems();
+const projects = itemsForSport(gallery, entry.id, 4);
+const galleryLink = await galleryHref(gallery, entry.id);
+
+const testimonial =
+  data.testimonial ?? (await getCollection('testimonials')).find((t) => t.data.context === entry.id)?.data;
+
+const jsonLd: Record<string, unknown>[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: data.eyebrow,
+    description: data.description,
+    url: absoluteUrl(url),
+    serviceType: `Custom ${data.title.toLowerCase()} uniforms`,
+    provider: { '@id': ORGANIZATION_ID },
+    areaServed: { '@type': 'Country', name: 'New Zealand' },
+  },
+];
+if (data.faqs.length) jsonLd.push(faqJsonLd(data.faqs));
+---
+
+<BaseLayout
+  title={data.seoTitle ?? `Custom ${label} Uniforms`}
+  description={data.description}
+  breadcrumbs={[{ label: 'Sports', href: '/sports' }, { label }]}
+  jsonLd={jsonLd}
+>
+  <!-- Hero -->
+  <section class="hero-glow-right relative overflow-hidden">
+    <div class="container-x grid gap-10 py-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:pb-[50px] lg:pt-14">
+      <div class="flex flex-col gap-5">
+        <span class="eyebrow">{data.eyebrow}</span>
+        <h1 class="display text-[40px] leading-[0.96] tracking-[-0.035em] sm:text-[58px]">{data.heroTitle}</h1>
+        <p class="max-w-[470px] text-[17.5px] leading-[1.6] text-white/[0.72]">{data.intro}</p>
+        <div class="flex flex-wrap gap-[14px]">
+          <a href={nav.cta.href} class="btn btn-primary">Request a quote <span aria-hidden="true">→</span></a>
+          <a href={galleryLink} class="btn btn-outline">See {data.title.toLowerCase()} designs</a>
+        </div>
+      </div>
+      <Figure
+        src={data.heroImage ?? sportHero(entry.id)}
+        alt={data.heroImageAlt ?? data.heroTitle}
+        tone="hero"
+        label={data.heroLabel}
+        class="min-h-[260px] lg:min-h-[400px]"
+        loading="eager"
+      />
+    </div>
+  </section>
+
+  <!-- Highlights strip -->
+  <ul class="grid border-y border-white/[0.08] bg-plum-850 sm:grid-cols-2 lg:grid-cols-4">
+    {
+      data.highlights.map((h) => (
+        <li class="border-b border-white/[0.08] px-6 py-5 text-[14px] font-semibold leading-[1.3] text-white last:border-b-0 sm:border-r lg:border-b-0 lg:[&:nth-child(4)]:border-r-0">
+          {h}
+        </li>
+      ))
+    }
+  </ul>
+
+  <!-- Garments -->
+  <section class="bg-plum-900">
+    <div class="container-x py-14 lg:py-[60px]">
+      <div class="mb-[26px]">
+        <span class="eyebrow eyebrow-lilac">{data.garmentsEyebrow}</span>
+        <h2 class="display mt-3 text-[32px] sm:text-[40px]">{data.garmentsTitle}</h2>
+      </div>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          data.garments.map((g) => {
+            const Tag = g.href ? 'a' : 'div';
+            return (
+              <li>
+                <Tag
+                  href={g.href}
+                  class:list={['group block h-full border border-white/10 bg-plum-850', g.href && 'transition-colors hover:border-lime/60']}
+                >
+                  <Figure tone="hero" label={g.label ?? g.name} class="aspect-[4/3] w-full border-b border-white/10" />
+                  <div class="px-5 py-[18px]">
+                    <h3 class:list={['card-title text-[18px]', g.href && 'group-hover:text-lime-soft']}>{g.name}</h3>
+                    <p class="mt-[6px] text-[14px] leading-[1.55] text-white/[0.62]">{g.description}</p>
+                  </div>
+                </Tag>
+              </li>
+            );
+          })
+        }
+      </ul>
+      {
+        data.extras.length > 0 && (
+          <ul class="mt-4 grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4">
+            {data.extras.map((e) =>
+              e.href ? (
+                <li>
+                  <a
+                    href={e.href}
+                    class="flex items-center justify-between gap-4 border border-white/10 bg-plum-850 px-5 py-4 text-[15.5px] font-semibold text-white transition-colors hover:border-lime/60 hover:bg-plum-800"
+                  >
+                    {e.label}
+                    <span class="text-lime" aria-hidden="true">
+                      <span aria-hidden="true">→</span>
+                    </span>
+                  </a>
+                </li>
+              ) : (
+                <li class="flex items-center justify-between gap-4 border border-white/10 bg-plum-850 px-5 py-4 text-[15.5px] font-semibold text-white">
+                  {e.label}
+                </li>
+              ),
+            )}
+          </ul>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Feature -->
+  {
+    data.feature && (
+      <section class="bg-plum-850">
+        <div class="container-x grid gap-10 py-14 lg:grid-cols-2 lg:items-center lg:gap-[52px] lg:py-16">
+          <div>
+            <span class="eyebrow">{data.feature.eyebrow}</span>
+            <h2 class="display mt-3 text-[32px] sm:text-[38px]">{data.feature.title}</h2>
+            <p class="mb-[22px] mt-4 max-w-[480px] text-[16.5px] leading-[1.65] text-white/70">{data.feature.body}</p>
+            {data.feature.tags && (
+              <ul class="flex flex-wrap gap-2">
+                {data.feature.tags.map((t) => (
+                  <li class="border border-white/[0.14] bg-plum-800 px-4 py-3 font-mono text-[14px] font-bold leading-none text-white">{t}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <Figure
+            src={sportFeature(entry.id)}
+            alt={data.feature.title}
+            tone="hero"
+            label={data.feature.imageLabel}
+            class="min-h-[240px] lg:min-h-[340px]"
+          />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Projects (only this sport's kit; hidden until there is something to show) -->
+  {
+    projects.length > 0 && (
+      <section class="bg-plum-900">
+        <div class="container-x py-14 lg:py-[60px]">
+          <div class="mb-6 flex items-end justify-between gap-4">
+            <h2 class="display text-[30px] sm:text-[38px]">{data.projectsTitle}</h2>
+            <a href={galleryLink} class="link-lime">
+              Full gallery <span aria-hidden="true">→</span>
+            </a>
+          </div>
+          <ProjectsGrid items={projects} />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- FAQ + testimonial -->
+  {
+    (data.faqs.length > 0 || testimonial) && (
+      <section class="bg-plum-800">
+        <div class="container-x grid gap-10 py-14 lg:grid-cols-2">
+          {data.faqs.length > 0 && (
+            <div>
+              <h2 class="display mb-5 text-[28px] sm:text-[34px]">{data.title} questions</h2>
+              <Faq items={data.faqs} idPrefix={`${entry.id}-faq`} />
+            </div>
+          )}
+          {testimonial && (
+            <div class="panel flex flex-col justify-center gap-[14px] px-7 py-[30px]">
+              <Stars />
+              <blockquote class="text-[17px] leading-[1.65] text-white/[0.82]">
+                <p>“{testimonial.quote}”</p>
+              </blockquote>
+              <p class="text-[12.5px] font-semibold uppercase tracking-[0.06em] text-white/50">{testimonial.author}</p>
+            </div>
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand title={data.ctaTitle} body={data.ctaBody} watermark={data.title.toUpperCase()} />
+</BaseLayout>

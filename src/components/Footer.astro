@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import { nav, site } from '@/config/site';
+import { routeEnabled } from '@/config/mode';
+import Wordmark from './Wordmark.astro';
+
+const sports = (await getCollection('sports')).sort((a, b) => a.data.order - b.data.order);
+const sportsLinked = routeEnabled('/sports');
+const year = new Date().getFullYear();
+const socials = [
+  { label: 'Facebook', href: site.social.facebook },
+  { label: 'Instagram', href: site.social.instagram },
+].filter((s) => s.href);
+---
+
+<footer class="bg-plum-950 text-[14px] leading-[1.7] text-white/60">
+  <div class="container-x grid gap-9 py-11 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:gap-8">
+    <div>
+      <a href="/" aria-label={`${site.name} — home`}><Wordmark size="sm" /></a>
+      <p class="mt-3 max-w-[260px]">
+        Custom sublimated sports apparel for teams, clubs, schools and cultural groups. New Zealand owned and operated.
+      </p>
+      {
+        socials.length > 0 && (
+          <ul class="mt-4 flex gap-4">
+            {socials.map((s) => (
+              <li>
+                <a href={s.href} class="font-semibold uppercase tracking-[0.08em] text-white/70 hover:text-white" rel="noopener">
+                  {s.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <div>
+      <h2 class="mb-3 text-[12px] font-bold uppercase leading-none tracking-[0.12em] text-white">Contact</h2>
+      <address class="not-italic">
+        <a href={`mailto:${site.email}`} class="hover:text-white">{site.email}</a><br />
+        <a href={site.phone.href} class="hover:text-white">{site.phone.display}</a><br />
+        {site.address.street}, {site.address.suburb}<br />
+        {site.address.city} {site.address.postcode}, NZ
+      </address>
+    </div>
+
+    <div>
+      <h2 class="mb-3 text-[12px] font-bold uppercase leading-none tracking-[0.12em] text-white">Links</h2>
+      <ul>
+        {
+          nav.footer.links.map((l) => (
+            <li>
+              <a href={l.href} class="hover:text-white">
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    {
+      sportsLinked ? (
+        <div>
+          <h2 class="mb-3 text-[12px] font-bold uppercase leading-none tracking-[0.12em] text-white">Sports</h2>
+          <ul>
+            {sports.map((s) => (
+              <li>
+                <a href={`/sports/${s.id}`} class="hover:text-white">
+                  {s.data.navLabel ?? s.data.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <div>
+          <h2 class="mb-3 text-[12px] font-bold uppercase leading-none tracking-[0.12em] text-white">Help</h2>
+          <ul>
+            {nav.footer.help.map((l) => (
+              <li>
+                <a href={l.href} class="hover:text-white">
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+
+  <div class="border-t border-white/[0.08]">
+    <div class="container-x flex flex-col gap-3 py-5 text-[12.5px] text-white/60 sm:flex-row sm:items-center sm:justify-between">
+      <p>© {year} {site.legalName}. All rights reserved.</p>
+      {
+        sportsLinked && (
+          <ul class="flex flex-wrap gap-x-5 gap-y-1">
+            {nav.footer.help.map((l) => (
+              <li>
+                <a href={l.href} class="hover:text-white">
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,11 @@
+---
+/** Five-star rating glyphs with an accessible name. */
+interface Props {
+  label?: string;
+  /** Size/tracking classes; defaults to the testimonial-card style. */
+  class?: string;
+}
+const { label = 'Five star rating', class: className = 'text-[13px] tracking-[0.2em]' } = Astro.props;
+---
+
+<span role="img" aria-label={label} class:list={['inline-block font-bold text-lime', className]}>★★★★★</span>

@@ -1,0 +1,28 @@
+---
+/**
+ * Zero-JavaScript error notice for the form pages. The API endpoints redirect
+ * browser (non-fetch) submissions that fail to `#error`; CSS `:target`
+ * reveals the notice. Successful submissions redirect to /thanks instead.
+ */
+import { site } from '@/config/site';
+
+interface Props {
+  error?: string;
+}
+const {
+  error = `Something went wrong sending the form. Please check the fields and try again, or email ${site.email}.`,
+} = Astro.props;
+---
+
+<div id="error" class="form-notice bg-[#ff7a7a] text-[#2a0a0a]" role="alert" tabindex="-1">
+  <p class="container-x py-4 text-[15px] font-semibold">{error}</p>
+</div>
+
+<style>
+  .form-notice {
+    display: none;
+  }
+  .form-notice:target {
+    display: block;
+  }
+</style>

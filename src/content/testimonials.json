@@ -1,0 +1,58 @@
+[
+  {
+    "id": "committee-signoff",
+    "quote": "Turnaround was faster than quoted and the mockups meant our committee could sign off without any back and forth.",
+    "author": "Club secretary — placeholder",
+    "context": "general",
+    "placeholder": true
+  },
+  {
+    "id": "juniors-140",
+    "quote": "We kit out 140 juniors every season. Instinct handled the sizing spread and reorders without a fuss.",
+    "author": "Junior coordinator — placeholder",
+    "context": "general",
+    "placeholder": true
+  },
+  {
+    "id": "group-brief",
+    "quote": "They took our group's design brief seriously and got the detail right first time. The team loves them.",
+    "author": "Group organiser — placeholder",
+    "context": "general",
+    "placeholder": true
+  },
+  {
+    "id": "third-season",
+    "quote": "Third season with Instinct. Reorders take one email and the colours match exactly.",
+    "author": "Club secretary — placeholder",
+    "context": "why-us",
+    "placeholder": true
+  },
+  {
+    "id": "every-size",
+    "quote": "140 juniors, every size under the sun, and not a single reorder problem.",
+    "author": "Junior coordinator — placeholder",
+    "context": "why-us",
+    "placeholder": true
+  },
+  {
+    "id": "cultural-detail",
+    "quote": "They got the cultural detail in our design right the first time. That mattered to us.",
+    "author": "Group organiser — placeholder",
+    "context": "why-us",
+    "placeholder": true
+  },
+  {
+    "id": "same-day-quote",
+    "quote": "Quote came back same day with a mockup we could take straight to the committee.",
+    "author": "Club secretary — placeholder",
+    "context": "quote",
+    "placeholder": true
+  },
+  {
+    "id": "one-meeting",
+    "quote": "The mockups meant our committee could sign off in one meeting instead of three.",
+    "author": "Club secretary — placeholder",
+    "context": "how-it-works",
+    "placeholder": true
+  }
+]

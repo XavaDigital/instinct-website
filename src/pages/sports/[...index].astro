@@ -1,0 +1,116 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Figure from '@/components/Figure.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { nav, site } from '@/config/site';
+import { IS_MVP } from '@/config/mode';
+import { sportHero } from '@/lib/images';
+import { webPageJsonLd } from '@/lib/seo';
+
+/** Rest route that resolves to /sports itself; returns nothing in MVP so the page is not built. */
+export function getStaticPaths() {
+  return IS_MVP ? [] : [{ params: { index: undefined } }];
+}
+
+const title = 'Sports';
+const description =
+  'Custom sublimated uniforms for every sport and group in New Zealand — rugby, netball, football, basketball, touch and tag, kapa haka and cultural groups. Free mockups, no minimum order.';
+
+const sports = (await getCollection('sports')).sort((a, b) => a.data.order - b.data.order);
+const others = [
+  'Hockey',
+  'Cricket',
+  'League',
+  'Volleyball',
+  'Softball',
+  'Cycling',
+  'Athletics',
+  'Waka ama',
+  'Esports',
+  'Schools',
+  'Workplaces',
+  'Events',
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  breadcrumbs={[{ label: 'Sports' }]}
+  jsonLd={webPageJsonLd({ name: title, description, url: '/sports', type: 'CollectionPage' })}
+>
+  <section class="hero-glow">
+    <div class="container-x py-14 lg:pb-12 lg:pt-16">
+      <span class="eyebrow">What we can help with</span>
+      <h1 class="display mt-3 text-[40px] leading-[0.96] tracking-[-0.035em] sm:text-[58px]">Every sport, every group</h1>
+      <p class="mt-4 max-w-[620px] text-[17.5px] leading-[1.6] text-white/[0.72]">
+        Sport-specific cuts, fabrics and details — with the same process behind every order: free mockup, no minimum,
+        3–4 week turnaround, New Zealand owned and operated.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-plum-900">
+    <div class="container-x py-12 lg:py-14">
+      <ul class="grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
+        {
+          sports.map((s) => (
+            <li>
+              <a href={`/sports/${s.id}`} class="group flex h-full flex-col border border-white/10 bg-plum-850 transition-colors hover:border-lime/60">
+                <Figure
+                  src={s.data.heroImage ?? sportHero(s.id)}
+                  alt={s.data.heroImageAlt ?? s.data.title}
+                  label={s.data.heroLabel}
+                  tone="tile"
+                  class="aspect-[16/10] w-full border-b border-white/10"
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                />
+                <div class="flex flex-1 flex-col p-6">
+                  <span class="eyebrow eyebrow-lilac">{s.data.eyebrow}</span>
+                  <h2 class="mt-3 font-display text-[24px] font-bold uppercase leading-tight tracking-[-0.01em] text-white group-hover:text-lime-soft">
+                    {s.data.navLabel ?? s.data.title}
+                  </h2>
+                  <p class="mt-3 text-[15px] leading-[1.6] text-white/65">{s.data.intro}</p>
+                  <ul class="mt-4 flex flex-wrap gap-2">
+                    {s.data.highlights.slice(0, 3).map((h) => (
+                      <li class="border border-white/15 px-[10px] py-[6px] text-[11.5px] font-semibold uppercase tracking-[0.06em] text-white/70">{h}</li>
+                    ))}
+                  </ul>
+                  <span class="link-lime mt-auto pt-6">View {s.data.title.toLowerCase()} kit <span aria-hidden="true">→</span></span>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="bg-plum-850">
+    <div class="container-x grid gap-8 py-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:py-14">
+      <div>
+        <span class="eyebrow">Don't see yours?</span>
+        <h2 class="display mt-3 text-[32px] sm:text-[40px]">And many more</h2>
+        <p class="mt-4 max-w-[440px] text-[16.5px] leading-[1.65] text-white/70">
+          If it's worn by a team, we can make it. Tell us the sport and the garments you need and we'll come back with a
+          mockup and a price. Or call <a href={site.phone.href} class="link-inline">{site.phone.display}</a>.
+        </p>
+        <a href={nav.cta.href} class="btn btn-primary mt-7">Request a quote <span aria-hidden="true">→</span></a>
+      </div>
+      <ul class="flex flex-wrap gap-[10px]">
+        {
+          others.map((o) => (
+            <li class="border border-white/15 bg-plum-800 px-4 py-3 text-[14px] font-semibold uppercase tracking-[0.06em] text-white/80">{o}</li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Let's price your kit"
+    body="Send the sport, numbers and garments you're after. Price and a free mockup back within one business day."
+    watermark="SPORTS"
+  />
+</BaseLayout>

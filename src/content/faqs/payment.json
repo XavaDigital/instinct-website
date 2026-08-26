@@ -1,0 +1,18 @@
+{
+  "title": "Payment",
+  "order": 5,
+  "items": [
+    {
+      "q": "How does payment work?",
+      "a": "A deposit is due when you approve your final mockup, and the balance is due before dispatch. The deposit amount is shown on your quote. We accept bank transfer and card payments; details are on the invoice. See our [payment and deposits policy](/policies/payment-deposits)."
+    },
+    {
+      "q": "Can players pay individually?",
+      "a": "In most cases, yes. For larger orders we can set up individual payment links so each player or family pays for their own gear, and the club isn't left carrying the balance. Ask us when you request your quote and we'll suggest the simplest set-up for your group."
+    },
+    {
+      "q": "Do you invoice schools and clubs on account?",
+      "a": "Yes. Schools and established clubs can be invoiced with standard payment terms once an account is set up. Send a purchase order number with your approval if your school requires one."
+    }
+  ]
+}
