@@ -9,9 +9,15 @@
  * /api/export answers 503.
  */
 import { env } from 'cloudflare:workers';
+import type { KVLike } from './artwork';
 import type { D1Like } from './store';
 
 /** The submissions database, or undefined when no binding is available. */
 export function getDb(): D1Like | undefined {
   return env.DB;
+}
+
+/** Storage for artwork uploaded with quote requests, or undefined when unavailable. */
+export function getArtworkStore(): KVLike | undefined {
+  return env.ARTWORK;
 }

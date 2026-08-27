@@ -6,74 +6,21 @@
  *   /api/export?key=<EXPORT_KEY>&format=json     JSON
  *   ...&type=quote|contact   ...&since=YYYY-MM-DD (NZ date)   ...&limit=N (max 10000)
  *
+ * Stored artwork is linked from every format via /api/export/file (same login).
  * Scripts can send the key as `Authorization: Bearer <EXPORT_KEY>` instead.
  * Opening the table view with ?key= sets a session cookie and redirects to the
  * same URL without the key, so the key is not repeated in links, history or
- * request logs; the cookie is an HMAC of the key, so rotating EXPORT_KEY
- * (`wrangler secret put EXPORT_KEY`) signs every browser out. Without an
- * EXPORT_KEY secret the route is a 404.
+ * request logs. See src/lib/server/export-auth.ts.
  */
 import type { APIRoute } from 'astro';
-import { EXPORT_KEY } from 'astro:env/server';
+import { fileUrl, formatSize, parseFiles } from '@/lib/server/artwork';
 import { getDb } from '@/lib/server/bindings';
+import { PRIVATE_HEADERS, authorise, sessionCookie } from '@/lib/server/export-auth';
 import { escapeHtml } from '@/lib/server/mailgun';
 import { json } from '@/lib/server/request';
 import { flattenSource, listSubmissions, nzTime, toCsv, type SubmissionRow, type SubmissionType } from '@/lib/server/store';
 
 export const prerender = false;
-
-const PRIVATE_HEADERS = { 'cache-control': 'no-store', 'x-robots-tag': 'noindex, nofollow' };
-const COOKIE = 'instinct_export';
-const COOKIE_MAX_AGE = 30 * 24 * 60 * 60;
-
-const enc = new TextEncoder();
-
-/** Byte-wise comparison of two SHA-256 digests: a wrong value learns nothing from timing. */
-async function sameSecret(a: string, b: string): Promise<boolean> {
-  const [x, y] = await Promise.all([
-    crypto.subtle.digest('SHA-256', enc.encode(a)),
-    crypto.subtle.digest('SHA-256', enc.encode(b)),
-  ]);
-  const p = new Uint8Array(x);
-  const q = new Uint8Array(y);
-  let diff = 0;
-  for (let i = 0; i < p.length; i++) diff |= p[i] ^ q[i];
-  return diff === 0;
-}
-
-/** Session cookie value: HMAC-SHA256 over a fixed label, keyed with EXPORT_KEY. */
-async function sessionToken(secret: string): Promise<string> {
-  const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-  const sig = await crypto.subtle.sign('HMAC', key, enc.encode('instinct-export-session-v1'));
-  return Array.from(new Uint8Array(sig), (b) => b.toString(16).padStart(2, '0')).join('');
-}
-
-/** Candidate keys from the query string: decoded, and raw (a "+" in the key must survive). */
-function queryKeys(url: URL): string[] {
-  const out: string[] = [];
-  const decoded = url.searchParams.get('key');
-  if (decoded) out.push(decoded);
-  const raw = /[?&]key=([^&#]*)/.exec(url.search)?.[1];
-  if (raw && raw !== decoded) {
-    out.push(raw);
-    try {
-      const pct = decodeURIComponent(raw);
-      if (pct !== raw && pct !== decoded) out.push(pct);
-    } catch {
-      // not percent-encoded
-    }
-  }
-  return out.filter((k) => k.length <= 512);
-}
-
-function cookieValue(request: Request): string | null {
-  const header = request.headers.get('cookie') ?? '';
-  for (const part of header.split(';')) {
-    const [name, ...rest] = part.trim().split('=');
-    if (name === COOKIE) return rest.join('=');
-  }
-  return null;
-}
 
 /** Percent-encodes the characters that would let an address smuggle mailto header fields. */
 function mailtoHref(email: string): string {
@@ -91,6 +38,15 @@ function renderHtml(rows: SubmissionRow[], url: URL, type: SubmissionType | unde
     return escapeHtml(u.pathname + u.search);
   };
   const cell = (v: unknown) => escapeHtml(String(v ?? ''));
+  const filesCell = (r: SubmissionRow) => {
+    const stored = parseFiles(r.files);
+    if (stored.length) {
+      return stored
+        .map((f, i) => `<a href="${escapeHtml(fileUrl(r.id, i))}">${cell(f.name)}</a> <small>${cell(formatSize(f.size))}</small>`)
+        .join('<br>');
+    }
+    return cell(r.artwork);
+  };
   const body = rows
     .map(
       (r) => `<tr>
@@ -105,7 +61,7 @@ function renderHtml(rows: SubmissionRow[], url: URL, type: SubmissionType | unde
   <td>${cell(r.quantity)}</td>
   <td>${cell(r.needed_by)}</td>
   <td class="msg">${cell(r.message)}</td>
-  <td class="files">${cell(r.artwork)}</td>
+  <td class="files">${filesCell(r)}</td>
   <td class="src">${cell(flattenSource(r.source))}</td>
   <td class="${r.email_status === 'sent' ? 'ok' : 'bad'}">${cell(r.email_status)}${r.email_error ? `<br><small>${cell(r.email_error)}</small>` : ''}</td>
 </tr>`,
@@ -133,7 +89,8 @@ function renderHtml(rows: SubmissionRow[], url: URL, type: SubmissionType | unde
   th { background: #2a1458; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; position: sticky; top: 0; }
   td { max-width: 260px; overflow-wrap: anywhere; }
   td.msg { min-width: 260px; max-width: 480px; white-space: pre-wrap; }
-  td.files, td.src { font-size: 12px; color: rgba(255,255,255,.7); word-break: break-all; }
+  td.files { min-width: 160px; font-size: 13px; }
+  td.src { font-size: 12px; color: rgba(255,255,255,.7); word-break: break-all; }
   td.nowrap { white-space: nowrap; }
   td.ok { color: #b6ff3b; } td.bad { color: #ff8a8a; }
   a { color: #b6ff3b; }
@@ -142,7 +99,7 @@ function renderHtml(rows: SubmissionRow[], url: URL, type: SubmissionType | unde
 </head>
 <body>
 <h1>Submissions</h1>
-<p>${rows.length} ${type ?? 'submission'}${rows.length === 1 ? '' : 's'}, newest first. Times are New Zealand time.</p>
+<p>${rows.length} ${type ?? 'submission'}${rows.length === 1 ? '' : 's'}, newest first. Times are New Zealand time. Artwork links download the file (kept for 12 months).</p>
 <nav>
   ${tab('All', null)} ${tab('Quotes', 'quote')} ${tab('Contacts', 'contact')}
   <a href="${link({ format: 'csv' })}">Download CSV</a>
@@ -162,36 +119,14 @@ ${body || '<tr><td colspan="14">No submissions yet.</td></tr>'}
 }
 
 export const GET: APIRoute = async ({ request }) => {
-  if (!EXPORT_KEY) return json({ ok: false, error: 'Not found' }, 404, PRIVATE_HEADERS);
-  const secret = EXPORT_KEY;
-
   const url = new URL(request.url);
+  const auth = await authorise(request, url);
+  if (!auth.ok) return auth.response;
+
   const format = url.searchParams.get('format') ?? 'html';
 
-  // 1. Key in the query string or a Bearer header.
-  let viaKey = false;
-  let viaQuery = false;
-  for (const candidate of queryKeys(url)) {
-    if (await sameSecret(candidate, secret)) {
-      viaKey = true;
-      viaQuery = true;
-      break;
-    }
-  }
-  if (!viaKey) {
-    const bearer = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ?? '';
-    if (bearer && bearer.length <= 512 && (await sameSecret(bearer, secret))) viaKey = true;
-  }
-  // 2. Otherwise the session cookie set by an earlier ?key= visit.
-  if (!viaKey) {
-    const cookie = cookieValue(request);
-    if (!cookie || cookie.length > 128 || !(await sameSecret(cookie, await sessionToken(secret)))) {
-      return json({ ok: false, error: 'Unauthorised' }, 401, PRIVATE_HEADERS);
-    }
-  }
-
   // Browser view with the key in the URL: remember the session, drop the key from the address bar.
-  if (viaQuery && format === 'html') {
+  if (auth.viaQuery && format === 'html') {
     const clean = new URL(url);
     clean.searchParams.delete('key');
     return new Response(null, {
@@ -199,7 +134,7 @@ export const GET: APIRoute = async ({ request }) => {
       headers: {
         ...PRIVATE_HEADERS,
         location: clean.pathname + clean.search,
-        'set-cookie': `${COOKIE}=${await sessionToken(secret)}; Path=/api/export; Max-Age=${COOKIE_MAX_AGE}; HttpOnly; Secure; SameSite=Strict`,
+        'set-cookie': await sessionCookie(auth.secret),
       },
     });
   }
@@ -222,9 +157,15 @@ export const GET: APIRoute = async ({ request }) => {
   }
 
   const stamp = new Date().toISOString().slice(0, 10);
-  if (format === 'json') return json({ ok: true, count: rows.length, rows }, 200, PRIVATE_HEADERS);
+  if (format === 'json') {
+    const out = rows.map((r) => ({
+      ...r,
+      files: parseFiles(r.files).map((f, i) => ({ name: f.name, size: f.size, type: f.type, url: url.origin + fileUrl(r.id, i) })),
+    }));
+    return json({ ok: true, count: out.length, rows: out }, 200, PRIVATE_HEADERS);
+  }
   if (format === 'csv') {
-    return new Response(toCsv(rows), {
+    return new Response(toCsv(rows, url.origin), {
       status: 200,
       headers: {
         ...PRIVATE_HEADERS,

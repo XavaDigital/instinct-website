@@ -195,7 +195,11 @@ Every genuine quote request and contact message is written to a Cloudflare D1 da
 (`instinct-apparel-leads`, binding `DB` in `wrangler.jsonc`) *before* the notification email is
 sent, so a lead survives a mail outage; the email's outcome (`sent` / `failed` + reason) is stored
 next to it. Bots caught by the honeypot, timing or Turnstile checks are not stored. Attached
-artwork is not stored — the files travel only in the email.
+artwork is copied to the `ARTWORK` KV namespace (12-month expiry, matching the D1 purge) and
+linked from the export — the table, the CSV's "Artwork links" column and the JSON — via
+`/api/export/file?id=…&n=…`, which uses the same login and always serves files as downloads.
+The originals still travel as email attachments, so a storage hiccup never loses a file. KV's
+free tier holds 1 GB; if artwork volume outgrows it, move `src/lib/server/artwork.ts` to R2.
 
 Viewing it — replace `KEY` with the `EXPORT_KEY` secret:
 
@@ -287,8 +291,8 @@ src/
   content/           Editable content (see above)
   layouts/           BaseLayout.astro — <head>, SEO, analytics, header/footer
   lib/               seo.ts (JSON-LD helpers), forms.ts (shared validation)
-  lib/server/        mailgun.ts, request.ts, store.ts (server-only helpers)
-  pages/             One file per route; api/ holds the endpoints (quote, contact, export)
+  lib/server/        mailgun.ts, request.ts, store.ts, artwork.ts, export-auth.ts, bindings.ts
+  pages/             One file per route; api/ holds the endpoints (quote, contact, export, export/file)
   styles/global.css  Tailwind theme tokens and component classes
 migrations/          D1 schema for the submissions log
 scripts/             generate-assets.mjs (OG image + favicons)

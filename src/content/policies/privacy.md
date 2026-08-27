@@ -39,4 +39,4 @@ You can ask us at any time to show you the personal information we hold about yo
 
 ## Security
 
-Form submissions are sent over an encrypted connection and stored in our website's database and our email, with providers that use industry-standard security. Access inside Instinct is limited to the staff who need it for your order.
+Form submissions, including any artwork you attach, are sent over an encrypted connection and stored in our website's database and file storage and in our email, with providers that use industry-standard security. Access inside Instinct is limited to the staff who need it for your order.

@@ -12,6 +12,8 @@
   ],
   "workers_dev": true,
   // Submissions log (every quote request / contact message). See README → Submissions log.
+  // Artwork uploaded with quote requests (12-month expiry); linked from /api/export.
+  "kv_namespaces": [{ "binding": "ARTWORK", "id": "d3e71d1516f1494b81da654e66f53958" }],
   "d1_databases": [
     {
       "binding": "DB",

@@ -10,6 +10,8 @@
  * completes. Reads are used by /api/export (private table / CSV / JSON).
  */
 
+import { fileUrl, parseFiles, type KVLike, type StoredFile } from './artwork';
+
 // Structural types for the D1 binding, so no Cloudflare type package is needed.
 export interface D1Statement {
   bind(...values: unknown[]): D1Statement;
@@ -22,6 +24,7 @@ export interface D1Like {
 /** Worker bindings the site uses (read through bindings.ts; module declared in src/env.d.ts). */
 export interface Env {
   DB?: D1Like;
+  ARTWORK?: KVLike;
 }
 
 export type SubmissionType = 'quote' | 'contact';
@@ -39,8 +42,10 @@ export interface Submission {
   neededBy?: string;
   /** Quote notes or the contact message. */
   message: string;
-  /** Attached filenames, already cleaned (the files themselves travel only in the email). */
+  /** Attached filenames, already cleaned (always listed, even when a copy could not be stored). */
   artwork?: string[];
+  /** Stored copies of the attachments (see artwork.ts); linked from the export. */
+  files?: StoredFile[];
   /** Campaign attribution: utm_*, gclid, fbclid, referrer, landing, at. */
   source?: Record<string, string>;
   /** Hostname the form was posted on. */
@@ -62,6 +67,7 @@ export const COLUMNS = [
   'needed_by',
   'message',
   'artwork',
+  'files',
   'source',
   'page',
   'email_status',
@@ -74,8 +80,8 @@ export type SubmissionRow = Record<Column, string | number>;
 export const RETENTION_MONTHS = 12;
 
 const INSERT_SQL = `INSERT INTO submissions
-  (received_at, type, name, role, email, phone, org, sport, garments, quantity, needed_by, message, artwork, source, page)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  (received_at, type, name, role, email, phone, org, sport, garments, quantity, needed_by, message, artwork, files, source, page)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
 /** Deletes rows past the retention period. Best-effort; uses the received_at index. */
 export async function purgeExpired(db: D1Like, now = new Date()): Promise<void> {
@@ -112,6 +118,7 @@ export async function recordSubmission(db: D1Like | undefined, s: Submission): P
         s.neededBy ?? '',
         s.message,
         (s.artwork ?? []).join(', '),
+        s.files && s.files.length ? JSON.stringify(s.files) : '',
         s.source && Object.keys(s.source).length ? JSON.stringify(s.source) : '',
         s.page,
       )
@@ -226,7 +233,7 @@ export function flattenSource(raw: string | number): string {
   }
 }
 
-export const CSV_HEADERS: [Column | 'received_nz', string][] = [
+export const CSV_HEADERS: [Column | 'received_nz' | 'file_links', string][] = [
   ['id', 'ID'],
   ['received_nz', 'Received (NZ time)'],
   ['received_at', 'Received (UTC)'],
@@ -242,6 +249,7 @@ export const CSV_HEADERS: [Column | 'received_nz', string][] = [
   ['needed_by', 'Needed by'],
   ['message', 'Message / notes'],
   ['artwork', 'Artwork files'],
+  ['file_links', 'Artwork links'],
   ['source', 'Source'],
   ['page', 'Page'],
   ['email_status', 'Email status'],
@@ -263,14 +271,19 @@ export function csvCell(value: unknown): string {
   return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
-/** UTF-8 with BOM and CRLF line ends, so Excel opens it correctly by double-click. */
-export function toCsv(rows: SubmissionRow[]): string {
+/**
+ * UTF-8 with BOM and CRLF line ends, so Excel opens it correctly by double-click.
+ * `origin` (e.g. https://instinct.nz) makes the artwork links absolute.
+ */
+export function toCsv(rows: SubmissionRow[], origin = ''): string {
   const lines = [CSV_HEADERS.map(([, label]) => csvCell(label)).join(',')];
   for (const row of rows) {
     lines.push(
       CSV_HEADERS.map(([key]) => {
         if (key === 'received_nz') return csvCell(nzTime(row.received_at));
         if (key === 'source') return csvCell(flattenSource(row.source));
+        if (key === 'files') return csvCell(parseFiles(row.files).map((f) => f.name).join(', '));
+        if (key === 'file_links') return csvCell(parseFiles(row.files).map((_, i) => origin + fileUrl(row.id, i)).join(' '));
         return csvCell(row[key]);
       }).join(','),
     );
