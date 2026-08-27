@@ -4,9 +4,10 @@
  * On Cloudflare (production and `astro dev`) `cloudflare:workers` exposes the
  * bindings declared in wrangler.jsonc. On another host (for example Google
  * Cloud Run with @astrojs/node) replace this file's body with whatever that
- * platform offers — or leave getDb() returning undefined: the forms then skip
- * the submissions log with a warning and still send the email, and
- * /api/export answers 503.
+ * platform offers — or leave getDb() / getArtworkStore() returning undefined:
+ * the forms then skip the submissions log and the stored artwork copies with a
+ * warning and still send the email (attachments included), and /api/export and
+ * /api/export/file answer 503.
  */
 import { env } from 'cloudflare:workers';
 import type { KVLike } from './artwork';

@@ -10,7 +10,7 @@ teamwear, Christchurch NZ). Main conversion is the quote request form. Not e-com
 ## Stack
 
 - Astro 7 (static output, `build.format: 'file'`, no trailing slashes) with the
-  Cloudflare adapter. Only `src/pages/api/*.ts` render on demand.
+  Cloudflare adapter. Only the endpoints under `src/pages/api/` render on demand.
 - React 19 islands for the two forms only. Everything else is zero-JS Astro; prefer
   `<details>`, plain `<script>` tags in `.astro` files, or CSS before adding an island.
 - Tailwind CSS v4. Design tokens are defined in `src/styles/global.css` under `@theme`
@@ -49,7 +49,8 @@ the MVP — both sites must build from `main`.
 - "Your gear, your way" is the tagline of the owner's other brand (BeastMode); don't use
   it here. Instinct's lines are "Follow your instinct" and "Trust your instinct".
 - Both form endpoints log the submission to D1 (`src/lib/server/store.ts`) before sending the
-  email; keep that order, and keep the database writes best-effort (never fail the form).
+  email; the quote endpoint then copies artwork to KV (`src/lib/server/artwork.ts`) against
+  that row. Keep that order, and keep the D1 and KV writes best-effort (never fail the form).
 
 ## Commands
 

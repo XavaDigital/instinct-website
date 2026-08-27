@@ -10,7 +10,7 @@ import { renderFields, sendMail } from '@/lib/server/mailgun';
 import { rateLimited } from '@/lib/server/ratelimit';
 import { planFiles, storeArtwork } from '@/lib/server/artwork';
 import { getArtworkStore, getDb } from '@/lib/server/bindings';
-import { markEmail, recordSubmission } from '@/lib/server/store';
+import { markEmail, markFiles, recordSubmission } from '@/lib/server/store';
 import {
   attributionData,
   attributionRows,
@@ -102,8 +102,6 @@ export const POST: APIRoute = async ({ request }) => {
   const quantityShort = quantityChars.length > 40 ? `${quantityChars.slice(0, 39).join('')}…` : fields.quantity;
 
   const artworkNames = artwork.map((f) => cleanFileName(f.name));
-  // Keep a downloadable copy of each attachment for the submissions export (best-effort).
-  const storedFiles = await storeArtwork(getArtworkStore(), planFiles(artwork, artworkNames), artwork);
 
   // Log the lead first, so it survives an email outage (best-effort; see store.ts).
   const db = getDb();
@@ -120,10 +118,15 @@ export const POST: APIRoute = async ({ request }) => {
     neededBy: fields.neededBy,
     message: fields.notes,
     artwork: artworkNames,
-    files: storedFiles,
     source: attributionData(form),
     page: new URL(request.url).hostname,
   });
+  // Keep a downloadable copy of each attachment, recorded against the row (best-effort;
+  // skipped when the row itself could not be written, so nothing is stored unreferenced).
+  if (rowId !== null && artwork.length) {
+    const storedFiles = await storeArtwork(getArtworkStore(), planFiles(artwork, artworkNames, rowId), artwork);
+    await markFiles(db, rowId, storedFiles);
+  }
 
   const rows: [string, string][] = [
     ['Name', fields.name],

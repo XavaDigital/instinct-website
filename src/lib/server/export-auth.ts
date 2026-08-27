@@ -37,9 +37,13 @@ export async function sessionToken(secret: string): Promise<string> {
   return Array.from(new Uint8Array(sig), (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-/** `Set-Cookie` value for a freshly authenticated browser session. */
+/**
+ * `Set-Cookie` value for a freshly authenticated browser session. SameSite=Lax
+ * (not Strict) so an artwork link clicked from a spreadsheet or an email still
+ * carries the session; both routes are GET-only reads, so Lax gives up nothing.
+ */
 export async function sessionCookie(secret: string): Promise<string> {
-  return `${COOKIE}=${await sessionToken(secret)}; Path=/api/export; Max-Age=${COOKIE_MAX_AGE}; HttpOnly; Secure; SameSite=Strict`;
+  return `${COOKIE}=${await sessionToken(secret)}; Path=/api/export; Max-Age=${COOKIE_MAX_AGE}; HttpOnly; Secure; SameSite=Lax`;
 }
 
 /** Candidate keys from the query string: decoded, and raw (a "+" in the key must survive). */

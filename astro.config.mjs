@@ -9,14 +9,15 @@ import tailwindcss from '@tailwindcss/vite';
  * Instinct Apparel — Astro configuration.
  *
  * Every page is prerendered to static HTML at build time. Only the endpoints
- * under src/pages/api/ (quote, contact, export) opt out with
+ * under src/pages/api/ (quote, contact, export, export/file) opt out with
  * `export const prerender = false`.
  *
  * Hosting: the Cloudflare adapter is the default. To deploy on Google Cloud Run
  * instead, install @astrojs/node, swap the adapter line for
  * `adapter: node({ mode: 'standalone' })`, and give src/lib/server/bindings.ts
- * another way to reach a database (or none: the forms still work, they just
- * skip the submissions log). Nothing else depends on Cloudflare.
+ * another way to reach a database and file store (or none: the forms still
+ * work, they just skip the submissions log and stored artwork). Nothing else
+ * depends on Cloudflare.
  */
 export default defineConfig({
   site: 'https://instinct.nz',

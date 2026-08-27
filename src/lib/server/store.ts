@@ -131,6 +131,16 @@ export async function recordSubmission(db: D1Like | undefined, s: Submission): P
   }
 }
 
+/** Records the stored artwork copies against a row. Best-effort. */
+export async function markFiles(db: D1Like | undefined, id: number | null, files: StoredFile[]): Promise<void> {
+  if (!db || id === null || !files.length) return;
+  try {
+    await db.prepare('UPDATE submissions SET files = ? WHERE id = ?').bind(JSON.stringify(files), id).run();
+  } catch (err) {
+    console.error('[store] files update failed:', (err as Error).message);
+  }
+}
+
 /** Records how the notification email went. Best-effort. */
 export async function markEmail(
   db: D1Like | undefined,

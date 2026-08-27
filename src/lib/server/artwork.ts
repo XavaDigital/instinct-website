@@ -29,10 +29,14 @@ export interface StoredFile {
 /** Matches the privacy policy's 12-month retention (and the D1 purge). */
 export const ARTWORK_TTL_SECONDS = 365 * 24 * 60 * 60;
 
-/** Assigns a random key to each upload; `names` are the cleaned display names. */
-export function planFiles(files: File[], names: string[]): StoredFile[] {
+/**
+ * Assigns a key to each upload; `names` are the cleaned display names. Keys
+ * start with the submission's row id so orphans can be found if a row is ever
+ * removed without its files.
+ */
+export function planFiles(files: File[], names: string[], rowId: number): StoredFile[] {
   return files.map((f, i) => ({
-    key: crypto.randomUUID(),
+    key: `${rowId}-${crypto.randomUUID()}`,
     name: names[i] ?? f.name,
     size: f.size,
     type: (f.type || 'application/octet-stream').slice(0, 100),

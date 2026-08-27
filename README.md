@@ -3,7 +3,7 @@
 Customer-facing site for Instinct Apparel (custom sublimated teamwear, Christchurch, NZ).
 Built with [Astro](https://astro.build) and React islands, styled with Tailwind CSS v4,
 deployed to Cloudflare Workers. Every page is prerendered to static HTML; only the two
-form endpoints and the private submissions export run on the server.
+form endpoints and the private submissions export (and its artwork downloads) run on the server.
 
 ## Quick start
 
@@ -137,7 +137,8 @@ The quote and contact forms are React islands (`src/components/islands/`) that P
 `src/pages/api/quote.ts` and `src/pages/api/contact.ts`. The endpoints validate input,
 run a honeypot + timing check, optionally verify a Cloudflare Turnstile token, and send
 the submission through Mailgun. Artwork uploads (up to 5 files / 20MB) are attached to
-the email, so no file storage is needed.
+the email, and a copy is kept for 12 months so it can be downloaded from the submissions
+export (see **Submissions log**).
 
 The forms also work without JavaScript: on success the endpoint redirects to `/thanks/quote`
 or `/thanks/contact`; on failure it redirects back to `#error` and a CSS `:target` notice on
@@ -200,6 +201,14 @@ linked from the export — the table, the CSV's "Artwork links" column and the J
 `/api/export/file?id=…&n=…`, which uses the same login and always serves files as downloads.
 The originals still travel as email attachments, so a storage hiccup never loses a file. KV's
 free tier holds 1 GB; if artwork volume outgrows it, move `src/lib/server/artwork.ts` to R2.
+Artwork links opened from a spreadsheet or an email work once the export table has been opened
+in that browser (the session cookie is sent on ordinary link clicks); scripts use the Bearer header.
+
+**Deleting someone's data on request:** find the rows, delete their stored files, then the rows —
+`npx wrangler d1 execute instinct-apparel-leads --remote --command "SELECT id, files FROM submissions WHERE email = 'person@example.com'"`,
+then for each key in `files`: `npx wrangler kv key delete --binding ARTWORK --remote <key>`, then
+`... --command "DELETE FROM submissions WHERE email = 'person@example.com'"`. Keys start with the
+row id, so `wrangler kv key list --binding ARTWORK --remote --prefix <id>-` finds a row's files too.
 
 Viewing it — replace `KEY` with the `EXPORT_KEY` secret:
 
@@ -262,8 +271,10 @@ In `astro.config.mjs` replace the `adapter: cloudflare(...)` line with
 `adapter: node({ mode: 'standalone' })` (and the import). Build a container that runs
 `node dist/server/entry.mjs`; set the same environment variables on the service. Turnstile and
 Mailgun are plain HTTPS calls. The only Cloudflare-specific code is `src/lib/server/bindings.ts`
-(the D1 submissions log): point it at another database, or let `getDb()` return `undefined` —
-the forms then skip the log and still send email, and `/api/export` answers 503.
+(the D1 submissions log and the KV artwork store): point `getDb()` / `getArtworkStore()` at
+other storage, or let them return `undefined` — the forms then skip the log and the stored
+copies and still send email with the attachments, and `/api/export` / `/api/export/file`
+answer 503.
 
 ## SEO checklist built in
 

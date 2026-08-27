@@ -13,10 +13,32 @@ import { json } from '@/lib/server/request';
 
 export const prerender = false;
 
+/**
+ * The name the browser saves under. Shortened on the stem only, so the
+ * extension that passed validateArtwork() is always the one the file gets
+ * (a 154-character "….exe.png" must never be saved as "….exe"). Lone
+ * surrogates are dropped so encoding can't throw.
+ */
+function safeName(name: string): string {
+  const full = Array.from(name)
+    .filter((ch) => !/[\uD800-\uDFFF]/.test(ch))
+    .join('');
+  const dot = full.lastIndexOf('.');
+  const ext = dot > 0 ? full.slice(dot).slice(0, 12) : '';
+  const stem = Array.from(dot > 0 ? full.slice(0, dot) : full).slice(0, 120).join('').trim() || 'file';
+  return stem + ext;
+}
+
 /** RFC 6266 filename headers: an ASCII fallback plus the UTF-8 form. */
 function contentDisposition(name: string): string {
-  const ascii = name.replace(/[^\x20-\x7e]/g, '_').replace(/["\\]/g, '_').slice(0, 150) || 'file';
-  const utf8 = encodeURIComponent(name.slice(0, 150)).replace(/['()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+  const safe = safeName(name);
+  const ascii = safe.replace(/[^\x20-\x7e]/g, '_').replace(/["\\]/g, '_');
+  let utf8: string;
+  try {
+    utf8 = encodeURIComponent(safe).replace(/['()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+  } catch {
+    utf8 = encodeURIComponent(ascii);
+  }
   return `attachment; filename="${ascii}"; filename*=UTF-8''${utf8}`;
 }
 

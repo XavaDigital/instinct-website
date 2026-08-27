@@ -69,10 +69,14 @@ export function files(form: FormData, key: string): File[] {
   return form.getAll(key).filter((v): v is File => v instanceof File && v.size > 0 && Boolean(v.name));
 }
 
-/** A filename safe to store and print: control characters removed, trimmed, at most 200 characters. */
+/**
+ * A filename safe to store and print: control characters removed, trimmed, at
+ * most 200 characters, cut on code points (never inside an emoji) and keeping
+ * the tail so the extension survives.
+ */
 export function cleanFileName(name: string): string {
-  const clean = name.replace(CONTROL_CHARS, ' ').trim();
-  return clean.length > 200 ? `${clean.slice(0, 190)}…${clean.slice(-9)}` : clean;
+  const chars = Array.from(name.replace(CONTROL_CHARS, ' ').trim());
+  return chars.length > 200 ? `${chars.slice(0, 190).join('')}…${chars.slice(-9).join('')}` : chars.join('');
 }
 
 /**
