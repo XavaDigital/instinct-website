@@ -7,7 +7,7 @@ import Faq from '@/components/Faq.astro';
 import ContactForm from '@/components/islands/ContactForm';
 import FormStatusNotice from '@/components/FormStatusNotice.astro';
 import { nav, site } from '@/config/site';
-import { siteImage } from '@/lib/images';
+import { siteImage, slotFile } from '@/lib/images';
 import { webPageJsonLd } from '@/lib/seo';
 
 const title = 'Contact';
@@ -81,14 +81,16 @@ const faqs = [
           alt={`Map showing the Instinct Apparel showroom in ${site.address.suburb}, ${site.address.city}`}
           tone="hero"
           label={`Map — ${site.address.city} showroom location`}
-          class="min-h-[240px] lg:min-h-[300px]"
+          file={slotFile.site('contact-map')}
+          ratio="16/9"
           loading="eager"
         />
         <Figure
           src={siteImage('contact-showroom')}
           alt="The Instinct Apparel team and showroom"
           label="Photo — the team / showroom interior"
-          class="min-h-[160px] lg:min-h-[200px]"
+          file={slotFile.site('contact-showroom')}
+          ratio="2/1"
         />
       </div>
     </div>

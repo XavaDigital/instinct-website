@@ -8,7 +8,7 @@ import QuoteForm from '@/components/islands/QuoteForm';
 import FormStatusNotice from '@/components/FormStatusNotice.astro';
 import { site } from '@/config/site';
 import { GARMENT_OPTIONS } from '@/lib/forms';
-import { siteImage } from '@/lib/images';
+import { siteImage, slotFile } from '@/lib/images';
 import { testimonialsFor } from '@/lib/testimonials';
 import { webPageJsonLd } from '@/lib/seo';
 
@@ -105,7 +105,9 @@ const steps = [
           alt="A design mockup sheet next to finished kit"
           tone="hero"
           label="Photo — mockup sheet / kit detail"
-          class="min-h-[150px]"
+          file={slotFile.site('quote-page')}
+          ratio="3/2"
+          sizes="(min-width: 1024px) 400px, 100vw"
         />
       </aside>
     </div>

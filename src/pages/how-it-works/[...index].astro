@@ -7,7 +7,7 @@ import CtaBand from '@/components/CtaBand.astro';
 import { nav, site } from '@/config/site';
 import { IS_MVP } from '@/config/mode';
 import Stars from '@/components/Stars.astro';
-import { siteImage } from '@/lib/images';
+import { siteImage, slotFile } from '@/lib/images';
 import { testimonialsFor } from '@/lib/testimonials';
 import { webPageJsonLd } from '@/lib/seo';
 
@@ -116,7 +116,8 @@ const testimonial = (await testimonialsFor('how-it-works', 1))[0];
         alt="An organiser reviewing a kit design mockup"
         tone="hero"
         label="Photo — organiser reviewing a design mockup"
-        class="min-h-[240px] lg:min-h-[380px]"
+        file={slotFile.site('how-it-works')}
+        ratio="4/3"
         loading="eager"
       />
     </div>

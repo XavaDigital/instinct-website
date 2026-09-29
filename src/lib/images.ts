@@ -51,6 +51,22 @@ export type SiteSlot =
   | 'contact-map'
   | 'contact-showroom';
 
+/**
+ * The filename each slot looks for, relative to src/assets/. Shown on the
+ * placeholder so whoever supplies photos knows exactly what to name them.
+ * Any of the supported extensions works; .jpg is what we ask for.
+ */
+export const slotFile = {
+  site: (slot: SiteSlot) => `site/${slot}.jpg`,
+  sport: (id: string) => `sports/${id}.jpg`,
+  sportFeature: (id: string) => `sports/${id}-feature.jpg`,
+  garment: (id: string) => `garments/${id}.jpg`,
+  garmentView: (id: string, n: number) => `garments/${id}-${n}.jpg`,
+  garmentBranding: (id: string, n: number) => `garments/${id}-branding-${n}.jpg`,
+  gallery: (sport?: string) => `gallery/${sport ? `${sport}-` : ''}<caption>.jpg`,
+  logo: () => 'logos/<club-name>.png',
+};
+
 export function siteImage(slot: SiteSlot): ImageMetadata | undefined {
   return SITE.get(slot);
 }

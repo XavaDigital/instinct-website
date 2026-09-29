@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { IS_MVP } from '@/config/mode';
-import { clientLogos, siteImage } from '@/lib/images';
+import { clientLogos, siteImage, slotFile } from '@/lib/images';
 import { testimonialsFor } from '@/lib/testimonials';
 import Figure from '@/components/Figure.astro';
 import Testimonials from '@/components/Testimonials.astro';
@@ -131,7 +131,8 @@ const realLogos = clientLogos();
         alt="Close-up of sublimated fabric showing the design dyed into the fibres"
         tone="hero"
         label="Photo — fabric close-up / sublimation detail"
-        class="min-h-[260px] lg:min-h-[380px]"
+        file={slotFile.site('why-us-fabric')}
+        ratio="4/3"
       />
       <div>
         <span class="eyebrow eyebrow-lilac">The difference</span>
@@ -183,7 +184,7 @@ const realLogos = clientLogos();
               <ul class="mt-[34px] grid grid-cols-2 gap-[14px] sm:grid-cols-3 lg:grid-cols-5">
                 {logos.map((l) => (
                   <li>
-                    <Figure tone="deep" label={l} labelPosition="center" class="min-h-[64px]" />
+                    <Figure tone="deep" label={l} file={slotFile.logo()} labelPosition="center" class="min-h-[64px]" />
                   </li>
                 ))}
               </ul>

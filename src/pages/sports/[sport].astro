@@ -10,7 +10,7 @@ import Stars from '@/components/Stars.astro';
 import { nav } from '@/config/site';
 import { IS_MVP } from '@/config/mode';
 import { galleryHref, getGalleryItems, itemsForSport } from '@/lib/gallery';
-import { sportFeature, sportHero } from '@/lib/images';
+import { garmentImage, slotFile, sportFeature, sportHero } from '@/lib/images';
 import { ORGANIZATION_ID, absoluteUrl, faqJsonLd } from '@/lib/seo';
 
 export async function getStaticPaths() {
@@ -72,7 +72,8 @@ if (data.faqs.length) jsonLd.push(faqJsonLd(data.faqs));
         alt={data.heroImageAlt ?? data.heroTitle}
         tone="hero"
         label={data.heroLabel}
-        class="min-h-[260px] lg:min-h-[400px]"
+        file={slotFile.sport(entry.id)}
+        ratio="16/10"
         loading="eager"
       />
     </div>
@@ -100,13 +101,24 @@ if (data.faqs.length) jsonLd.push(faqJsonLd(data.faqs));
         {
           data.garments.map((g) => {
             const Tag = g.href ? 'a' : 'div';
+            // Garments that link to a garment page reuse that garment's main image.
+            const gid = /^\/teamwear\/([a-z0-9-]+)$/.exec(g.href ?? '')?.[1];
             return (
               <li>
                 <Tag
                   href={g.href}
                   class:list={['group block h-full border border-white/10 bg-plum-850', g.href && 'transition-colors hover:border-lime/60']}
                 >
-                  <Figure tone="hero" label={g.label ?? g.name} class="aspect-[4/3] w-full border-b border-white/10" />
+                  <Figure
+                    src={gid ? garmentImage(gid) : undefined}
+                    alt={g.name}
+                    tone="hero"
+                    label={g.label ?? g.name}
+                    file={gid ? slotFile.garment(gid) : undefined}
+                    ratio="4/3"
+                    class="w-full border-b border-white/10"
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                  />
                   <div class="px-5 py-[18px]">
                     <h3 class:list={['card-title text-[18px]', g.href && 'group-hover:text-lime-soft']}>{g.name}</h3>
                     <p class="mt-[6px] text-[14px] leading-[1.55] text-white/[0.62]">{g.description}</p>
@@ -167,7 +179,8 @@ if (data.faqs.length) jsonLd.push(faqJsonLd(data.faqs));
             alt={data.feature.title}
             tone="hero"
             label={data.feature.imageLabel}
-            class="min-h-[240px] lg:min-h-[340px]"
+            file={slotFile.sportFeature(entry.id)}
+            ratio="4/3"
           />
         </div>
       </section>

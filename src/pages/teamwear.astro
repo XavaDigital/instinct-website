@@ -7,7 +7,7 @@ import SportsGrid from '@/components/SportsGrid.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import { nav } from '@/config/site';
 import { IS_MVP, routeEnabled } from '@/config/mode';
-import { siteImage } from '@/lib/images';
+import { siteImage, slotFile } from '@/lib/images';
 import { webPageJsonLd } from '@/lib/seo';
 
 const title = 'Club teamwear';
@@ -73,7 +73,8 @@ const tiers = [
         alt="A full club kit laid out: jersey, hoodie, shorts and polo"
         tone="hero"
         label="Hero — full club kit laid out flat: jersey, hoodie, shorts, polo"
-        class="min-h-[260px] lg:min-h-[390px]"
+        file={slotFile.site('teamwear-hero')}
+        ratio="4/3"
         loading="eager"
       />
     </div>

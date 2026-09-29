@@ -5,7 +5,7 @@ import Figure from '@/components/Figure.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import { nav, site } from '@/config/site';
 import { IS_MVP } from '@/config/mode';
-import { sportHero } from '@/lib/images';
+import { slotFile, sportHero } from '@/lib/images';
 import { webPageJsonLd } from '@/lib/seo';
 
 /** Rest route that resolves to /sports itself; returns nothing in MVP so the page is not built. */
@@ -63,7 +63,9 @@ const others = [
                   alt={s.data.heroImageAlt ?? s.data.title}
                   label={s.data.heroLabel}
                   tone="tile"
-                  class="aspect-[16/10] w-full border-b border-white/10"
+                  file={slotFile.sport(s.id)}
+                  ratio="16/10"
+                  class="w-full border-b border-white/10"
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                 />
                 <div class="flex flex-1 flex-col p-6">

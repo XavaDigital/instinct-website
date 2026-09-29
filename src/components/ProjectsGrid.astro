@@ -1,5 +1,6 @@
 ---
 import type { GalleryItem } from '@/lib/gallery';
+import { slotFile } from '@/lib/images';
 import Figure from './Figure.astro';
 
 interface Props {
@@ -10,6 +11,11 @@ interface Props {
 }
 const { items, columns = 4, captions = false, class: className } = Astro.props;
 const cols = { 2: 'sm:grid-cols-2', 3: 'sm:grid-cols-2 lg:grid-cols-3', 4: 'grid-cols-2 lg:grid-cols-4' }[columns];
+const sizes = {
+  2: '(min-width: 640px) 50vw, 100vw',
+  3: '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw',
+  4: '(min-width: 1024px) 25vw, 50vw',
+}[columns];
 ---
 
 <ul class:list={['grid gap-[14px]', cols, className]}>
@@ -20,8 +26,10 @@ const cols = { 2: 'sm:grid-cols-2', 3: 'sm:grid-cols-2 lg:grid-cols-3', 4: 'grid
           src={p.image}
           alt={p.imageAlt ?? p.title}
           label={p.label}
-          class="aspect-[4/5] w-full"
-          sizes="(min-width: 1024px) 25vw, 50vw"
+          file={slotFile.gallery(p.sport)}
+          ratio="4/5"
+          class="w-full"
+          {sizes}
         />
         {captions && (
           <div class="mt-3">

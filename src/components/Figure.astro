@@ -3,6 +3,11 @@
  * Image slot. Renders an optimised <Image> when a source is provided,
  * otherwise the hatched placeholder from the mockup with a mono caption —
  * so real photography can be dropped in later without touching layouts.
+ *
+ * `file` and `ratio` tell whoever supplies photos what the slot expects: the
+ * placeholder prints the filename and a recommended pixel size, and `?slots`
+ * on any page overlays the live box size (see BaseLayout). The ratio is fixed
+ * at every screen width, so one file fills the slot on phone, tablet and desktop.
  */
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -12,6 +17,10 @@ interface Props {
   alt?: string;
   /** Caption shown on the placeholder, e.g. "Hero — team in full custom kit" */
   label: string;
+  /** Expected file under src/assets/, e.g. "site/home-hero.jpg" */
+  file?: string;
+  /** Box aspect ratio as "width/height", e.g. "4/3". Omit to size the box with classes. */
+  ratio?: `${number}/${number}`;
   class?: string;
   tone?: 'hero' | 'photo' | 'tile' | 'deep';
   /** Placeholder caption position */
@@ -25,13 +34,28 @@ const {
   src,
   alt,
   label,
+  file,
+  ratio,
   class: className,
   tone = 'photo',
   labelPosition = 'bottom',
   loading = 'lazy',
-  sizes = '(min-width: 1280px) 600px, (min-width: 768px) 50vw, 100vw',
-  widths = [480, 800, 1200],
+  // Two-column sections stack below lg, where the photo spans the full width.
+  sizes = '(min-width: 1280px) 600px, (min-width: 1024px) 50vw, 100vw',
+  widths = [480, 800, 1200, 1600, 2000],
 } = Astro.props;
+
+/** Longest edge we ask for; the build derives the smaller sizes from it. */
+const LONG_EDGE = 2400;
+const [rw, rh] = ratio ? ratio.split('/').map(Number) : [];
+const recommended =
+  rw && rh
+    ? rw >= rh
+      ? `${LONG_EDGE} × ${Math.round((LONG_EDGE * rh) / rw)}`
+      : `${Math.round((LONG_EDGE * rw) / rh)} × ${LONG_EDGE}`
+    : undefined;
+const style = ratio ? `aspect-ratio: ${ratio}` : undefined;
+const slot = file ? [file, recommended].filter(Boolean).join(' · ') : undefined;
 
 const tones = {
   hero: 'bg-plum-700 text-white/50 border border-white/10',
@@ -43,7 +67,7 @@ const tones = {
 
 {
   src ? (
-    <div class:list={['relative overflow-hidden', className]}>
+    <div class:list={['relative overflow-hidden', className]} {style} data-slot={slot}>
       <Image
         src={src}
         alt={alt ?? label}
@@ -62,8 +86,13 @@ const tones = {
         tones[tone],
         className,
       ]}
+      {style}
+      data-slot={slot}
     >
-      <span class="px-[10px] py-2 font-mono text-[10px] font-medium uppercase leading-none tracking-[0.06em]">{label}</span>
+      <span class="flex max-h-full flex-col gap-[6px] overflow-hidden px-[10px] py-2 font-mono text-[10px] font-medium uppercase leading-none tracking-[0.06em]">
+        {label}
+        {slot && <span class="normal-case tracking-normal opacity-80">{slot}</span>}
+      </span>
     </div>
   )
 }

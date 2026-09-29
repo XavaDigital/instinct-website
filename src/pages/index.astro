@@ -11,7 +11,7 @@ import CtaBand from '@/components/CtaBand.astro';
 import { nav, site } from '@/config/site';
 import { IS_MVP, routeEnabled } from '@/config/mode';
 import { featuredItems, getGalleryItems } from '@/lib/gallery';
-import { siteImage } from '@/lib/images';
+import { siteImage, slotFile } from '@/lib/images';
 import { testimonialsFor } from '@/lib/testimonials';
 import { webPageJsonLd } from '@/lib/seo';
 
@@ -97,7 +97,9 @@ const reasons = [
         alt="A team wearing custom sublimated Instinct Apparel kit"
         tone="hero"
         label="Hero image — team in full custom kit, cut out on dark"
-        class="min-h-[260px] sm:min-h-[360px] lg:min-h-[430px]"
+        file={slotFile.site('home-hero')}
+        ratio="4/3"
+        class="lg:self-center"
         loading="eager"
       />
     </div>
@@ -110,7 +112,8 @@ const reasons = [
         src={siteImage('home-team')}
         alt="A club team lined up in matching custom jerseys"
         label="Photo — club team lined up in matching jerseys"
-        class="min-h-[240px] lg:min-h-[360px]"
+        file={slotFile.site('home-team')}
+        ratio="4/3"
       />
       <div>
         <span class="eyebrow eyebrow-lilac">Why Instinct</span>

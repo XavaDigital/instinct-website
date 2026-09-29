@@ -2,7 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import { routeEnabled } from '@/config/mode';
-import { sportHero } from '@/lib/images';
+import { slotFile, sportHero } from '@/lib/images';
 
 interface Props {
   sports: CollectionEntry<'sports'>[];
@@ -32,8 +32,9 @@ const linked = routeEnabled('/sports');
           <Tag
             href={linked ? `/sports/${s.id}` : undefined}
             aria-current={linked && s.id === current ? 'page' : undefined}
+            data-slot={`${slotFile.sport(s.id)} · 2400 × 1500`}
             class:list={[
-              'hatch group relative flex items-center justify-center overflow-hidden border text-center',
+              'hatch group relative flex flex-col items-center justify-center gap-2 overflow-hidden border text-center',
               linked && 'transition-colors hover:border-lime/60 hover:bg-plum-600',
               variant === 'tile' ? 'min-h-[150px] bg-plum-650 px-4' : 'min-h-[110px] bg-plum-700 px-3',
               s.id === current ? 'border-lime bg-plum-650' : 'border-white/[0.09]',
@@ -44,7 +45,7 @@ const linked = routeEnabled('/sports');
                 src={hero}
                 alt=""
                 widths={[400, 800]}
-                sizes="(min-width: 768px) 33vw, 100vw"
+                sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
                 class="absolute inset-0 h-full w-full object-cover opacity-60 transition-opacity group-hover:opacity-80"
               />
             )}
@@ -59,6 +60,9 @@ const linked = routeEnabled('/sports');
             >
               {s.data.navLabel ?? s.data.title}
             </span>
+            {!hero && variant === 'tile' && (
+              <span class="relative font-mono text-[10px] font-medium leading-none text-white/60">{slotFile.sport(s.id)} · 2400 × 1500</span>
+            )}
           </Tag>
         </li>
       );

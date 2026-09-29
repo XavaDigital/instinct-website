@@ -8,7 +8,7 @@ import CtaBand from '@/components/CtaBand.astro';
 import { nav } from '@/config/site';
 import { IS_MVP } from '@/config/mode';
 import { getGalleryItems, itemsForGarment } from '@/lib/gallery';
-import { garmentBranding, garmentImage, garmentViews } from '@/lib/images';
+import { garmentBranding, garmentImage, garmentViews, slotFile } from '@/lib/images';
 import { productJsonLd, webPageJsonLd } from '@/lib/seo';
 
 export async function getStaticPaths() {
@@ -57,7 +57,9 @@ const branding = garmentBranding(entry.id);
           alt={data.imageAlt ?? data.title}
           tone="hero"
           label={data.imageLabel}
-          class="aspect-[4/3] w-full lg:min-h-[440px]"
+          file={slotFile.garment(entry.id)}
+          ratio="4/3"
+          class="w-full"
           loading="eager"
         />
         {
@@ -69,8 +71,10 @@ const branding = garmentBranding(entry.id);
                     src={views[i]}
                     alt={`${data.title} — ${label.toLowerCase()}`}
                     label={label}
+                    file={slotFile.garmentView(entry.id, i + 1)}
+                    ratio="4/3"
                     tone={i === 0 ? 'tile' : 'photo'}
-                    class:list={['aspect-[4/3] min-h-[72px] sm:min-h-[96px]', i === 0 ? 'border-lime' : 'border border-white/10']}
+                    class={i === 0 ? 'border-lime' : 'border border-white/10'}
                     sizes="(min-width: 1024px) 150px, 25vw"
                     widths={[300, 600]}
                   />
@@ -173,7 +177,8 @@ const branding = garmentBranding(entry.id);
                     alt={`${data.title} — ${spot.toLowerCase()}`}
                     tone="hero"
                     label={spot}
-                    class="aspect-[4/3] min-h-[120px] sm:min-h-[150px]"
+                    file={slotFile.garmentBranding(entry.id, i + 1)}
+                    ratio="4/3"
                     sizes="(min-width: 1024px) 300px, 50vw"
                     widths={[400, 800]}
                   />
@@ -220,7 +225,8 @@ const branding = garmentBranding(entry.id);
                     alt={g.data.imageAlt ?? g.data.title}
                     tone="hero"
                     label={g.data.name}
-                    class="aspect-[4/3] min-h-[120px] sm:min-h-[160px]"
+                    file={slotFile.garment(g.id)}
+                    ratio="4/3"
                     sizes="(min-width: 1024px) 25vw, 50vw"
                   />
                   <div class="px-[18px] py-4 text-[16px] font-semibold leading-[1.2] text-white group-hover:text-lime-soft">{g.data.cardTitle}</div>

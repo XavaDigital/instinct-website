@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { routeEnabled } from '@/config/mode';
-import { garmentImage } from '@/lib/images';
+import { garmentImage, slotFile } from '@/lib/images';
 import Figure from './Figure.astro';
 
 interface Props {
@@ -44,9 +44,11 @@ const Tag = linked ? 'a' : 'div';
         src={data.image ?? garmentImage(garment.id)}
         alt={data.imageAlt ?? data.title}
         label={data.name}
-        class="aspect-[4/3] w-full border-b border-white/10"
+        file={slotFile.garment(garment.id)}
+        ratio="4/3"
+        class="w-full border-b border-white/10"
         tone="deep"
-        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
       />
       <div class="p-5">
         <h3 class:list={['text-[18px] font-bold leading-tight text-white', linked && 'group-hover:text-lime-soft']}>

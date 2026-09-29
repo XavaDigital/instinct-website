@@ -19,6 +19,12 @@ src/assets/logos/      club / school logos we've worked with
 If you can't add files to the project yourself, send them to David in a zip **with the
 filenames already correct** — the names are the whole system.
 
+**Finding the slots on the site.** Every empty slot shows its filename and recommended size
+on the placeholder itself, e.g. `site/home-hero.jpg · 2400 × 1800`. Add `?slots` to any page
+address (e.g. `https://instinct.nz/?slots`) to label every slot, filled or empty, with its
+filename and the size it is showing at on your current screen. It stays on while you click
+around; add `?slots=off` to turn it off.
+
 ---
 
 ## 1. Rules that apply to every file
@@ -27,10 +33,11 @@ filenames already correct** — the names are the whole system.
 | --- | --- |
 | Filename characters | Lower-case letters, numbers and hyphens only: `netball-riverside-2026.jpg`. No spaces, apostrophes, macrons or capitals. Use hyphens, not underscores. |
 | Format | Photos: **JPG** (quality 80–90). Logos: **PNG** with a transparent background, or **SVG**. WebP/AVIF/PNG photos also work. |
-| Size | Longest edge **1600–2400 px**. Under **3 MB** per file. The build re-encodes every image to AVIF/WebP at several sizes, so don't pre-shrink below 1600 px. |
+| Size | Longest edge **2400 px** (1600 px at the very least). Under **3 MB** per file. The build makes the smaller versions for phones itself, so never pre-shrink. |
 | Colour | sRGB. No borders, no text overlays, no watermarks, no collages. |
 | Content | Our kit only — no other brand's garments. We must own the photo or have permission to use it. No identifiable children without a parent's OK. |
-| Orientation | See each section. Images are cropped to fit their tile (`object-fit: cover`), so keep the subject centred and leave some room around the edges. |
+| Shape | Every slot has a fixed shape (ratio), listed in each section, and keeps that shape on phone, tablet and desktop. A photo in the same ratio fills the slot exactly. A photo in a different ratio still fills it with no gaps, but its edges are cropped, so keep the subject centred with some room around it. |
+| Tablets | No separate tablet images. On tablets the page photos stack under the text and show **wider than on desktop** (up to about 990 px on screen, so about 2000 px on a retina iPad). That is why 2400 px is the target. |
 
 ---
 
@@ -90,8 +97,8 @@ and is tagged *dresses*. `rugby-jerseys-shorts-riverside.jpg` reads "Jerseys sho
 and is tagged for both the jerseys and the shorts pages. Put the words in the order that
 reads best as a caption.
 
-**Orientation:** gallery tiles are portrait (4:5). Landscape photos work but are cropped
-to the centre; portrait or square shots show the most.
+**Shape:** gallery tiles are portrait **4:5 (1920 × 2400)**. Landscape photos work but are
+cropped to the centre; portrait or square shots show the most.
 
 **How many:** aim for **two or more per sport** (12+ total). Once a sport has one real photo,
 that sport's placeholder tiles disappear.
@@ -104,18 +111,18 @@ filename is enough.
 
 ## 3. Fixed page photos — `src/assets/site/`
 
-One file per slot, named exactly as below. Landscape unless stated.
+One file per slot, named exactly as below. All landscape.
 
 | Filename | Where it shows | What to shoot | Ratio / size |
 | --- | --- | --- | --- |
-| `home-hero.jpg` | Homepage hero (largest image on the site) | A team in full custom kit. A cut-out or dark-background shot suits the purple hero best. | 4:3, 1600 × 1200 or larger |
-| `home-team.jpg` | Homepage "Play on instinct" section | A club team lined up in matching jerseys | 4:3 |
-| `teamwear-hero.jpg` | Teamwear page hero | A full club kit laid out flat: jersey, hoodie, shorts, polo | 4:3 |
-| `why-us-fabric.jpg` | Why buy from us page | Close-up of sublimated fabric / print detail | 4:3 |
-| `how-it-works.jpg` | How it works page hero (full site) | An organiser reviewing a design mockup (tablet, printout) | 4:3 |
-| `quote-page.jpg` | Request a quote page, side panel | A mockup sheet next to finished kit | 3:2, at least 1200 wide |
-| `contact-map.jpg` | Contact page | A map screenshot of 11/8 Dakota Crescent, Wigram | 4:3 |
-| `contact-showroom.jpg` | Contact page | The team or the showroom interior | 3:2 |
+| `home-hero.jpg` | Homepage hero (first image visitors see) | A team in full custom kit. A cut-out or dark-background shot suits the purple hero best. | 4:3, 2400 × 1800 |
+| `home-team.jpg` | Homepage "Play on instinct" section | A club team lined up in matching jerseys | 4:3, 2400 × 1800 |
+| `teamwear-hero.jpg` | Teamwear page hero | A full club kit laid out flat: jersey, hoodie, shorts, polo | 4:3, 2400 × 1800 |
+| `why-us-fabric.jpg` | Why buy from us page | Close-up of sublimated fabric / print detail | 4:3, 2400 × 1800 |
+| `how-it-works.jpg` | How it works page hero (full site) | An organiser reviewing a design mockup (tablet, printout) | 4:3, 2400 × 1800 |
+| `quote-page.jpg` | Request a quote page, side panel | A mockup sheet next to finished kit | 3:2, 2400 × 1600 |
+| `contact-map.jpg` | Contact page | A map screenshot of 11/8 Dakota Crescent, Wigram | 16:9, 2400 × 1350 |
+| `contact-showroom.jpg` | Contact page | The team or the showroom interior | 2:1, 2400 × 1200 |
 
 ---
 
@@ -126,8 +133,8 @@ feature photo when sport pages are live.
 
 | Filename | Where it shows | What to shoot |
 | --- | --- | --- |
-| `<sport>.jpg` | Sport tile background, sports index card, sport page hero | The team in action or lined up in kit, landscape 16:10 (1600 × 1000), subject centred — tiles crop to a wide strip |
-| `<sport>-feature.jpg` | Sport page feature section | See below |
+| `<sport>.jpg` | Sport tile background, sports index card, sport page hero | The team in action or lined up in kit, 16:10 (2400 × 1500), subject centred — the homepage tiles crop it to a wide strip |
+| `<sport>-feature.jpg` | Sport page feature section | 4:3 (2400 × 1800), see below |
 
 Feature photo per sport:
 
@@ -153,9 +160,9 @@ Garment ids: `jerseys` `hoodies` `jackets` `training-tees` `polos` `shorts-leggi
 
 | Filename | Where it shows | Notes |
 | --- | --- | --- |
-| `<garment>.jpg` | Teamwear card + garment page main image | Product-style shot, 4:3, plain or dark background, front view |
-| `<garment>-1.jpg` … `<garment>-4.jpg` | Garment page thumbnails, in order | See the view list below; 4:3 |
-| `<garment>-branding-1.jpg` … `-4.jpg` | "Where clubs put their branding" grid, in order | See the branding list below; 4:3 |
+| `<garment>.jpg` | Teamwear card, garment page main image, and the garment cards on each sport page | Product-style shot, 4:3 (2400 × 1800), plain or dark background, front view |
+| `<garment>-1.jpg` … `<garment>-4.jpg` | Garment page thumbnails, in order | See the view list below; 4:3 (2400 × 1800) |
+| `<garment>-branding-1.jpg` … `-4.jpg` | "Where clubs put their branding" grid, in order | See the branding list below; 4:3 (2400 × 1800) |
 
 Views (`-1` to `-4`) per garment:
 
@@ -212,7 +219,8 @@ clubs, schools or groups that have agreed to be shown.
 
 ## 8. Checking your work
 
-Run `npm run dev` and open http://localhost:4321 — every slot with a file shows the photo;
-every slot without one still shows its labelled placeholder, which tells you the filename it
-is waiting for. A wrongly named file simply won't appear; check the spelling against the
-tables above.
+Run `npm run dev` and open http://localhost:4321/?slots — every slot with a file shows the
+photo; every slot without one still shows its placeholder with the filename it is waiting
+for. The `?slots` labels show each slot's filename and its size on screen right now; drag the
+browser narrower to see the tablet (640–1023 px) and phone sizes. A wrongly named file simply
+won't appear; check the spelling against the tables above.

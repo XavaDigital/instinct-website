@@ -194,6 +194,54 @@ const extraJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
       <slot />
     </main>
     <Footer />
+    <!--
+      Image slot overlay for whoever supplies photos: add ?slots to any URL to label every
+      image slot with its filename and the size it is showing at right now (?slots=off to stop).
+      It stays on for the browser tab, so it follows you between pages.
+    -->
+    <script is:inline>
+      (function () {
+        var q = new URLSearchParams(location.search).get('slots');
+        var on = q !== null && q !== 'off';
+        try {
+          if (q !== null) sessionStorage.setItem('instinct_slots', on ? '1' : '0');
+          else on = sessionStorage.getItem('instinct_slots') === '1';
+        } catch (e) {}
+        if (!on) return;
+
+        var bar = document.createElement('div');
+        bar.className = 'slot-viewport';
+        document.body.appendChild(bar);
+        var badges = [];
+        document.querySelectorAll('[data-slot]').forEach(function (el) {
+          var b = document.createElement('span');
+          b.className = 'slot-badge';
+          el.appendChild(b);
+          badges.push([el, b]);
+        });
+
+        function update() {
+          var vw = document.documentElement.clientWidth;
+          var device = vw < 640 ? 'phone' : vw < 1024 ? 'tablet' : 'desktop';
+          bar.textContent = 'Screen ' + vw + ' px wide (' + device + ') · ?slots=off to hide';
+          badges.forEach(function (pair) {
+            var r = pair[0].getBoundingClientRect();
+            var w = Math.round(r.width);
+            var h = Math.round(r.height);
+            pair[1].textContent =
+              pair[0].getAttribute('data-slot') +
+              '\nShowing at ' + w + ' × ' + h + ' px' +
+              '\nSharp on retina from ' + w * 2 + ' × ' + h * 2 + ' px';
+          });
+        }
+        var frame = 0;
+        addEventListener('resize', function () {
+          cancelAnimationFrame(frame);
+          frame = requestAnimationFrame(update);
+        });
+        update();
+      })();
+    </script>
     {
       PUBLIC_CF_ANALYTICS_TOKEN && (
         <script
