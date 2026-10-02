@@ -2,12 +2,10 @@
 import { getCollection } from 'astro:content';
 import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Figure from '@/components/Figure.astro';
 import Faq from '@/components/Faq.astro';
 import ContactForm from '@/components/islands/ContactForm';
 import FormStatusNotice from '@/components/FormStatusNotice.astro';
 import { nav, site } from '@/config/site';
-import { siteImage, slotFile } from '@/lib/images';
 import { webPageJsonLd } from '@/lib/seo';
 
 const title = 'Contact';
@@ -40,58 +38,40 @@ const faqs = [
       <div>
         <span class="eyebrow">Talk to a real person</span>
         <h1 class="display mt-3 text-[40px] leading-[0.96] tracking-[-0.035em] sm:text-[56px]">Get in touch</h1>
-        <p class="mb-[30px] mt-[14px] max-w-[470px] text-[17.5px] leading-[1.6] text-white/[0.72]">
+        <p class="mt-[14px] max-w-[470px] text-[17.5px] leading-[1.6] text-white/[0.72]">
           Questions about sizing, artwork, timelines or pricing? Call us, email us, or send a message and we'll come
           back within one business day.
         </p>
-        <div class="grid max-w-[460px] gap-[14px]">
-          <a
-            href={site.phone.href}
-            class="panel-deep flex items-center justify-between gap-[18px] px-[22px] py-5 transition-colors hover:border-lime/60"
-          >
-            <div>
-              <div class="mb-2 text-[11.5px] font-semibold uppercase leading-none tracking-[0.12em] text-white/55">Phone</div>
-              <div class="card-title text-[24px] text-lime">{site.phone.display}</div>
-            </div>
-            <span class="text-right text-[13px] leading-[1.5] text-white/50">
-              {site.hours.short[0]}<br />{site.hours.short[1]}
-            </span>
-          </a>
-          <a href={`mailto:${site.email}`} class="panel block px-[22px] py-5 transition-colors hover:border-lime/60">
-            <div class="mb-2 text-[11.5px] font-semibold uppercase leading-none tracking-[0.12em] text-white/55">Email</div>
-            <div class="break-all text-[17px] font-semibold leading-[1.4] text-white">{site.email}</div>
-            <div class="mt-1 text-[13.5px] leading-[1.5] text-white/50">Artwork files welcome — up to 25MB</div>
-          </a>
-          <div class="panel px-[22px] py-5">
-            <div class="mb-2 text-[11.5px] font-semibold uppercase leading-none tracking-[0.12em] text-white/55">Showroom</div>
-            <address class="text-[17px] font-semibold not-italic leading-[1.5] text-white">
-              {site.address.street}, {site.address.suburb}<br />
-              {site.address.city} {site.address.postcode}, {site.address.country}
-            </address>
-            <div class="mt-1 text-[13.5px] leading-[1.5] text-white/50">
-              Visits by appointment — come see and feel the fabric.
-              <a href={site.mapsUrl} class="link-inline ml-1" rel="noopener" target="_blank">Open in Google Maps</a>
-            </div>
+      </div>
+      <div class="grid content-start gap-[14px]">
+        <a
+          href={site.phone.href}
+          class="panel-deep flex items-center justify-between gap-[18px] px-[22px] py-5 transition-colors hover:border-lime/60"
+        >
+          <div>
+            <div class="mb-2 text-[11.5px] font-semibold uppercase leading-none tracking-[0.12em] text-white/55">Phone</div>
+            <div class="card-title text-[24px] text-lime">{site.phone.display}</div>
+          </div>
+          <span class="text-right text-[13px] leading-[1.5] text-white/50">
+            {site.hours.short[0]}<br />{site.hours.short[1]}
+          </span>
+        </a>
+        <a href={`mailto:${site.email}`} class="panel block px-[22px] py-5 transition-colors hover:border-lime/60">
+          <div class="mb-2 text-[11.5px] font-semibold uppercase leading-none tracking-[0.12em] text-white/55">Email</div>
+          <div class="break-all text-[17px] font-semibold leading-[1.4] text-white">{site.email}</div>
+          <div class="mt-1 text-[13.5px] leading-[1.5] text-white/50">Artwork files welcome — up to 25MB</div>
+        </a>
+        <div class="panel px-[22px] py-5">
+          <div class="mb-2 text-[11.5px] font-semibold uppercase leading-none tracking-[0.12em] text-white/55">Showroom</div>
+          <address class="text-[17px] font-semibold not-italic leading-[1.5] text-white">
+            {site.address.street}, {site.address.suburb}<br />
+            {site.address.city} {site.address.postcode}, {site.address.country}
+          </address>
+          <div class="mt-1 text-[13.5px] leading-[1.5] text-white/50">
+            Visits by appointment — come see and feel the fabric.
+            <a href={site.mapsUrl} class="link-inline ml-1" rel="noopener" target="_blank">Open in Google Maps</a>
           </div>
         </div>
-      </div>
-      <div class="grid content-start gap-4">
-        <Figure
-          src={siteImage('contact-map')}
-          alt={`Map showing the Instinct Apparel showroom in ${site.address.suburb}, ${site.address.city}`}
-          tone="hero"
-          label={`Map — ${site.address.city} showroom location`}
-          file={slotFile.site('contact-map')}
-          ratio="16/9"
-          loading="eager"
-        />
-        <Figure
-          src={siteImage('contact-showroom')}
-          alt="The Instinct Apparel team and showroom"
-          label="Photo — the team / showroom interior"
-          file={slotFile.site('contact-showroom')}
-          ratio="2/1"
-        />
       </div>
     </div>
   </section>
