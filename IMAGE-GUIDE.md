@@ -131,7 +131,7 @@ The contact page has no photos for now (the map and team / showroom slots were r
 
 ## 4. Sport images — `src/assets/sports/`
 
-Used on the small sport tiles on the teamwear page now (the homepage tiles are plain green, no photo), and as the sport page hero and
+Used on the small sport tiles on the teamwear page now (the homepage tiles are outlined text tiles, no photo), and as the sport page hero and
 feature photo when sport pages are live.
 
 | Filename | Where it shows | What to shoot |

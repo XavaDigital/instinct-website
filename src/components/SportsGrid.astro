@@ -7,7 +7,7 @@ import { slotFile, sportHero } from '@/lib/images';
 interface Props {
   sports: CollectionEntry<'sports'>[];
   current?: string;
-  /** "tile": large 3-column lime tiles, no photo. "mini": compact 6-column strip with the sport photo. */
+  /** "tile": large 3-column outlined tiles with lime text, no photo. "mini": compact 6-column strip with the sport photo. */
   variant?: 'tile' | 'mini';
   class?: string;
 }
@@ -34,11 +34,11 @@ const linked = routeEnabled('/sports');
               href={linked ? `/sports/${s.id}` : undefined}
               aria-current={linked && s.id === current ? 'page' : undefined}
               class:list={[
-                'flex min-h-[150px] items-center justify-center bg-lime px-4 text-center',
-                linked && 'transition-colors hover:bg-lime-deep',
+                'flex min-h-[150px] items-center justify-center border border-white/[0.11] bg-gradient-to-b from-lime/[0.07] to-transparent px-4 text-center',
+                linked && 'transition-colors hover:border-lime/60',
               ]}
             >
-              <span class="font-display text-[24px] font-bold uppercase leading-[1.1] tracking-[0.04em] text-plum-900 sm:text-[26px]">
+              <span class="font-display text-[24px] font-bold uppercase leading-[1.1] tracking-[0.04em] text-lime sm:text-[26px]">
                 {label}
               </span>
             </Tag>
