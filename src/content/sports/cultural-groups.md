@@ -2,7 +2,7 @@
 title: Cultural groups
 navLabel: Kapa haka & culture
 seoTitle: Custom Kapa Haka & Cultural Group Uniforms
-order: 6
+order: 9
 description: "Custom sublimated uniforms for kapa haka rōpū, Pasifika groups, cultural clubs and schools in New Zealand — performance tops, polos and hoodies with your patterns printed edge to edge. Free mockups, no minimum order."
 eyebrow: Cultural & performance group uniforms
 heroTitle: Uniforms that carry your story

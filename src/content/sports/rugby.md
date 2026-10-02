@@ -1,10 +1,11 @@
 ---
 title: Rugby
+navLabel: Rugby & Rugby League
 order: 1
-description: "Custom sublimated rugby jerseys, shorts and socks for New Zealand clubs and schools. Contact-grade knit, reinforced seams, numbers and names included. Free mockups, no minimum order."
+description: "Custom sublimated rugby union and rugby league jerseys, shorts and socks for New Zealand clubs and schools. Contact-grade knit, reinforced seams, numbers and names included. Free mockups, no minimum order."
 eyebrow: Custom rugby jerseys & kit
 heroTitle: Rugby kit that survives the season
-intro: "Contact-grade sublimated jerseys, shorts and socks in your club colours — plus training and sideline gear in the same design. Juniors through to premier grade."
+intro: "Contact-grade sublimated jerseys, shorts and socks in your club colours — plus training and sideline gear in the same design. Union or league, juniors through to premier grade."
 heroLabel: Hero — rugby team in custom jerseys, muddy field
 highlights:
   - Contact-grade reinforced seams

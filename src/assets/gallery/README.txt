@@ -1,6 +1,6 @@
 # Drop gallery photos here: jpg, jpeg, png, webp or avif (upper- or lower-case extensions).
 # The filename becomes the caption. Start it with a sport id to group the photo:
-#   rugby-  netball-  football-  basketball-  touch-  cultural-groups-
+#   rugby-  netball-  football-  basketball-  touch-  volleyball-  hockey-  cricket-  cultural-groups-
 # Examples:
 #   netball-riverside-2026.jpg  ->  "Riverside 2026" under Netball
 #   rugby-under-12.jpg          ->  "Under 12" under Rugby

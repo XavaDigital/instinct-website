@@ -7,7 +7,7 @@ import { slotFile, sportHero } from '@/lib/images';
 interface Props {
   sports: CollectionEntry<'sports'>[];
   current?: string;
-  /** "tile": large 3-column tiles. "mini": compact 6-column strip. */
+  /** "tile": large 3-column lime tiles, no photo. "mini": compact 6-column strip with the sport photo. */
   variant?: 'tile' | 'mini';
   class?: string;
 }
@@ -26,6 +26,25 @@ const linked = routeEnabled('/sports');
   {
     sports.map((s) => {
       const Tag = linked ? 'a' : 'div';
+      const label = s.data.navLabel ?? s.data.title;
+      if (variant === 'tile') {
+        return (
+          <li>
+            <Tag
+              href={linked ? `/sports/${s.id}` : undefined}
+              aria-current={linked && s.id === current ? 'page' : undefined}
+              class:list={[
+                'flex min-h-[150px] items-center justify-center bg-lime px-4 text-center',
+                linked && 'transition-colors hover:bg-lime-deep',
+              ]}
+            >
+              <span class="font-display text-[24px] font-bold uppercase leading-[1.1] tracking-[0.04em] text-plum-900 sm:text-[26px]">
+                {label}
+              </span>
+            </Tag>
+          </li>
+        );
+      }
       const hero = s.data.heroImage ?? sportHero(s.id);
       return (
         <li>
@@ -34,9 +53,8 @@ const linked = routeEnabled('/sports');
             aria-current={linked && s.id === current ? 'page' : undefined}
             data-slot={`${slotFile.sport(s.id)} · 2400 × 1500`}
             class:list={[
-              'hatch group relative flex flex-col items-center justify-center gap-2 overflow-hidden border text-center',
+              'hatch group relative flex min-h-[110px] flex-col items-center justify-center gap-2 overflow-hidden border bg-plum-700 px-3 text-center',
               linked && 'transition-colors hover:border-lime/60 hover:bg-plum-600',
-              variant === 'tile' ? 'min-h-[150px] bg-plum-650 px-4' : 'min-h-[110px] bg-plum-700 px-3',
               s.id === current ? 'border-lime bg-plum-650' : 'border-white/[0.09]',
             ]}
           >
@@ -49,20 +67,9 @@ const linked = routeEnabled('/sports');
                 class="absolute inset-0 h-full w-full object-cover opacity-60 transition-opacity group-hover:opacity-80"
               />
             )}
-            <span
-              class:list={[
-                'relative text-white',
-                variant === 'tile'
-                  ? 'font-display text-[20px] font-bold uppercase tracking-[0.04em]'
-                  : 'text-[14px] font-bold leading-tight',
-                s.id === current && 'text-lime-soft',
-              ]}
-            >
-              {s.data.navLabel ?? s.data.title}
+            <span class:list={['relative text-[14px] font-bold leading-tight text-white', s.id === current && 'text-lime-soft']}>
+              {label}
             </span>
-            {!hero && variant === 'tile' && (
-              <span class="relative font-mono text-[10px] font-medium leading-none text-white/60">{slotFile.sport(s.id)} · 2400 × 1500</span>
-            )}
           </Tag>
         </li>
       );

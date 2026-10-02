@@ -49,15 +49,18 @@ full site is switched on — on each sport page and the relevant garment pages.
 
 **Filename pattern:** `<sport>-<caption words>.jpg`
 
-Start with one of the six sport ids so the photo lands in the right group:
+Start with one of the nine sport ids so the photo lands in the right group:
 
 | Sport id | Group heading |
 | --- | --- |
-| `rugby` | Rugby |
+| `rugby` | Rugby (union and league) |
 | `netball` | Netball |
 | `football` | Football |
 | `basketball` | Basketball |
 | `touch` | Touch & Tag |
+| `volleyball` | Volleyball |
+| `hockey` | Hockey |
+| `cricket` | Cricket |
 | `cultural-groups` | Kapa haka & culture |
 
 Everything after the sport id becomes the caption (first letter capitalised, hyphens become
@@ -128,12 +131,12 @@ The contact page has no photos for now (the map and team / showroom slots were r
 
 ## 4. Sport images — `src/assets/sports/`
 
-Used on the sport tiles (homepage and teamwear page) now, and as the sport page hero and
+Used on the small sport tiles on the teamwear page now (the homepage tiles are plain green, no photo), and as the sport page hero and
 feature photo when sport pages are live.
 
 | Filename | Where it shows | What to shoot |
 | --- | --- | --- |
-| `<sport>.jpg` | Sport tile background, sports index card, sport page hero | The team in action or lined up in kit, 16:10 (2400 × 1500), subject centred — the homepage tiles crop it to a wide strip |
+| `<sport>.jpg` | Teamwear page sport tile, sports index card, sport page hero | The team in action or lined up in kit, 16:10 (2400 × 1500), subject centred — the small tiles crop it |
 | `<sport>-feature.jpg` | Sport page feature section | 4:3 (2400 × 1800), see below |
 
 Feature photo per sport:
@@ -146,6 +149,9 @@ Feature photo per sport:
 | `basketball-feature.jpg` | A reversible singlet, both faces |
 | `touch-feature.jpg` | Social team tees with nicknames |
 | `cultural-groups-feature.jpg` | Pattern detail on a performance top |
+| `volleyball-feature.jpg` | Team jersey and libero jersey side by side |
+| `hockey-feature.jpg` | Field shirt and goalkeeper smock side by side |
+| `cricket-feature.jpg` | Cricket shirt and trousers in club colours |
 
 ---
 
