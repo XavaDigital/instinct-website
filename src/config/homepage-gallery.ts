@@ -5,12 +5,12 @@
  * a build warning, and any empty spots are filled one sport at a time.
  */
 export const homepageGallery: string[] = [
-  'rugby-dragons-full-strip-front',
-  'netball-descendentz-dress-front',
-  'basketball-chertsey-school-full-strip-front',
-  'football-mid-canterbury-shirt-front',
-  'cultural-groups-ngā-kura-a-iwi-ki-te-arawa-quarter-zip-hoodie',
-  'rugby-glenora-tribal-bears-tracksuit-front',
-  'netball-wahine-whakamiharo-jacket-front',
-  'cricket-veterans-world-cup-umpire-polo',
+  "rugby-dragons-full-strip-front",
+  "netball-descendentz-dress-front",
+  "football-mid-canterbury-shirt-front",
+  "basketball-chertsey-school-full-strip-front",
+  "cultural-groups-ngā-kura-a-iwi-ki-te-arawa-quarter-zip-hoodie",
+  "rugby-glenora-tribal-bears-tracksuit-front",
+  "netball-wahine-whakamiharo-jacket-front",
+  "cultural-groups-tai-awa-waka-ama-hoodie-front",
 ];
