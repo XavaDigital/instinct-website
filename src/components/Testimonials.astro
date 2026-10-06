@@ -4,11 +4,20 @@ import Stars from './Stars.astro';
 interface Props {
   items: { quote: string; author: string }[];
   title?: string;
+  /** Line under the title saying where the quotes come from */
+  intro?: string;
   align?: 'left' | 'center';
   tone?: 'outline' | 'deep' | 'panel';
   class?: string;
 }
-const { items, title, align = 'center', tone = 'outline', class: className } = Astro.props;
+const {
+  items,
+  title,
+  intro = 'Reviews from clubs our team has kitted out.',
+  align = 'center',
+  tone = 'outline',
+  class: className,
+} = Astro.props;
 const card = {
   outline: 'border border-white/[0.11]',
   deep: 'panel-deep',
@@ -19,7 +28,14 @@ const card = {
 <div class:list={[className]}>
   {
     title && (
-      <h2 class:list={['display mb-8 text-[32px] sm:text-[42px]', align === 'center' && 'text-center']}>{title}</h2>
+      <h2 class:list={['display text-[32px] sm:text-[42px]', intro ? 'mb-3' : 'mb-8', align === 'center' && 'text-center']}>
+        {title}
+      </h2>
+    )
+  }
+  {
+    title && intro && (
+      <p class:list={['mb-8 text-[15.5px] text-white/60', align === 'center' && 'text-center']}>{intro}</p>
     )
   }
   <ul class="grid gap-5 md:grid-cols-3">
