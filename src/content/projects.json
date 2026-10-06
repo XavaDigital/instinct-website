@@ -98,5 +98,21 @@
     "garments": ["Group polos", "Kit bags"],
     "label": "Cultural group project 2 — travel polos",
     "order": 12
+  },
+  {
+    "id": "hockey-club-kit",
+    "title": "Club playing kit — hockey",
+    "sport": "hockey",
+    "garments": ["Playing shirts", "Skorts", "Socks"],
+    "label": "Hockey project 1 — club playing kit",
+    "order": 13
+  },
+  {
+    "id": "hockey-keeper",
+    "title": "Goalkeeper smocks — hockey",
+    "sport": "hockey",
+    "garments": ["Goalkeeper smocks", "Playing shirts"],
+    "label": "Hockey project 2 — goalkeeper smocks",
+    "order": 14
   }
 ]

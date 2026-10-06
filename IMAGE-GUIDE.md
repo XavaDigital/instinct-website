@@ -31,7 +31,7 @@ around; add `?slots=off` to turn it off.
 
 | Rule | Detail |
 | --- | --- |
-| Filename characters | Lower-case letters, numbers and hyphens only: `netball-riverside-2026.jpg`. No spaces, apostrophes, macrons or capitals. Use hyphens, not underscores. |
+| Filename characters | Lower-case letters, numbers and hyphens only: `netball-riverside-2026.jpg`. No spaces, apostrophes, macrons or capitals. Use hyphens, not underscores. The one exception: gallery photos may use capitals for names (section 2). |
 | Format | Photos: **JPG** (quality 80–90). Logos: **PNG** with a transparent background, or **SVG**. WebP/AVIF/PNG photos also work. |
 | Size | Longest edge **2400 px** (1600 px at the very least). Under **3 MB** per file. The build makes the smaller versions for phones itself, so never pre-shrink. |
 | Colour | sRGB. No borders, no text overlays, no watermarks, no collages. |
@@ -64,12 +64,15 @@ Start with one of the nine sport ids so the photo lands in the right group:
 | `cultural-groups` | Kapa haka & culture |
 
 Everything after the sport id becomes the caption (first letter capitalised, hyphens become
-spaces). Examples:
+spaces). Capitals in the filename are kept, so write names the way they should read:
+`rugby-St-Paul-training-strip.jpg` shows "St Paul training strip". Keep the sport id itself
+lower-case. Examples:
 
 | Filename | Caption shown | Group |
 | --- | --- | --- |
 | `netball-riverside-2026.jpg` | Riverside 2026 | Netball |
 | `rugby-under-12.jpg` | Under 12 | Rugby |
+| `cricket-Kaiapoi-hoodie-front.jpg` | Kaiapoi hoodie front | Cricket (capitals kept for names) |
 | `rugby-final.jpg` | Rugby final | Rugby (a single word keeps the sport for context) |
 | `netball-2.jpg` | Netball kit | Netball (a bare number is not a caption) |
 | `01-rugby-final.jpg` | Rugby final | Rugby (a leading number is only a sort prefix) |
@@ -93,7 +96,7 @@ garment's page when garment pages are live:
 | `sock` `socks` | Socks |
 | `cap` `caps` `beanie` `beanies` `hat` `hats` `headwear` | Headwear |
 | `bag` `bags` `backpack` | Bags & accessories |
-| `singlet` `singlets` `dress` `dresses` `bodysuit` | (kept as tags for future pages) |
+| `singlet` `singlets` `dress` `dresses` `bodysuit` `tracksuit` `tracksuits` `trackpants` | (kept as tags for future pages) |
 
 So `netball-riverside-dresses-2026.jpg` reads "Riverside dresses 2026", sits under Netball,
 and is tagged *dresses*. `rugby-jerseys-shorts-riverside.jpg` reads "Jerseys shorts riverside"

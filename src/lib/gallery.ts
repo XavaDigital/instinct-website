@@ -87,6 +87,9 @@ const GARMENT_ALIASES: Record<string, string> = {
   dress: 'dresses',
   dresses: 'dresses',
   bodysuit: 'dresses',
+  tracksuit: 'tracksuits',
+  tracksuits: 'tracksuits',
+  trackpants: 'tracksuits',
 };
 
 function garmentTagsFromName(name: string): string[] {
@@ -102,7 +105,8 @@ function garmentTagsFromName(name: string): string[] {
  * "netball-riverside-2026" -> "Riverside 2026"; "rugby-final" -> "Rugby final"
  * (a single word keeps the sport for context); "netball-2" -> "Netball kit"
  * (a bare number is not a caption). Numbers inside a caption are kept, so
- * "rugby-under-12" -> "Under 12".
+ * "rugby-under-12" -> "Under 12". Capitals in the filename are kept for
+ * proper nouns: "rugby-St-Paul-training" -> "St Paul training".
  */
 function titleFromName(name: string, sport?: SportInfo): string {
   let rest = sport ? name.slice(sport.id.length) : name;
