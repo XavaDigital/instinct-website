@@ -51,8 +51,8 @@ faqs:
   - q: Do you make women's and junior cuts?
     a: "Yes. Women's fit shirts and shorts, and junior sizes from 4Y, are all graded from the same design so the whole club matches."
 testimonial:
-  quote: "Home, away and keeper kits for six teams, all delivered together and all the right colours. Easiest kit order we've done."
-  author: Football club kit coordinator — placeholder
+  quote: "Great to deal with, fair pricing and an awesome end product. Will definitely be dealing with David again for our football teamwear!"
+  author: Barak G., football
 ctaTitle: Get your football kit priced
 ctaBody: Tell us your teams, numbers and colours. Free mockup and a written price within one business day.
 ---

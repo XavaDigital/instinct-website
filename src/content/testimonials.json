@@ -1,58 +1,68 @@
 [
   {
-    "id": "committee-signoff",
-    "quote": "Turnaround was faster than quoted and the mockups meant our committee could sign off without any back and forth.",
-    "author": "Club secretary — placeholder",
-    "context": "general",
-    "placeholder": true
+    "id": "ngaruawahia-hockey",
+    "quote": "Communication was super prompt and came with lay ups of how our uniform would look. Everything we asked was quickly answered — size chart please, can we reverse those colours, can I grab the same but for a toddler? Really easy to deal with and super happy with what has been delivered.",
+    "author": "Vanessa G., Ngāruawāhia Hockey Club",
+    "context": "general"
   },
   {
-    "id": "juniors-140",
-    "quote": "We kit out 140 juniors every season. Instinct handled the sizing spread and reorders without a fuss.",
-    "author": "Junior coordinator — placeholder",
-    "context": "general",
-    "placeholder": true
+    "id": "trusted-supplier",
+    "quote": "I was a bit wary at first, as trying to find a trusted supplier is hard these days. But man did the team pull through! They were very fast, communication was excellent. And they nailed my vision of what I wanted to perfection.",
+    "author": "Tyrese R.",
+    "context": "general"
   },
   {
-    "id": "group-brief",
-    "quote": "They took our group's design brief seriously and got the detail right first time. The team loves them.",
-    "author": "Group organiser — placeholder",
-    "context": "general",
-    "placeholder": true
+    "id": "cricket-well-priced",
+    "quote": "Such awesome products - great for our cricket team! Cat and David had excellent communication, and we were well informed at every step of the process. Cost of the kit was well priced and very competitive compared to others.",
+    "author": "Nick G., cricket team",
+    "context": "general"
   },
   {
-    "id": "third-season",
-    "quote": "Third season with Instinct. Reorders take one email and the colours match exactly.",
-    "author": "Club secretary — placeholder",
-    "context": "why-us",
-    "placeholder": true
+    "id": "final-check",
+    "quote": "During the final checking process, one of the team members spotted a minor issue and went well above and beyond to make sure my order was exactly right. … Oh, and the basketball singlets themselves are fantastic. The design looks great, the fit is excellent and the quality of the material exceeded my expectations.",
+    "author": "Patoa T., basketball",
+    "context": "why-us"
   },
   {
-    "id": "every-size",
-    "quote": "140 juniors, every size under the sun, and not a single reorder problem.",
-    "author": "Junior coordinator — placeholder",
-    "context": "why-us",
-    "placeholder": true
+    "id": "samples-before-due",
+    "quote": "Samples for materials and sizes were supplied very quickly and once order placed, the order arrived before due date. Communication throughout the process was fantastic. And the uniforms look amazing!",
+    "author": "Carl G.",
+    "context": "why-us"
   },
   {
-    "id": "cultural-detail",
-    "quote": "They got the cultural detail in our design right the first time. That mattered to us.",
-    "author": "Group organiser — placeholder",
-    "context": "why-us",
-    "placeholder": true
+    "id": "look-no-more",
+    "quote": "Excellent ideas for helping you figure out your design and material in those early stages. … Superb service from start to end - if you're deliberating online which supplier to use, look no more, these are your guys!",
+    "author": "Cait D.",
+    "context": "why-us"
   },
   {
-    "id": "same-day-quote",
-    "quote": "Quote came back same day with a mockup we could take straight to the committee.",
-    "author": "Club secretary — placeholder",
-    "context": "quote",
-    "placeholder": true
+    "id": "same-day-response",
+    "quote": "Enquired via email and received a response on the same day. Communication was great and fast, they dealt with our constant changes and requests so well, we were able to put our own design on the garments and they look so cool!",
+    "author": "Maryanne M.",
+    "context": "quote"
   },
   {
-    "id": "one-meeting",
-    "quote": "The mockups meant our committee could sign off in one meeting instead of three.",
-    "author": "Club secretary — placeholder",
-    "context": "how-it-works",
-    "placeholder": true
+    "id": "exactly-as-sample",
+    "quote": "Sample images of various options were provided very quickly and once the final design was approved, the supplied kit was exactly as the sample. Would highly recommend.",
+    "author": "Phil A.",
+    "context": "how-it-works"
+  },
+  {
+    "id": "cricket-50-shirts",
+    "quote": "Placed an order for 50 shirts for men's and women's cricket teams. David was fantastic to work with. He helped with design options, was very quick with responses and was flexible with our needs. Can't recommend highly enough.",
+    "author": "Derek K., cricket club",
+    "context": "cricket"
+  },
+  {
+    "id": "volleyball-gear",
+    "quote": "Had the pleasure of working with David and the team in customising a design for our volley team gears. The communication and customer service throughout has been of quality service!",
+    "author": "Volleyball team organiser",
+    "context": "volleyball"
+  },
+  {
+    "id": "hockey-strip",
+    "quote": "We ordered a strip for our hockey team. … Communication was super prompt and came with lay ups of how our uniform would look. Really easy to deal with and super happy with what has been delivered.",
+    "author": "Vanessa G., Ngāruawāhia Hockey Club",
+    "context": "hockey"
   }
 ]

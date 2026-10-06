@@ -51,8 +51,8 @@ faqs:
   - q: What sizes do you make for miniball?
     a: "Junior sizes start at 4Y and run through to 12Y before adult XS, so miniball teams are covered without borrowing adult cuts."
 testimonial:
-  quote: "The reversible sets sorted our training nights, and the game singlets look sharp under the lights. The kids won't take them off."
-  author: Basketball club coach — placeholder
+  quote: "We requested custom basketball singlets for our work team using our own designs, and we couldn't be happier with the result. When they arrived, the quality was absolutely top-notch."
+  author: Leonato R., work basketball team
 ctaTitle: Get your basketball kit priced
 ctaBody: Tell us your teams and numbers. Free mockup and a written price within one business day.
 ---
