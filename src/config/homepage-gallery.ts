@@ -1,0 +1,16 @@
+/**
+ * Photos for the homepage "Kit we shipped lately" strip, in display order.
+ * Each entry is a filename from src/assets/gallery/ (the extension is optional).
+ * Pick for variety of garments, not just sports. A missing file is skipped with
+ * a build warning, and any empty spots are filled one sport at a time.
+ */
+export const homepageGallery: string[] = [
+  'rugby-dragons-full-strip-front',
+  'netball-descendentz-dress-front',
+  'basketball-chertsey-school-full-strip-front',
+  'football-mid-canterbury-shirt-front',
+  'cultural-groups-ngā-kura-a-iwi-ki-te-arawa-quarter-zip-hoodie',
+  'rugby-glenora-tribal-bears-tracksuit-front',
+  'netball-wahine-whakamiharo-jacket-front',
+  'cricket-veterans-world-cup-umpire-polo',
+];

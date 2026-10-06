@@ -9,6 +9,7 @@ import Testimonials from '@/components/Testimonials.astro';
 import Stars from '@/components/Stars.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import { nav, site } from '@/config/site';
+import { homepageGallery } from '@/config/homepage-gallery';
 import { IS_MVP, routeEnabled } from '@/config/mode';
 import { featuredItems, getGalleryItems } from '@/lib/gallery';
 import { siteImage, slotFile } from '@/lib/images';
@@ -16,7 +17,7 @@ import { testimonialsFor } from '@/lib/testimonials';
 import { webPageJsonLd } from '@/lib/seo';
 
 const sports = (await getCollection('sports')).sort((a, b) => a.data.order - b.data.order);
-const projects = await featuredItems(await getGalleryItems(), 8);
+const projects = await featuredItems(await getGalleryItems(), 8, homepageGallery);
 const testimonials = await testimonialsFor('general');
 // The Google rating is a placeholder until a review profile exists; never show it to ad traffic unbacked.
 const showRating = !IS_MVP || Boolean(site.googleReviewsUrl);

@@ -15,6 +15,8 @@ export interface GalleryItem {
   label: string;
   image?: ImageMetadata;
   imageAlt?: string;
+  /** Filename without extension, for photos from src/assets/gallery/ */
+  file?: string;
   featured: boolean;
   order: number;
 }
@@ -143,6 +145,7 @@ export function getGalleryItems(): Promise<GalleryItem[]> {
         const title = titleFromName(name, sport);
         const fileName = file.split('/').pop() ?? file;
         return {
+          file: fileName.replace(/\.[^.]+$/, ''),
           id: `photo-${fileName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
           title,
           sport: sport?.id,
@@ -181,20 +184,30 @@ export function getGalleryItems(): Promise<GalleryItem[]> {
   return cache;
 }
 
+/** Filename comparison that ignores the extension, case and macron encoding. */
+const fileKey = (name: string) => name.replace(/\.(jpe?g|png|webp|avif)$/i, '').normalize('NFC').toLowerCase();
+
 /**
- * Up to `limit` items for the homepage "recent projects" strip, taking one
- * real photo from each sport in turn (sports collection order) so the strip
- * shows a spread rather than the first few files of one sport. Within a sport,
- * featured projects come first, then filename order. Placeholders only fill
- * the strip when there are not enough real photos.
+ * Up to `limit` items for the homepage "recent projects" strip. The photos
+ * named in `picks` come first, in that order (a name with no matching photo is
+ * skipped with a build warning). Remaining spots take one real photo from each
+ * sport in turn (sports collection order) so the strip shows a spread rather
+ * than the first few files of one sport. Within a sport, featured projects
+ * come first, then filename order. Placeholders only fill the strip when there
+ * are not enough real photos.
  */
-export async function featuredItems(items: GalleryItem[], limit = 8): Promise<GalleryItem[]> {
-  const real = items.filter((i) => i.image);
+export async function featuredItems(items: GalleryItem[], limit = 8, picks: string[] = []): Promise<GalleryItem[]> {
+  const picked: GalleryItem[] = [];
+  for (const name of picks) {
+    const match = items.find((i) => i.file && fileKey(i.file) === fileKey(name));
+    if (!match) console.warn(`[gallery] homepage photo not found in src/assets/gallery/: ${name}`);
+    else if (!picked.includes(match) && picked.length < limit) picked.push(match);
+  }
+  const real = items.filter((i) => i.image && !picked.includes(i));
   const queues = (await groupBySport(real)).map((g) => [
     ...g.items.filter((i) => i.featured),
     ...g.items.filter((i) => !i.featured),
   ]);
-  const picked: GalleryItem[] = [];
   while (picked.length < limit && queues.some((q) => q.length)) {
     for (const q of queues) {
       const next = q.shift();
