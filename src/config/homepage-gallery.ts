@@ -9,7 +9,7 @@ export const homepageGallery: string[] = [
   "netball-descendentz-dress-front",
   "football-mid-canterbury-shirt-front",
   "basketball-chertsey-school-full-strip-front",
-  "cultural-groups-ngā-kura-a-iwi-ki-te-arawa-quarter-zip-hoodie",
+  "cultural-groups-ghost-chips-long-sleeve-tee-side",
   "rugby-glenora-tribal-bears-tracksuit-front",
   "netball-wahine-whakamiharo-jacket-front",
   "cultural-groups-tai-awa-waka-ama-hoodie-front",
