@@ -16,7 +16,7 @@ import { testimonialsFor } from '@/lib/testimonials';
 import { webPageJsonLd } from '@/lib/seo';
 
 const sports = (await getCollection('sports')).sort((a, b) => a.data.order - b.data.order);
-const projects = featuredItems(await getGalleryItems(), 4);
+const projects = await featuredItems(await getGalleryItems(), 8);
 const testimonials = await testimonialsFor('general');
 // The Google rating is a placeholder until a review profile exists; never show it to ad traffic unbacked.
 const showRating = !IS_MVP || Boolean(site.googleReviewsUrl);

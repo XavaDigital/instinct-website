@@ -150,7 +150,7 @@ export function getGalleryItems(): Promise<GalleryItem[]> {
           label: title,
           image: mod.default,
           imageAlt: title,
-          featured: i < 4,
+          featured: false,
           order: i,
         };
       });
@@ -181,10 +181,27 @@ export function getGalleryItems(): Promise<GalleryItem[]> {
   return cache;
 }
 
-/** Up to `limit` items for the homepage "recent projects" strip. */
-export function featuredItems(items: GalleryItem[], limit = 4): GalleryItem[] {
-  const featured = items.filter((i) => i.featured);
-  return [...featured, ...items.filter((i) => !featured.includes(i))].slice(0, limit);
+/**
+ * Up to `limit` items for the homepage "recent projects" strip, taking one
+ * real photo from each sport in turn (sports collection order) so the strip
+ * shows a spread rather than the first few files of one sport. Within a sport,
+ * featured projects come first, then filename order. Placeholders only fill
+ * the strip when there are not enough real photos.
+ */
+export async function featuredItems(items: GalleryItem[], limit = 8): Promise<GalleryItem[]> {
+  const real = items.filter((i) => i.image);
+  const queues = (await groupBySport(real)).map((g) => [
+    ...g.items.filter((i) => i.featured),
+    ...g.items.filter((i) => !i.featured),
+  ]);
+  const picked: GalleryItem[] = [];
+  while (picked.length < limit && queues.some((q) => q.length)) {
+    for (const q of queues) {
+      const next = q.shift();
+      if (next && picked.length < limit) picked.push(next);
+    }
+  }
+  return [...picked, ...items.filter((i) => !i.image)].slice(0, limit);
 }
 
 /** Items for one sport only (no padding with other sports' kit). */

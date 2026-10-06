@@ -44,8 +44,9 @@ around; add `?slots=off` to turn it off.
 ## 2. Gallery photos — `src/assets/gallery/`
 
 Bulk photos of finished kit. They appear on **/gallery** (grouped by sport), in the
-**"Kit we shipped lately"** strip on the homepage (the first four by filename), and — once the
-full site is switched on — on each sport page and the relevant garment pages.
+**"Kit we shipped lately"** strip on the homepage (eight photos, one from each sport in turn:
+the first by filename in each sport, so a `01-` prefix chooses it), and — once the full site
+is switched on — on each sport page and the relevant garment pages.
 
 **Filename pattern:** `<sport>-<caption words>.jpg`
 
