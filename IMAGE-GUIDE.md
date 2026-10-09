@@ -16,7 +16,9 @@ src/assets/garments/   one main image per garment, plus optional extra views
 src/assets/logos/      club / school logos we've worked with
 ```
 
-If you can't add files to the project yourself, send them to David in a zip **with the
+To add files yourself — download the project, copy images in, save to GitHub and publish —
+follow **[HOW-TO-UPDATE-IMAGES.md](HOW-TO-UPDATE-IMAGES.md)**. If you can't add files to the
+project yourself, send them to David in a zip **with the
 filenames already correct** — the names are the whole system.
 
 **Finding the slots on the site.** Every empty slot shows its filename and recommended size

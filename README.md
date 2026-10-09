@@ -88,7 +88,9 @@ to them is removed or rendered as plain text.
 ### Photos and images
 
 **See [IMAGE-GUIDE.md](IMAGE-GUIDE.md)** — the complete brief for whoever supplies photos:
-which folder, which filename, what to shoot, what size. Every image slot on the site is
+which folder, which filename, what to shoot, what size. For a non-developer adding images
+themselves (setup, git pull/commit/push, `npm run deploy:mvp`), see
+[HOW-TO-UPDATE-IMAGES.md](HOW-TO-UPDATE-IMAGES.md). Every image slot on the site is
 resolved by filename (`src/lib/images.ts`), so correctly named files appear with no edits.
 
 Gallery summary: drop photos (jpg, jpeg, png, webp, avif; any case) into `src/assets/gallery/`. The filename
