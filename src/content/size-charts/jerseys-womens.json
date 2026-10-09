@@ -1,0 +1,26 @@
+{
+  "title": "Jerseys, tees & polos (women's)",
+  "garment": "jerseys",
+  "order": 4,
+  "note": "Women's fit, shaped through the waist. Half chest, half waist and body length in cm, garment laid flat. Tall sizing adds 3–5cm to the length. Indicative — confirm with a sizing kit.",
+  "columns": ["Size", "Half chest (cm)", "Half waist (cm)", "Body length (cm)"],
+  "rows": [
+    ["WXXS", 40, 36, 58],
+    ["WXS", 42, 38, 60],
+    ["WS", 45, 41, 62],
+    ["WM", 48, 44, 64],
+    ["WL", 51, 46, 67],
+    ["WXL", 53, 48, 69],
+    ["W2XL", 55, 50, 71],
+    ["W3XL", 56, 52, 73],
+    ["W4XL", 59, 55, 74],
+    ["W5XL", 62, 58, 75],
+    ["W6XL", 65, 61, 76],
+    ["W7XL", 68, 64, 77],
+    ["W8XL", 71, 67, 78],
+    ["W9XL", 74, 70, 79],
+    ["W10XL", 77, 73, 80],
+    ["W11XL", 80, 76, 81],
+    ["W12XL", 83, 79, 82]
+  ]
+}

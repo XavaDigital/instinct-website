@@ -4,7 +4,6 @@ summary: Deposit terms, invoicing for schools and clubs, and what happens if an 
 inShort: A deposit is due when you approve your final mockup and the balance before dispatch. Schools and established clubs can be invoiced on account. Orders cancelled after approval are charged for work already done.
 updated: 2026-08-20
 order: 4
-draft: true
 ---
 
 ## Quotes and pricing

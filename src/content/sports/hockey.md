@@ -8,7 +8,7 @@ intro: "Sublimated playing shirts, skorts, shorts and socks in your club's colou
 heroLabel: Hero — hockey team in custom shirts, turf background
 highlights:
   - Goalkeeper smocks to match
-  - Junior to adult 5XL
+  - Junior to adult 12XL
   - Numbers & names included
   - Breathable, quick-dry fabric
 garmentsEyebrow: Hockey garments
@@ -47,7 +47,7 @@ faqs:
   - q: Can we mix skorts and shorts in one team?
     a: "Yes. Players can choose skorts or shorts in the same design and colours, all on one order and one invoice."
   - q: Do you make junior sizes?
-    a: "Yes. Junior sizes start at 4Y and run through to adult 5XL, so a club can kit every grade from the same design."
+    a: "Yes. Junior sizes run from Y4 to Y16 and adult sizes from XS to 12XL, so a club can kit every grade from the same design."
   - q: Can we add a player mid-season?
     a: "Yes. There's no minimum order, and your design stays on file, so a single extra shirt is a quick email."
 ctaTitle: Get your hockey kit priced

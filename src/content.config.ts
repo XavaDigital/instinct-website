@@ -109,7 +109,6 @@ const policies = defineCollection({
     inShort: z.string(),
     updated: z.coerce.date(),
     order: z.number().default(99),
-    draft: z.boolean().default(false),
   }),
 });
 

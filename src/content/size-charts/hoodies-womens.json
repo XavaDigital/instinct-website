@@ -1,0 +1,20 @@
+{
+  "title": "Hoodies & jackets (women's)",
+  "garment": "hoodies",
+  "order": 2,
+  "note": "Women's fit. Half chest and body length in cm, garment laid flat. Sizes above W5XL on request. Indicative — confirm with a sizing kit.",
+  "columns": ["Size", "Half chest (cm)", "Body length (cm)"],
+  "rows": [
+    ["W3XS", 43, 56],
+    ["WXXS", 45.5, 59],
+    ["WXS", 48, 62],
+    ["WS", 50.5, 65],
+    ["WM", 54.5, 68],
+    ["WL", 58.5, 71],
+    ["WXL", 62.5, 74],
+    ["W2XL", 66.5, 77],
+    ["W3XL", 70.5, 80],
+    ["W4XL", 74.5, 83],
+    ["W5XL", 78.5, 86]
+  ]
+}

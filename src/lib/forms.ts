@@ -68,7 +68,7 @@ export function validateArtwork(files: { name: string; size: number }[]): string
   if (files.length > ARTWORK_MAX_FILES) return `Please attach no more than ${ARTWORK_MAX_FILES} files.`;
   if (files.some((f) => f.name.length > 255)) return 'One of the file names is too long. Please rename it and try again.';
   const bad = files.find((f) => !ARTWORK_EXTENSIONS.includes(fileExtension(f.name)));
-  if (bad) return `"${bad.name}" isn't a file type we can open. Send PNG, JPG, PDF, AI, EPS, SVG or ZIP.`;
+  if (bad) return `"${bad.name}" isn't a file type we can open. Send PNG, JPG, PDF, AI (Adobe Illustrator), EPS, SVG or ZIP.`;
   const total = files.reduce((n, f) => n + f.size, 0);
   if (total > ARTWORK_MAX_TOTAL_BYTES) {
     return `Files add up to ${formatBytes(total)}; the limit is ${formatBytes(ARTWORK_MAX_TOTAL_BYTES)}. Email larger files to us after you submit.`;

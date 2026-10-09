@@ -482,7 +482,7 @@ export default function QuoteForm({ sports, garments, turnstileSiteKey, phone }:
             ].join(' ')}
           >
             <p id="f-artwork-hint" className="text-[14.5px] text-white/60">
-              Drop your logo or artwork here — PNG, JPG, PDF, AI, EPS, SVG or ZIP
+              Drop your logo or artwork here — PNG, JPG, PDF, AI (Adobe Illustrator), EPS, SVG or ZIP
             </p>
             <input
               ref={fileInput}

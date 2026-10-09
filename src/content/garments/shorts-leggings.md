@@ -5,8 +5,8 @@ cardTitle: Shorts & leggings
 cardBlurb: Match shorts, skorts and compression to match the top half.
 order: 6
 featured: false
-description: "Custom sublimated match shorts, skorts, leggings and compression wear for New Zealand clubs and schools, designed to match your playing kit. Junior to 5XL, no minimum order."
-intro: "Match shorts, skorts, leggings and compression pieces sublimated to match the top half — same colours, same pattern, same order. Sport-specific cuts from rugby to netball, junior through to 5XL."
+description: "Custom sublimated match shorts, skorts, leggings and compression wear for New Zealand clubs and schools, designed to match your playing kit. Junior to 12XL, no minimum order."
+intro: "Match shorts, skorts, leggings and compression pieces sublimated to match the top half — same colours, same pattern, same order. Sport-specific cuts from rugby to netball, junior through to 12XL."
 imageLabel: Main image — custom sublimated match shorts
 thumbLabels: [Front, Back, Waistband detail, On team]
 options:
@@ -14,7 +14,7 @@ options:
     values: [Match shorts, Long-line shorts, Skort, Leggings, Compression shorts]
   - label: Cut
     values: [Men's, Women's, Junior]
-sizes: [4Y, 6Y, 8Y, 10Y, 12Y, XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL]
+sizes: [Y4, Y6, Y8, Y10, Y12, Y14, Y16, XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL, 6XL, 7XL, 8XL, 9XL, 10XL, 11XL, 12XL]
 sizeChart: shorts
 priceNote: "Price depends on quantity, style and design. Numbers on shorts included on request."
 specs:

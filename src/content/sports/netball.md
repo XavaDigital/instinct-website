@@ -8,7 +8,7 @@ intro: "Dresses, singlets, bodysuits and skorts in your club's colours — with 
 heroLabel: Hero — netball team in custom dresses, court background
 highlights:
   - Sublimated positional bibs
-  - Junior to adult 5XL
+  - Junior to adult 12XL
   - Four-way stretch, breathable
   - Modest-fit options available
 garmentsEyebrow: Netball garments
@@ -42,7 +42,7 @@ faqs:
   - q: Can we order different garments across the same team?
     a: "Yes. Dresses for some players, singlet and skort for others, a long-sleeve top for whoever wants one — all in the same design and colours, all on one order and one invoice."
   - q: Do you make junior sizes?
-    a: "Yes. Junior sizes start at 4Y and run through to adult 5XL, so a club can kit every grade from the same design. Ask for a sizing kit if you want players to try before you confirm the size run."
+    a: "Yes. Junior sizes run from Y4 to Y16 and adult sizes from XS to 12XL, so a club can kit every grade from the same design. Ask for a sizing kit if you want players to try before you confirm the size run."
   - q: Will the dresses meet our competition's uniform rules?
     a: "Every competition sets its own uniform rules. We don't check designs against them — confirming your kit meets your competition's rules is the club's responsibility — but we'll work with you to make sure your design is competition compliant. Send us the requirements with your quote request and we'll build them into the mockup, including positional bibs, so you can confirm it against the rules before you sign off."
   - q: Can we add a player mid-season?

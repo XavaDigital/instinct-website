@@ -5,7 +5,7 @@ cardTitle: Hoodies
 cardBlurb: Sideline warmth players actually wear off the field.
 order: 2
 featured: true
-description: "Custom sublimated club hoodies, printed edge to edge — sleeves, hood lining and side panels included. Pullover, full zip or quarter zip, junior to 5XL. New Zealand owned and operated, no minimum order."
+description: "Custom sublimated club hoodies, printed edge to edge — sleeves, hood lining and side panels included. Pullover, full zip or quarter zip, junior to 12XL. New Zealand owned and operated, no minimum order."
 intro: "Fully sublimated, edge to edge — sleeves, hood lining and side panels included. Brushed-back poly fleece that holds colour through the season and doesn't go stiff in the wash."
 imageLabel: Main image — custom sublimated hoodie, front view
 thumbLabels: [Front, Back, Hood detail, On team]
@@ -14,7 +14,7 @@ options:
     values: [Pullover hood, Full zip, Quarter zip, Crew neck]
   - label: Fabric weight
     values: [280gsm mid-weight, 340gsm heavy fleece]
-sizes: [4Y, 6Y, 8Y, 10Y, 12Y, XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL]
+sizes: [Y4, Y6, Y8, Y10, Y12, Y14, Y16, XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL, 6XL, 7XL, 8XL, 9XL, 10XL, 11XL, 12XL]
 sizeChart: hoodies
 price:
   from: 89

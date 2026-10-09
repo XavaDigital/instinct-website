@@ -4,7 +4,6 @@ summary: Who owns what, the permissions you confirm when you send us a logo, and
 inShort: Your logos, patterns and marks stay yours. When you send us artwork you confirm you're allowed to use it. We keep your design on file so you can reorder, and we never reuse it for anyone else.
 updated: 2026-08-20
 order: 3
-draft: true
 ---
 
 ## What's yours

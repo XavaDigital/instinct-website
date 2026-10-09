@@ -9,7 +9,7 @@ heroLabel: Hero — football team in custom strip, pitch background
 highlights:
   - Home & away strips
   - Keeper kits included
-  - Junior to adult 5XL
+  - Junior to adult 12XL
   - Numbers & names included
 garmentsEyebrow: Football garments
 garmentsTitle: Everything from kick-off to full time
@@ -49,7 +49,7 @@ faqs:
   - q: Can players have different numbers on shirts and shorts?
     a: "Numbers on shirts are included. Numbers on shorts are optional and can be added at no extra design cost — just send us the list with your size run."
   - q: Do you make women's and junior cuts?
-    a: "Yes. Women's fit shirts and shorts, and junior sizes from 4Y, are all graded from the same design so the whole club matches."
+    a: "Yes. Women's fit shirts and shorts, and junior sizes from Y4, are all graded from the same design so the whole club matches."
 testimonial:
   quote: "Great to deal with, fair pricing and an awesome end product. Will definitely be dealing with David again for our football teamwear!"
   author: Barak G., football

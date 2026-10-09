@@ -1,10 +1,9 @@
 ---
 title: Sizing & fit assurance
 summary: How sizing kits work, our tolerance on measurements, and how we handle a genuine sizing miss.
-inShort: Use a sizing kit or our size charts to confirm your size run. Garments are made within ±1.5cm of the chart; anything outside that, or made to the wrong size, is remade at no cost.
+inShort: Use a sizing kit or our size charts to confirm your size run. Garments are made within ±2cm of the chart; anything outside that, or made to the wrong size, is remade at no cost.
 updated: 2026-08-20
 order: 6
-draft: true
 ---
 
 ## Sizing kits
@@ -17,7 +16,7 @@ Our [size charts](/size-charts) show garment measurements laid flat, along with 
 
 ## Tolerance
 
-Sublimated garments are cut and sewn individually, so small variation is normal. We work to a tolerance of ±1.5cm on chest, waist and length measurements against the published chart. A garment inside that range is made correctly.
+Sublimated garments are cut and sewn individually, so small variation is normal. We work to a tolerance of ±2cm on chest, waist and length measurements against the published chart. A garment inside that range is made correctly.
 
 ## When we've got it wrong
 

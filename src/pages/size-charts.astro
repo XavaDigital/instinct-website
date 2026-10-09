@@ -8,7 +8,7 @@ import { webPageJsonLd } from '@/lib/seo';
 
 const title = 'Size charts';
 const description =
-  'Indicative size charts for Instinct Apparel hoodies, jerseys, shorts and socks — junior 4Y to adult 5XL. Ask for a sizing kit to confirm before you order.';
+  "Indicative unisex and women's size charts for Instinct Apparel hoodies, jerseys, shorts and socks — junior Y4 to adult 12XL. Ask for a sizing kit to confirm before you order.";
 
 const charts = (await getCollection('sizeCharts')).sort((a, b) => a.data.order - b.data.order);
 const chartsWithGarments = await Promise.all(
@@ -16,9 +16,9 @@ const chartsWithGarments = await Promise.all(
 );
 
 const howTo = [
-  { title: 'Half chest', body: 'Lay the garment flat and measure straight across, 2cm below the armhole. Double it for the full chest.' },
+  { title: 'Half chest', body: 'Lay the garment flat and measure straight across, 1cm below the armpit. Double it for the full chest.' },
   { title: 'Body length', body: 'From the highest point of the shoulder, next to the collar, straight down to the hem.' },
-  { title: 'Waist', body: 'Lay shorts flat and measure straight across the top of the waistband, relaxed (not stretched).' },
+  { title: 'Waist', body: 'Measure around your own waist where the shorts sit, then find the size whose range it falls in.' },
   { title: 'Compare, don\'t guess', body: 'Measure a garment that already fits well and match it to the closest size in the chart.' },
 ];
 ---
@@ -35,7 +35,7 @@ const howTo = [
       <h1 class="display mt-3 text-[40px] leading-[0.96] tracking-[-0.035em] sm:text-[56px]">Size charts</h1>
       <p class="mt-3 max-w-[640px] text-[17.5px] leading-[1.6] text-white/[0.72]">
         Garment measurements in centimetres, laid flat. Every size is graded from the same design, so a club can
-        order 4Y through to 5XL in one look. For anything bigger than a social team, ask for a
+        order Y4 through to 12XL in one look. For anything bigger than a social team, ask for a
         <a href="/faq#sizing-fit" class="link-inline">sizing kit</a> and let players try before you confirm.
       </p>
     </div>
@@ -103,7 +103,7 @@ const howTo = [
         ))
       }
       <p class="text-[14px] leading-[1.6] text-white/50">
-        Measurements are indicative and may vary by ±1.5cm, which is normal for sublimated garments. See our
+        Measurements are indicative and may vary by ±2cm, which is normal for sublimated garments. See our
         <a href="/policies/sizing-fit" class="link-inline">sizing and fit assurance policy</a> for how we handle a genuine
         sizing miss.
       </p>

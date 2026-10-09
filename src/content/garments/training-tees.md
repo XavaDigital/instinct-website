@@ -5,8 +5,8 @@ cardTitle: Training tees
 cardBlurb: Breathable mid-week gear in the same design family.
 order: 4
 featured: true
-description: "Custom sublimated training tees and singlets for New Zealand clubs and schools — lightweight, quick-dry, in the same design as your playing kit. Junior to 5XL, no minimum order."
-intro: "Lightweight, quick-dry tees and singlets sublimated in the same design family as your playing kit, so Tuesday night looks like Saturday. Relaxed or fitted cuts, junior through to 5XL."
+description: "Custom sublimated training tees and singlets for New Zealand clubs and schools — lightweight, quick-dry, in the same design as your playing kit. Junior to 12XL, no minimum order."
+intro: "Lightweight, quick-dry tees and singlets sublimated in the same design family as your playing kit, so Tuesday night looks like Saturday. Relaxed or fitted cuts, junior through to 12XL."
 imageLabel: Main image — custom sublimated training tee
 thumbLabels: [Front, Back, Fabric detail, On team]
 options:
@@ -14,7 +14,7 @@ options:
     values: [Crew-neck tee, V-neck tee, Singlet, Long sleeve]
   - label: Cut
     values: [Relaxed, Fitted, Women's fit, Junior]
-sizes: [4Y, 6Y, 8Y, 10Y, 12Y, XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL]
+sizes: [Y4, Y6, Y8, Y10, Y12, Y14, Y16, XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL, 6XL, 7XL, 8XL, 9XL, 10XL, 11XL, 12XL]
 sizeChart: jerseys
 priceNote: "Price depends on quantity, style and design. Names and numbers included."
 specs:

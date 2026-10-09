@@ -8,7 +8,7 @@ intro: "Sublimated jerseys and shorts in your club's colours, with a contrasting
 heroLabel: Hero — volleyball team in custom jerseys, indoor court
 highlights:
   - Contrasting libero tops
-  - Junior to adult 5XL
+  - Junior to adult 12XL
   - Numbers front & back included
   - Lightweight, quick-dry fabric
 garmentsEyebrow: Volleyball garments

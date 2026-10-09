@@ -4,7 +4,6 @@ summary: What we collect from a quote request, how long we hold it, and who it i
 inShort: We collect only what we need to quote, make and deliver your order. We never sell or rent your details. You can ask to see, correct or delete what we hold at any time.
 updated: 2026-08-27
 order: 5
-draft: true
 ---
 
 Instinct Apparel Limited handles personal information in line with the Privacy Act 2020. This policy explains what we collect, why, and what you can ask of us.

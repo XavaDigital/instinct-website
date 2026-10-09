@@ -8,7 +8,7 @@ intro: "Sublimated singlets and shorts in your club's colours — reversible opt
 heroLabel: Hero — basketball team in custom singlets, indoor court
 highlights:
   - Reversible singlets available
-  - Junior to adult 5XL
+  - Junior to adult 12XL
   - Numbers front & back included
   - Lightweight mesh knit
 garmentsEyebrow: Basketball garments
@@ -49,7 +49,7 @@ faqs:
   - q: Can we get matching warm-ups?
     a: "Yes. Shooting shirts, hoodies and warm-up jackets can all be made in the same design so the bench matches the court."
   - q: What sizes do you make for miniball?
-    a: "Junior sizes start at 4Y and run through to 12Y before adult XS, so miniball teams are covered without borrowing adult cuts."
+    a: "Junior sizes run from Y4 through to Y16 before adult XS, so miniball teams are covered without borrowing adult cuts."
 testimonial:
   quote: "We requested custom basketball singlets for our work team using our own designs, and we couldn't be happier with the result. When they arrived, the quality was absolutely top-notch."
   author: Leonato R., work basketball team

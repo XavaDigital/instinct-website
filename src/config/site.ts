@@ -31,15 +31,15 @@ export const site = {
   mapsUrl:
     'https://www.google.com/maps/search/?api=1&query=11%2F8+Dakota+Crescent%2C+Wigram%2C+Christchurch+8042',
   hours: {
-    display: 'Mon–Fri, 8.30am–5pm',
-    displayLong: 'Mon–Fri, 8.30am–5pm NZT',
-    short: ['Mon–Fri', '8.30am–5pm'],
+    display: 'Mon–Fri, 9am–5pm NZ time',
+    displayLong: 'Monday to Friday, 9am to 5pm New Zealand time',
+    short: ['Mon–Fri', '9am–5pm NZ time'],
     /** Schema.org OpeningHoursSpecification */
     schema: [
       {
         '@type': 'OpeningHoursSpecification',
         dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        opens: '08:30',
+        opens: '09:00',
         closes: '17:00',
       },
     ],

@@ -4,7 +4,6 @@ summary: Custom gear can't be returned for change of mind — here's what we do 
 inShort: Custom-made garments can't be returned or exchanged for change of mind or a size you chose. Manufacturing faults are repaired, remade or credited at no cost — report anything visible on arrival within 14 days, and seams, zips or drawcords that fail in normal use as soon as it happens.
 updated: 2026-08-20
 order: 2
-draft: true
 ---
 
 ## What we can't take back

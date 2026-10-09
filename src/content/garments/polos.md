@@ -5,8 +5,8 @@ cardTitle: Committee polos
 cardBlurb: Tidy enough for prizegiving, branded for the club.
 order: 5
 featured: true
-description: "Custom sublimated club polos for committees, coaches, staff and supporters — tidy enough for prizegiving, fully branded. Junior to 5XL, New Zealand owned and operated, no minimum order."
-intro: "Sublimated polos for the committee, the coaches, the staff room and the supporters' club. Full-design or subtle-panel styles, in the same colours as the playing kit. Junior through to 5XL."
+description: "Custom sublimated club polos for committees, coaches, staff and supporters — tidy enough for prizegiving, fully branded. Junior to 12XL, New Zealand owned and operated, no minimum order."
+intro: "Sublimated polos for the committee, the coaches, the staff room and the supporters' club. Full-design or subtle-panel styles, in the same colours as the playing kit. Junior through to 12XL."
 imageLabel: Main image — custom sublimated club polo
 thumbLabels: [Front, Back, Collar detail, On team]
 options:
@@ -14,7 +14,7 @@ options:
     values: [Classic collar, Contrast collar, Women's fit, Junior]
   - label: Design coverage
     values: [Full sublimation, Panel accents on solid body]
-sizes: [4Y, 6Y, 8Y, 10Y, 12Y, XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL]
+sizes: [Y4, Y6, Y8, Y10, Y12, Y14, Y16, XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL, 6XL, 7XL, 8XL, 9XL, 10XL, 11XL, 12XL]
 sizeChart: jerseys
 priceNote: "Price depends on quantity, style and design. Names and roles included."
 specs:

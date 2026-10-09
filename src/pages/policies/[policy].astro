@@ -61,15 +61,6 @@ const longDate = data.updated.toLocaleDateString('en-NZ', { day: 'numeric', mont
           Last updated <time datetime={data.updated.toISOString().slice(0, 10)}>{longDate}</time>
         </p>
 
-        {
-          data.draft && (
-            <div class="mb-6 border-l-[3px] border-lilac bg-plum-800 px-6 py-5 text-[15.5px] leading-[1.7] text-white/[0.78]">
-              Draft wording for review. Have it checked and edit
-              <code class="font-mono text-[13px] text-lime-soft"> src/content/policies/{entry.id}.md</code> before this page goes live.
-            </div>
-          )
-        }
-
         <div class="mb-[26px] border-l-[3px] border-lime bg-plum-800 px-6 py-5">
           <div class="mb-2 text-[12px] font-bold uppercase leading-none tracking-[0.12em] text-lime-soft">In short</div>
           <p class="text-[16px] leading-[1.65] text-white/[0.82]">{data.inShort}</p>

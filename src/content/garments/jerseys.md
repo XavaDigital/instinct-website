@@ -5,7 +5,7 @@ cardTitle: Playing jerseys
 cardBlurb: Contact-grade and lightweight cuts, names and numbers included.
 order: 1
 featured: true
-description: "Custom sublimated playing jerseys for rugby, football, netball, basketball and touch. Contact-grade or lightweight cuts, names and numbers included, junior to 5XL. New Zealand owned and operated, no minimum order."
+description: "Custom sublimated playing jerseys for rugby, football, netball, basketball and touch. Contact-grade or lightweight cuts, names and numbers included, junior to 12XL. New Zealand owned and operated, no minimum order."
 intro: "Fully sublimated match jerseys in the cut your sport needs — heavier contact-grade knits for rugby and league, lightweight breathable knits for football, touch and basketball. Numbers, names and sponsors are dyed in, not stuck on."
 imageLabel: Main image — custom sublimated playing jersey, front view
 thumbLabels: [Front, Back, Collar detail, On team]
@@ -14,7 +14,7 @@ options:
     values: [Tight fit, Classic fit, Women's fit, Junior]
   - label: Fabric
     values: [Contact-grade knit, Lightweight mesh, Mid-weight interlock]
-sizes: [4Y, 6Y, 8Y, 10Y, 12Y, XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL]
+sizes: [Y4, Y6, Y8, Y10, Y12, Y14, Y16, XS, S, M, L, XL, 2XL, 3XL, 4XL, 5XL, 6XL, 7XL, 8XL, 9XL, 10XL, 11XL, 12XL]
 sizeChart: jerseys
 priceNote: "Price depends on quantity, cut, fabric and design. Names and numbers included on every jersey."
 specs:
