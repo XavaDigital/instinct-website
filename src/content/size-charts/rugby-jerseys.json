@@ -1,8 +1,8 @@
 {
   "title": "Rugby jerseys (unisex)",
-  "garment": "jerseys",
+  "garment": "rugby-jerseys",
   "order": 5,
-  "note": "Contact-grade rugby cut. Half chest and body length in cm, garment laid flat. Y16 and adult XS are the same size. Indicative — confirm with a sizing kit.",
+  "note": "Contact-grade rugby cut. Half chest and body length in cm, garment laid flat. Y16 and adult XS are the same size. Sizes above 7XL on request. Indicative — confirm with a sizing kit.",
   "columns": ["Size", "Half chest (cm)", "Body length (cm)"],
   "rows": [
     ["Y4", 35, 50],

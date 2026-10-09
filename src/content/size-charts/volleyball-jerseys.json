@@ -1,0 +1,22 @@
+{
+  "title": "Volleyball jerseys (fitted)",
+  "garment": "volleyball-jerseys",
+  "order": 7,
+  "note": "Fitted cut. Half chest and body length in cm, garment laid flat. Sizes above 5XL on request. Indicative — confirm with a sizing kit.",
+  "columns": ["Size", "Half chest (cm)", "Body length (cm)"],
+  "rows": [
+    ["Y6", 33, 51],
+    ["Y8", 35, 55],
+    ["Y10", 38, 58],
+    ["Y12", 41, 64],
+    ["XS", 44, 67],
+    ["S", 46, 72],
+    ["M", 49, 74],
+    ["L", 52, 76],
+    ["XL", 55, 78],
+    ["2XL", 58, 80],
+    ["3XL", 61, 82],
+    ["4XL", 64, 84],
+    ["5XL", 67, 86]
+  ]
+}

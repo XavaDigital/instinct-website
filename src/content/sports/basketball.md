@@ -8,7 +8,7 @@ intro: "Sublimated singlets and shorts in your club's colours — reversible opt
 heroLabel: Hero — basketball team in custom singlets, indoor court
 highlights:
   - Reversible singlets available
-  - Junior to adult 12XL
+  - Most garments to adult 12XL
   - Numbers front & back included
   - Lightweight mesh knit
 garmentsEyebrow: Basketball garments
@@ -16,12 +16,13 @@ garmentsTitle: Game day and training
 garments:
   - name: Game singlet
     description: Lightweight mesh, numbers front and back, wide armhole.
-    href: /teamwear/jerseys
+    href: /teamwear/basketball-singlets
   - name: Game shorts
     description: Long-line cut, optional side pockets.
     href: /teamwear/shorts-leggings
   - name: Reversible singlet
     description: Two colourways in one garment for training and scrimmage.
+    href: /teamwear/basketball-singlets
   - name: Shooting shirt
     description: Loose-fit warm-up tee in the same design.
     href: /teamwear/training-tees

@@ -14,7 +14,8 @@ const title = 'Club teamwear';
 const description =
   'Custom sublimated club teamwear from a New Zealand owned and operated supplier: playing jerseys, hoodies, jackets, training tees, polos, shorts, socks, headwear and bags — one design across the whole club, one point of contact, one invoice.';
 
-const garments = (await getCollection('garments')).sort((a, b) => a.data.order - b.data.order);
+// Sport-specific versions (rugby jerseys etc.) are reached through their family hub, not listed here.
+const garments = (await getCollection('garments', (g) => !g.data.parent)).sort((a, b) => a.data.order - b.data.order);
 // Full site: four featured cards plus a compact list linking to garment pages.
 // MVP: the garment pages don't exist, so every garment gets a showcase card.
 const featured = IS_MVP ? garments : garments.filter((g) => g.data.featured);

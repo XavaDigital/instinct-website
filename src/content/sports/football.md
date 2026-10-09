@@ -9,14 +9,14 @@ heroLabel: Hero — football team in custom strip, pitch background
 highlights:
   - Home & away strips
   - Keeper kits included
-  - Junior to adult 12XL
+  - Most garments to adult 12XL
   - Numbers & names included
 garmentsEyebrow: Football garments
 garmentsTitle: Everything from kick-off to full time
 garments:
   - name: Playing shirt
     description: Lightweight, breathable, with your sponsor and number sublimated in.
-    href: /teamwear/jerseys
+    href: /teamwear/football-shirts
   - name: Match shorts
     description: Matching shorts with a secure drawcord waistband.
     href: /teamwear/shorts-leggings

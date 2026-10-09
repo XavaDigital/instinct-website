@@ -1,0 +1,32 @@
+{
+  "title": "Singlets (unisex)",
+  "garment": "basketball-singlets",
+  "order": 8,
+  "note": "Half chest and body length in cm, garment laid flat. Tall sizing adds 3–5cm to the length. Indicative — confirm with a sizing kit.",
+  "columns": ["Size", "Half chest (cm)", "Body length (cm)"],
+  "rows": [
+    ["Y4", 37.5, 48.5],
+    ["Y6", 39.5, 52.5],
+    ["Y8", 41.5, 56.5],
+    ["Y10", 43.5, 60.5],
+    ["Y12", 45.5, 64.5],
+    ["Y14", 47.5, 68.5],
+    ["Y16", 49.5, 72.5],
+    ["XS", 52, 72.5],
+    ["S", 54.5, 74.5],
+    ["M", 57, 76.5],
+    ["L", 59.5, 78.5],
+    ["XL", 62, 80.5],
+    ["2XL", 64.5, 82.5],
+    ["3XL", 67, 84.5],
+    ["4XL", 69.5, 86],
+    ["5XL", 72, 88],
+    ["6XL", 74.5, 90],
+    ["7XL", 77, 92],
+    ["8XL", 79.5, 94],
+    ["9XL", 82, 96],
+    ["10XL", 84.5, 98],
+    ["11XL", 87, 100],
+    ["12XL", 89.5, 102]
+  ]
+}

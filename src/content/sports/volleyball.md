@@ -8,7 +8,7 @@ intro: "Sublimated jerseys and shorts in your club's colours, with a contrasting
 heroLabel: Hero — volleyball team in custom jerseys, indoor court
 highlights:
   - Contrasting libero tops
-  - Junior to adult 12XL
+  - Most garments to adult 12XL
   - Numbers front & back included
   - Lightweight, quick-dry fabric
 garmentsEyebrow: Volleyball garments
@@ -16,10 +16,10 @@ garmentsTitle: Court-ready from serve to spike
 garments:
   - name: Playing jersey
     description: Lightweight and close-fitting, with numbers front and back.
-    href: /teamwear/jerseys
+    href: /teamwear/volleyball-jerseys
   - name: Libero jersey
     description: The same design in a contrasting colourway.
-    href: /teamwear/jerseys
+    href: /teamwear/volleyball-jerseys
   - name: Playing shorts
     description: Short, stretch cut that moves with every dive.
     href: /teamwear/shorts-leggings
@@ -47,6 +47,8 @@ faqs:
     a: "Yes. We design the libero top alongside the team jersey, usually by swapping the main colours, and show both on the same mockup so you can check they contrast before you sign off."
   - q: Do you print numbers on the front and back?
     a: "Yes. Front and back numbers are included on every playing jersey. If your competition has a number-size rule, send it with your quote request and we'll work with you to match it on the mockup."
+  - q: What sizes do your volleyball jerseys come in?
+    a: "The fitted playing jersey runs from Y6 to Y12 and adult XS to 5XL, with larger sizes available on request. Most other garments go to adult 12XL. Measurements are on our [size charts](/size-charts#volleyball-jerseys)."
   - q: Do you make kit for beach volleyball?
     a: "Yes. Tell us it's for beach volleyball when you ask for a quote and we'll suggest the right garments, such as singlets and shorts, in the same design as your indoor kit."
   - q: Can we add a player mid-season?

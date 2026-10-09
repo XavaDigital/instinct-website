@@ -1,8 +1,8 @@
 {
   "title": "Rugby jerseys (women's)",
-  "garment": "jerseys",
+  "garment": "rugby-jerseys",
   "order": 6,
-  "note": "Women's contact-grade rugby cut. Half chest and body length in cm, garment laid flat. Indicative — confirm with a sizing kit.",
+  "note": "Women's contact-grade rugby cut. Half chest and body length in cm, garment laid flat. Sizes above W7XL on request. Indicative — confirm with a sizing kit.",
   "columns": ["Size", "Half chest (cm)", "Body length (cm)"],
   "rows": [
     ["WXS", 41.5, 60],

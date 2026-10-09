@@ -3,6 +3,7 @@ import { getCollection, getEntry } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Figure from '@/components/Figure.astro';
+import GarmentCard from '@/components/GarmentCard.astro';
 import ProjectsGrid from '@/components/ProjectsGrid.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import { nav } from '@/config/site';
@@ -28,7 +29,25 @@ const pairs = (await Promise.all(data.pairsWith.map((id) => getEntry('garments',
   (g): g is CollectionEntry<'garments'> => Boolean(g),
 );
 
-const projects = itemsForGarment(await getGalleryItems(), data.name, 4);
+// A family hub (jerseys) lists its sport-specific versions instead of showing product details.
+const sports = await getCollection('sports');
+const sportOrder = (id?: string) => sports.find((s) => s.id === id)?.data.order ?? 99;
+const variants = (await getCollection('garments', (g) => g.data.parent === entry.id)).sort(
+  (a, b) => sportOrder(a.data.sport) - sportOrder(b.data.sport),
+);
+const isHub = variants.length > 0;
+const parent = data.parent ? await getEntry('garments', data.parent) : undefined;
+
+// A sport version shows that sport's kit only, matched on the family name and its own
+// ("Jerseys" + "shirts" for football shirts) so a photo named "football-...-shirt" still counts.
+const gallery = await getGalleryItems();
+const projects = data.sport
+  ? itemsForGarment(
+      gallery.filter((i) => i.sport === data.sport),
+      `${parent?.data.name ?? ''} ${data.name.toLowerCase().replace(data.sport, '')}`,
+      4,
+    )
+  : itemsForGarment(gallery, data.name, 4);
 
 const sizeChart = data.sizeChart ? await getEntry('sizeCharts', data.sizeChart) : undefined;
 
@@ -41,13 +60,50 @@ const branding = garmentBranding(entry.id);
 <BaseLayout
   title={data.title}
   description={data.description}
-  breadcrumbs={[{ label: 'Club teamwear', href: '/teamwear' }, { label: data.name }]}
+  breadcrumbs={[
+    { label: 'Club teamwear', href: '/teamwear' },
+    ...(parent ? [{ label: parent.data.cardTitle, href: `/teamwear/${parent.id}` }] : []),
+    { label: data.name },
+  ]}
   jsonLd={
     data.price
       ? productJsonLd({ name: data.title, description: data.description, url, price: data.price })
-      : webPageJsonLd({ name: data.title, description: data.description, url, type: 'ItemPage' })
+      : webPageJsonLd({ name: data.title, description: data.description, url, type: isHub ? 'CollectionPage' : 'ItemPage' })
   }
 >
+  {
+    isHub && (
+      <>
+        <section class="hero-glow">
+          <div class="container-x pb-10 pt-12 lg:pt-[52px]">
+            <span class="eyebrow">Garment · {data.name}</span>
+            <h1 class="display mt-3 text-[40px] leading-[0.96] tracking-[-0.035em] sm:text-[56px]">{data.title}</h1>
+            <p class="mt-3 max-w-[640px] text-[17.5px] leading-[1.6] text-white/[0.72]">{data.intro}</p>
+          </div>
+        </section>
+        <section class="bg-plum-850">
+          <div class="container-x py-14">
+            <h2 class="display mb-[26px] text-[30px] sm:text-[36px]">Choose your sport</h2>
+            <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {variants.map((g) => (
+                <li>
+                  <GarmentCard garment={g} />
+                </li>
+              ))}
+            </ul>
+            <p class="mt-6 text-[15px] leading-[1.6] text-white/60">
+              Playing something else? Tell us the sport in your
+              <a href={nav.cta.href} class="link-inline">quote request</a> and we'll match the cut to it.
+            </p>
+          </div>
+        </section>
+      </>
+    )
+  }
+
+  {
+    !isHub && (
+  <>
   <!-- Product -->
   <section class="bg-plum-900">
     <div class="container-x grid gap-10 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-11">
@@ -190,6 +246,9 @@ const branding = garmentBranding(entry.id);
       }
     </div>
   </section>
+    )
+  }
+  </>
     )
   }
 

@@ -17,14 +17,16 @@ garmentsTitle: Light, quick and yours
 garments:
   - name: Playing tee
     description: Quick-dry, relaxed fit, your sponsor front and back.
-    href: /teamwear/jerseys
+    href: /teamwear/touch-tops
   - name: Playing singlet
     description: For the hottest evenings and the fastest wings.
+    href: /teamwear/touch-tops
   - name: Playing shorts
     description: Light, with a secure waistband for tag belts.
     href: /teamwear/shorts-leggings
   - name: Long-sleeve top
     description: For the early-season and late-season nights.
+    href: /teamwear/touch-tops
 extras:
   - label: Hoodies
     href: /teamwear/hoodies

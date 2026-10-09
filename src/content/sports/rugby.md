@@ -9,7 +9,7 @@ intro: "Contact-grade sublimated jerseys, shorts and socks in your club colours 
 heroLabel: Hero — rugby team in custom jerseys, muddy field
 highlights:
   - Contact-grade reinforced seams
-  - Junior to adult 12XL
+  - Most garments to adult 12XL
   - Numbers & names included
   - Sponsor logos placed for you
 garmentsEyebrow: Rugby garments
@@ -17,7 +17,7 @@ garmentsTitle: Built for the whole squad
 garments:
   - name: Playing jersey
     description: Contact-grade knit, reinforced seams, tight or classic fit.
-    href: /teamwear/jerseys
+    href: /teamwear/rugby-jerseys
   - name: Match shorts
     description: Heavy-duty with a secure waistband and reinforced hems.
     href: /teamwear/shorts-leggings
@@ -45,7 +45,7 @@ feature:
 projectsTitle: Rugby kit we've made
 faqs:
   - q: Can juniors and seniors share one design?
-    a: "Yes, and most clubs do. One design is graded across every size from Y4 to 12XL, so the under-8s and the premiers look like the same club. Sponsor panels can differ by grade if your sponsors do."
+    a: "Yes, and most clubs do. One design is graded across every size, so the under-8s and the premiers look like the same club. The playing jersey runs from Y4 to adult 7XL, most other garments go to adult 12XL, and larger sizes are available on request. Sponsor panels can differ by grade if your sponsors do."
   - q: Do the numbers wear off?
     a: "No. Numbers, names and sponsor logos are dyed into the fabric with the rest of the design, so there's nothing on the surface to crack, peel or be torn off in a tackle."
   - q: Can we add sponsor logos mid-season?

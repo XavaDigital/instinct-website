@@ -1,0 +1,25 @@
+{
+  "title": "Singlets (women's)",
+  "garment": "basketball-singlets",
+  "order": 9,
+  "note": "Women's fit, sized W8 to W38. Half chest and body length in cm, garment laid flat. Tall sizing adds 3–5cm to the length. Indicative — confirm with a sizing kit.",
+  "columns": ["Size", "Half chest (cm)", "Body length (cm)"],
+  "rows": [
+    ["W8", 47.5, 65],
+    ["W10", 50, 67],
+    ["W12", 52.5, 69],
+    ["W14", 55, 71],
+    ["W16", 57.5, 73],
+    ["W18", 60, 75],
+    ["W20", 62.5, 77],
+    ["W22", 65, 79],
+    ["W24", 67.5, 81],
+    ["W26", 70, 83],
+    ["W28", 72.5, 85],
+    ["W30", 75, 87],
+    ["W32", 77.5, 89],
+    ["W34", 80, 91],
+    ["W36", 82.5, 93],
+    ["W38", 85, 95]
+  ]
+}

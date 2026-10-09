@@ -8,7 +8,7 @@ intro: "Sublimated playing shirts and trousers in your club's colours for T20 an
 heroLabel: Hero — cricket team in custom coloured kit, summer field
 highlights:
   - Coloured kit for short formats
-  - Junior to adult 12XL
+  - Most garments to adult 12XL
   - Names & numbers included
   - Lightweight, breathable fabric
 garmentsEyebrow: Cricket garments
@@ -16,7 +16,7 @@ garmentsTitle: From the first ball to the last over
 garments:
   - name: Playing shirt
     description: Lightweight and breathable, with names and numbers on the back.
-    href: /teamwear/jerseys
+    href: /teamwear/cricket-shirts
   - name: Playing trousers
     description: Sublimated to match the shirt for coloured-kit formats.
     href: /teamwear/shorts-leggings
@@ -48,7 +48,7 @@ faqs:
   - q: Can we add sponsor logos?
     a: "Yes. Sponsor logos are printed into the fabric as part of the design. Send us the files with your quote request and we'll place them on the mockup."
   - q: Do you make junior sizes?
-    a: "Yes. Junior sizes run from Y4 to Y16 and adult sizes from XS to 12XL, so a club can kit every grade from the same design."
+    a: "Yes. Most garments run from junior Y4 to Y16 and adult XS to 12XL, so a club can kit every grade from the same design."
   - q: Can we add a player mid-season?
     a: "Yes. There's no minimum order, and your design stays on file, so a single extra shirt is a quick email."
 ctaTitle: Get your cricket kit priced

@@ -62,6 +62,10 @@ const garments = defineCollection({
       cardBlurb: z.string(),
       order: z.number().default(99),
       featured: z.boolean().default(false),
+      /** Garment id of the family hub this is a sport-specific version of ("jerseys"). Hidden from the /teamwear grid. */
+      parent: z.string().optional(),
+      /** Sport id this version is cut for; orders the hub and filters its projects. */
+      sport: z.string().optional(),
       description: z.string(),
       intro: z.string(),
       image: image().optional(),
